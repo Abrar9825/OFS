@@ -1,15 +1,16 @@
-🚀 DevSprint – Collaborative Project Builder for Developers
-DevSprint is a powerful platform where developers can create or join real-world projects, prove their skills with tech-specific tests, and collaborate via GitHub, all while earning XP, badges, and leaderboard ranks. It's built for serious coders who want to build, ship, and grow together.
+# 🚀 DevSprint – Developer Collaboration Platform
 
-🔥 Key Features
-Login via GitHub – Quick and secure auth
+**DevSprint** is a powerful, gamified collaboration platform where developers can **create or join real-world projects**, verify their skills through **tech-stack-specific tests**, and collaborate using **GitHub integration**. Build. Ship. Grow.
 
-Skill-Based Entry – Take a tech-stack-specific test before joining
+---
 
-Create Projects – Auto-generate GitHub repo + README with contributors guide
+## 🌟 Features
 
-Join Projects – Pass tests, prove skills, and collaborate on live repos
+- 🔐 **GitHub Login** – Fast, secure authentication via GitHub OAuth  
+- 🧠 **Skill Test System** – Take short tests (HTML/CSS/JS & more) before joining a project  
+- 🚀 **Create Projects** – Auto-generate GitHub repos with README + contributor guide  
+- 🤝 **Join Projects** – Browse open projects, pass test, join repo with auto-access  
+- 🧩 **Collaboration Hub** – Built-in task board, issue tracker & team chat  
+- 🏆 **Gamification** – Earn XP for commits, issues, code reviews; unlock badges; rise on leaderboard  
 
-Gamification – Earn XP, badges, and climb the leaderboard
-
-Integrated Collab Hub – Task board, issue tracker, and live chat for every project
+---
