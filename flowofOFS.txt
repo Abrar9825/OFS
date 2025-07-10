@@ -1,0 +1,46 @@
+Dashboard
+   |
+Login/Signup (triggered only on action, NOT auto popup)
+   |
+User sets Preferences (tech stack, role, etc.)
+   |
+Dashboard (now personalized)
+   |
+[Create Project] OR [Join Project]
+   |
+Check GitHub Auth:
+   ├── If NOT logged in → Show short GitHub explainer video + Sign in link
+   └── If logged in → Proceed
+   |
+Skill Test Trigger:
+   ├── First Project? → Test: HTML, CSS, JS
+   └── Subsequent Projects? → Test only new tech stack
+   |
+Test Completed:
+   ├── If FAIL → Suggest Tutoriol + Retest after cooldown 1day
+   └── If PASS → Store result in DB
+   |
+IF "Create Project":
+   ├── Auto-create GitHub Repo via API
+   ├── Generate README with:
+   │     • Project Title
+   │     • Tech Stack
+   │     • Contribution Guide
+   └── Assign Leader Role
+   |
+IF "Join Project":
+   ├── Join via GitHub
+   └── Auto-check for test completion + permission
+   |
+Project Access Granted
+   |
+Collaboration Area:
+   ├── Repo Access
+   ├── Task Board
+   ├── Issue Tracker
+   └── Comm Channel (Discord / Slack / Internal)
+   |
+Gamification:
+   ├── XP for commits, issues solved, code reviews
+   ├── Badges for milestones
+   └── Leaderboard updates
