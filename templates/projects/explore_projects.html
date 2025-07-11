@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explore Projects</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { background: #f7f9fb; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .main-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.15em; }
+    .subtitle { color: #7d8597; font-size: 1.08rem; margin-bottom: 0.5em; }
+    .exp-search { border-radius: 12px; font-size: 1rem; border: 1.5px solid #e2e5ec; min-width: 340px; padding: 0.7em 1.1em; background: #fff; transition: border 0.2s; outline: none; }
+    .exp-search:focus { border-color: #2563eb; }
+    .chip-group, .chip-group-tech { display: flex; gap: 0.5em; flex-wrap: wrap; align-items: center; }
+    .chip-label { color: #222a36; font-weight: 600; font-size: 0.98rem; margin-right: 0.25em; }
+    .chip { border-radius: 999px; border: 1px solid #e2e5ec; background: #fff; font-size: 0.97rem; font-weight: 500; color: #222a36; padding: 0.38em 1.18em; cursor: pointer; transition: background 0.17s, color 0.17s;}
+    .chip.active, .chip:hover { background: #f2f6fe; color: #2563eb; border-color: #b3c5f1; }
+    .exp-checkbox { font-size: 1rem; font-weight: 500; color: #373d46; display: flex; align-items: center; gap: 0.45em; }
+    .exp-row { display: flex; gap: 2.5rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .exp-project-list { flex: 2; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    @media (max-width: 991.98px) {
+      .exp-project-list { grid-template-columns: 1fr; }
+      .exp-sidebar { min-width: 0; width: 100%; margin-top: 2rem; }
+      .exp-row { flex-direction: column; gap: 0; }
+    }
+    .exp-card {
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 2px 16px 0 #181d2410;
+      padding: 1.6rem 1.7rem 1.2rem 1.7rem;
+      display: flex; flex-direction: column; gap: 0.7rem;
+      border: 1.5px solid #f1f2f7;
+      min-width: 0; min-height: 220px;
+      transition: box-shadow 0.15s, border 0.15s;
+      height: 100%;
+      justify-content: space-between;
+    }
+    .exp-card:hover { box-shadow: 0 6px 24px 0 #2563eb1a; border-color: #b3c5f1; }
+    .exp-card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
+    .exp-card-title { font-size: 1.15rem; font-weight: 700; color: #23272f; margin-bottom: 0; }
+    .exp-card-time { font-size: 0.99rem; color: #848a9c; font-weight: 500; white-space: nowrap; margin-top: 2px; }
+    .exp-card-roles { display: flex; gap: 0.5em; margin-bottom: 0.2em; }
+    .exp-role { display: flex; align-items: center; gap: 0.2em; padding: 0.18em 0.8em; border-radius: 999px; font-weight: 600; font-size: 0.97rem; background: #f2f6fe;}
+    .exp-role.frontend { color: #2563eb; background: #eef4ff; }
+    .exp-role.backend { color: #1f8839; background: #eaf1fc; }
+    .exp-role.uiux { color: #a259ff; background: #f3eaff; }
+    .exp-role.ml { color: #f97316; background: #fff6ec; }
+    .exp-role.devops { color: #e14545; background: #fff0f2; }
+    .exp-card-techs { display: flex; gap: 0.5em; flex-wrap: wrap; margin-bottom: 0.25em; }
+    .exp-tech { border-radius: 6px; font-size: 0.98rem; background: #f2f4f7; color: #61677c; padding: 0.22em 0.95em; font-weight: 500;}
+    .exp-user { display: flex; align-items: center; gap: -0.4em; font-size: 1rem; font-weight: 500; color: #23272f; }
+    .exp-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #e7eaf3; }
+    .exp-apply-btn { background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%); color: #fff; font-weight: 600; font-size: 1rem; padding: 0.38em 1.5em; border: none; border-radius: 8px; box-shadow: 0 2px 8px #2563eb15; transition: background 0.15s; }
+    .exp-apply-btn:hover { background: linear-gradient(90deg, #1746a2 0%, #2563eb 100%);}
+    .exp-sidebar { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 1.6rem; }
+    .exp-sidebar-card { background: #fff; border-radius: 16px; box-shadow: 0 2px 16px 0 #181d2410; padding: 2.1rem 1.6rem 1.4rem 1.6rem; border: 1.5px solid #f1f2f7;}
+    .exp-sidebar-highlight { text-align: center; background: linear-gradient(115deg, #f7faff 75%, #f0f5ff 100%); box-shadow: 0 3px 24px #3b82f61a; padding-bottom: 2.1rem;}
+    .exp-sidebar-btn { background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%); color: #fff; font-weight: 600; font-size: 1.08rem; border-radius: 9px; padding: 0.68em 0; width: 100%; margin-top: 1.3rem; border: none; box-shadow: 0 2px 10px #2563eb12; transition: background 0.14s; }
+    .exp-sidebar-btn:hover { background: linear-gradient(90deg, #1746a2 0%, #2563eb 100%);}
+    .exp-quickstats-title { font-weight: 600; font-size: 1.08rem; margin-bottom: 1rem; color: #222a36;}
+    .exp-quickstats dt { font-size: 1rem; font-weight: 400; color: #535b6e;}
+    .exp-quickstats dd { font-size: 1.13rem; font-weight: 700; color: #23272f; text-align: right;}
+    @media (max-width: 700px) {
+      .exp-header { flex-direction: column; align-items: flex-start !important; gap: 1.3rem; }
+      .exp-search { min-width: 0; width: 100%; }
+      .exp-project-list { grid-template-columns: 1fr; gap: 1.5rem;}
+      .exp-row { gap: 1.3rem;}
+      .exp-sidebar { gap: 1rem;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3 exp-header" style="gap: 2rem;">
+      <div>
+        <div class="main-title">Explore Projects</div>
+        <div class="subtitle">Real teams. Real builds. Match your skills to real-world builds.</div>
+      </div>
+      <input class="exp-search" placeholder="Search by tech, role, or project title" />
+    </div>
+    <!-- Filters -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-1 mb-md-3" style="gap:1.4rem !important;">
+      <div class="chip-group">
+        <span class="chip-label">Role:</span>
+        <button class="chip">Backend</button>
+        <button class="chip">UI/UX</button>
+        <button class="chip">ML</button>
+        <button class="chip">DevOps</button>
+      </div>
+      <div class="chip-group-tech">
+        <span class="chip-label">Tech:</span>
+        <button class="chip">React</button>
+        <button class="chip">Node.js</button>
+        <button class="chip">Figma</button>
+        <button class="chip">Docker</button>
+      </div>
+      <label class="exp-checkbox mb-0 ms-md-4">
+        <input class="form-check-input mt-0" type="checkbox" />
+        Only show projects I qualify for
+      </label>
+    </div>
+    <!-- Main Content -->
+    <div class="exp-row">
+      <div class="exp-project-list">
+        <!-- Card 1 -->
+        <div class="exp-card">
+          <div>
+            <div class="exp-card-row">
+              <div class="exp-card-title">Figma to Code Generator</div>
+              <div class="exp-card-time">2 days ago</div>
+            </div>
+            <div class="exp-card-roles">
+              <span class="exp-role frontend">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="1.5" width="15" height="15" style="margin-right:3px;"><path d="M10.5 1.6l3.2 3.2-3.2 3.2M5.5 14.4l-3.2-3.4 3.2-3.2"/></svg>
+                Frontend
+              </span>
+              <span class="exp-role uiux">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#a259ff" width="13" height="13" style="margin-right:3px;"><circle cx="6.5" cy="6.5" r="6.5"/></svg>
+                UI/UX
+              </span>
+            </div>
+            <div class="exp-card-techs">
+              <span class="exp-tech">React</span>
+              <span class="exp-tech">TypeScript</span>
+              <span class="exp-tech">Figma API</span>
+            </div>
+          </div>
+          <div class="exp-card-row">
+            <div class="exp-user">
+              <img class="exp-avatar" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/dfef72ed-b31b-4cf7-b425-c18189a14de9.png" alt="alexdev" />
+              @alexdev
+            </div>
+            <button class="exp-apply-btn">Apply to Join</button>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="exp-card">
+          <div>
+            <div class="exp-card-row">
+              <div class="exp-card-title">AI Study Buddy</div>
+              <div class="exp-card-time">5 days ago</div>
+            </div>
+            <div class="exp-card-roles">
+              <span class="exp-role backend">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#1f8839" width="13" height="13" style="margin-right:3px;"><rect x="1.5" y="3" width="10" height="7" rx="3.5"/></svg>
+                Backend
+              </span>
+              <span class="exp-role ml">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#f97316" stroke-width="2" viewBox="0 0 24 24" width="14" height="14" style="margin-right:3px;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                ML
+              </span>
+            </div>
+            <div class="exp-card-techs">
+              <span class="exp-tech">Python</span>
+              <span class="exp-tech">FastAPI</span>
+              <span class="exp-tech">UX Pilot AI</span>
+            </div>
+          </div>
+          <div class="exp-card-row">
+            <div class="exp-user">
+              <img class="exp-avatar" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/60c8a622-a95d-4e28-b001-de2502e0fe08.png" alt="sarahml" />
+              @sarahml
+            </div>
+            <button class="exp-apply-btn">Apply to Join</button>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="exp-card">
+          <div>
+            <div class="exp-card-row">
+              <div class="exp-card-title">Campus Event Platform</div>
+              <div class="exp-card-time">1 week ago</div>
+            </div>
+            <div class="exp-card-roles">
+              <span class="exp-role frontend">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="1.5" width="15" height="15" style="margin-right:3px;"><path d="M10.5 1.6l3.2 3.2-3.2 3.2M5.5 14.4l-3.2-3.4 3.2-3.2"/></svg>
+                Frontend
+              </span>
+              <span class="exp-role backend">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#1f8839" width="13" height="13" style="margin-right:3px;"><rect x="1.5" y="3" width="10" height="7" rx="3.5"/></svg>
+                Backend
+              </span>
+            </div>
+            <div class="exp-card-techs">
+              <span class="exp-tech">Vue.js</span>
+              <span class="exp-tech">Node.js</span>
+              <span class="exp-tech">MongoDB</span>
+            </div>
+          </div>
+          <div class="exp-card-row">
+            <div class="exp-user">
+              <img class="exp-avatar" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c0bd9fb9-6b69-4f0c-96e4-cdcd7f81c642.png" alt="miketech" />
+              @miketech
+            </div>
+            <button class="exp-apply-btn">Apply to Join</button>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="exp-card">
+          <div>
+            <div class="exp-card-row">
+              <div class="exp-card-title">Crypto Portfolio Tracker</div>
+              <div class="exp-card-time">3 days ago</div>
+            </div>
+            <div class="exp-card-roles">
+              <span class="exp-role frontend">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="1.5" width="15" height="15" style="margin-right:3px;"><path d="M10.5 1.6l3.2 3.2-3.2 3.2M5.5 14.4l-3.2-3.4 3.2-3.2"/></svg>
+                Frontend
+              </span>
+              <span class="exp-role devops">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#e14545" stroke-width="2" viewBox="0 0 24 24" width="14" height="14" style="margin-right:3px;"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+                DevOps
+              </span>
+            </div>
+            <div class="exp-card-techs">
+              <span class="exp-tech">React</span>
+              <span class="exp-tech">AWS</span>
+              <span class="exp-tech">Docker</span>
+            </div>
+          </div>
+          <div class="exp-card-row">
+            <div class="exp-user">
+              <img class="exp-avatar" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7e96f3a1-6675-47bb-ac3c-486934df540f.png" alt="cryptodev" />
+              @cryptodev
+            </div>
+            <button class="exp-apply-btn">Apply to Join</button>
+          </div>
+        </div>
+      </div>
+      <!-- Sidebar -->
+      <div class="exp-sidebar">
+        <div class="exp-sidebar-card exp-sidebar-highlight">
+          <div class="exp-sidebar-icon">
+            <svg width="48" height="48" fill="#4F8CFF"><circle cx="24" cy="24" r="24" fill="#edf4ff"/><text x="50%" y="58%" text-anchor="middle" font-size="28" fill="#4F8CFF">🚀</text></svg>
+          </div>
+          <p class="fw-semibold fs-5 mb-1 text-dark">Can't find the right match?</p>
+          <p class="text-secondary mb-3">Create your own project and build your dream team using your preferred roles and tech stack.</p>
+          <button class="exp-sidebar-btn">+ Start Your Own Project</button>
+        </div>
+        <div class="exp-sidebar-card">
+          <div class="exp-quickstats-title">Quick Stats</div>
+          <dl class="row exp-quickstats mb-0">
+            <dt class="col-7">Active Projects</dt>
+            <dd class="col-5">247</dd>
+            <dt class="col-7">Students Building</dt>
+            <dd class="col-5">1,342</dd>
+            <dt class="col-7">Projects Completed</dt>
+            <dd class="col-5">89</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

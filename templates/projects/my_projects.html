@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Projects</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: #f8f9fb;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    }
+    .page-title {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .subtext {
+      color: #636978;
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+    }
+    .filter-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 7px 0 rgba(35,39,58,0.07);
+      padding: 26px 20px 22px 20px;
+      border: 1px solid #eff0f3;
+      min-width: 260px;
+      max-width: 310px;
+    }
+    .filter-label {
+      font-weight: 500;
+      color: #23283a;
+      font-size: 1.05rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+    .form-check-label {
+      font-weight: 500;
+      color: #23283a;
+      font-size: 0.98rem;
+    }
+    .form-check-input:checked {
+      background-color: #181c32;
+      border-color: #181c32;
+    }
+    .project-card {
+      background: #fff;
+      border-radius: 13px;
+      box-shadow: 0 2px 12px 0 rgba(35,39,58,0.07);
+      border: 1px solid #eff0f3;
+      padding: 22px 24px 18px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
+    .project-card .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 7px;
+    }
+    .project-card .project-title {
+      font-weight: 600;
+      font-size: 1.18rem;
+      color: #181c32;
+    }
+    .project-card .project-users {
+      display: flex;
+      align-items: center;
+      gap: -8px;
+      margin-top: 2px;
+    }
+    .project-card .project-users .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      margin-left: -8px;
+      box-shadow: 0 1px 3px #e2e4f2;
+    }
+    .project-card .project-users .avatar:first-child {
+      margin-left: 0;
+    }
+    .project-card .project-users .more {
+      font-size: 1rem;
+      color: #999;
+      margin-left: 4px;
+      font-weight: 500;
+    }
+    .badge-status {
+      font-size: 0.93em;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 3px 12px;
+      margin-right: 7px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .badge-status.completed {
+      background: #e8f8ee;
+      color: #17b15a;
+    }
+    .badge-status.ongoing {
+      background: #fdf7e2;
+      color: #edbe1a;
+    }
+    .badge-status.draft {
+      background: #f3f4f6;
+      color: #1e1e22;
+      font-weight: 500;
+    }
+    .project-tags {
+      margin: 6px 0 7px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .tag {
+      background: #f2f3fa;
+      color: #46485d;
+      font-size: 0.92em;
+      padding: 3px 11px;
+      border-radius: 11px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      border: none;
+      display: inline-block;
+    }
+    .tag.react { background: #e8f0fa; color: #217ce6;}
+    .tag.vue { background: #fff8e1; color: #f89f1b;}
+    .tag.python { background: #fff3e0; color: #e5b002;}
+    .tag.node { background: #e7f7e6; color: #46a046;}
+    .tag.mongodb { background: #eae8fd; color: #a259d9;}
+    .tag.django { background: #e8f6ed; color: #159761;}
+    .tag.postgres { background: #e3ecfa; color: #2f6792;}
+    .tag.js { background: #fffde1; color: #e9c40f;}
+    .tag.fastapi { background: #e8f8ee; color: #009688;}
+    .tag.ux { background: #e6eaff; color: #3855e7;}
+    .tag.uxai { background: #efe9fa; color: #5e57ae;}
+    .tag.default { background: #f2f3fa; color: #46485d;}
+    .project-role {
+      color: #636978;
+      font-size: 1.01rem;
+      font-weight: 500;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 0.32em;
+    }
+    .project-meta {
+      font-size: 0.98rem;
+      color: #888d94;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-top: 3px;
+    }
+    .project-meta .icon {
+      margin-right: 3px;
+    }
+    .project-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 10px;
+    }
+    .btn-view {
+      background: #181c32;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 9px 0;
+      width: 92%;
+      font-size: 1.02rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35em;
+      transition: background 0.17s;
+    }
+    .btn-view:hover, .btn-view:focus {
+      background: #09094b;
+      outline: none;
+    }
+    .btn-edit {
+      background: #f5f7fb;
+      color: #23283a;
+      border: 1px solid #e4e5f1;
+      border-radius: 6px;
+      padding: 7px 18px 7px 18px;
+      font-size: 0.97rem;
+      font-weight: 500;
+      margin-left: 7px;
+      transition: background 0.15s;
+    }
+    .btn-edit:hover, .btn-edit:focus {
+      background: #eef1f7;
+      outline: none;
+    }
+    .btn-leave {
+      background: #fff0f0;
+      color: #e03232;
+      border: 1px solid #f5dada;
+      border-radius: 6px;
+      padding: 7px 18px 7px 18px;
+      font-size: 0.97rem;
+      font-weight: 500;
+      transition: background 0.15s;
+      margin-left: 7px;
+    }
+    .btn-leave:hover, .btn-leave:focus {
+      background: #fbe6e6;
+      outline: none;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .pagination .page-link {
+      color: #181c32;
+      border-radius: 8px;
+      border: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      padding: 7px 15px;
+      background: #fff;
+      transition: background 0.15s, color 0.15s;
+      margin: 0 2px;
+    }
+    .pagination .page-link.active, .pagination .page-link:focus, .pagination .page-link:hover {
+      background: #181c32;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 992px) {
+      .main-row { flex-direction: column; }
+      .filter-card { width: 100%; max-width: 100%; margin-bottom: 18px;}
+    }
+    @media (max-width: 700px) {
+      .project-card { padding: 15px 7vw 13px 7vw; }
+      .filter-card {padding: 18px 3vw 13px 3vw;}
+      .page-title { font-size: 1.3rem;}
+    }
+    @media (max-width: 570px) {
+      .project-card { padding: 12px 3vw; }
+      .page-title { font-size: 1.09rem;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid px-0">
+    <div class="px-4 py-3 border-bottom" style="background:#fff;">
+      <div class="page-title">
+        <span style="font-size:1.3em;">&lt;/&gt;</span>
+        My Projects
+      </div>
+      <div class="subtext">Track and revisit everything you've built or contributed to.</div>
+    </div>
+    <div class="container-xl">
+      <div class="row g-4 main-row" style="margin-top:10px;">
+        <!-- Filters -->
+        <div class="col-lg-3 col-md-4 col-12">
+          <div class="filter-card">
+            <label for="searchProjects" class="filter-label">Filters</label>
+            <input type="text" id="searchProjects" class="form-control mb-3" placeholder="Search projects..." />
+            <div class="mb-3">
+              <div class="filter-label" style="font-size:1rem;margin-bottom:0.5rem;">Ownership</div>
+              <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-dark" style="background:#181c32;border:none;">Created</button>
+                <button type="button" class="btn btn-outline-dark" style="background:#fff;border:1.2px solid #e4e5f1;color:#181c32;">Joined</button>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="filter-label" style="font-size:1rem;margin-bottom:0.5rem;">Status</div>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" checked id="statusOngoing">
+                <label class="form-check-label" for="statusOngoing">Ongoing</label>
+              </div>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" checked id="statusCompleted">
+                <label class="form-check-label" for="statusCompleted">Completed</label>
+              </div>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" id="statusDraft">
+                <label class="form-check-label" for="statusDraft">Draft</label>
+              </div>
+            </div>
+            <div class="mb-2">
+              <div class="filter-label" style="font-size:1rem;margin-bottom:0.5rem;">Role</div>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" checked id="roleFrontend">
+                <label class="form-check-label" for="roleFrontend">Frontend</label>
+              </div>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" checked id="roleBackend">
+                <label class="form-check-label" for="roleBackend">Backend</label>
+              </div>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" checked id="roleFullstack">
+                <label class="form-check-label" for="roleFullstack">Fullstack</label>
+              </div>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" id="roleUIUX">
+                <label class="form-check-label" for="roleUIUX">UI/UX</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Projects -->
+        <div class="col-lg-9 col-md-8 col-12">
+          <!-- Project Card -->
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-title">EcoTracker Mobile App</span>
+              <span class="project-users">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="avatar" alt="User1">
+                <img src="https://randomuser.me/api/portraits/men/45.jpg" class="avatar" alt="User2">
+                <span class="more">+2</span>
+              </span>
+            </div>
+            <div>
+              <span class="badge-status completed">Completed</span>
+              <span class="tag react">React Native</span>
+              <span class="tag node">Node.js</span>
+              <span class="tag mongodb">MongoDB</span>
+            </div>
+            <div class="project-role"><span>👨‍💻</span> Frontend Developer</div>
+            <div class="project-meta">
+              <span><span class="icon">📅</span> Dec 2023 - Feb 2024</span>
+            </div>
+            <div class="project-actions">
+              <button class="btn-view"><span class="icon">👁️</span> View Project</button>
+              <button class="btn-edit">Edit</button>
+            </div>
+          </div>
+          <!-- Project Card -->
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-title">StudyBuddy Platform</span>
+              <span class="project-users">
+                <img src="https://randomuser.me/api/portraits/men/31.jpg" class="avatar" alt="User3">
+                <img src="https://randomuser.me/api/portraits/men/36.jpg" class="avatar" alt="User4">
+                <img src="https://randomuser.me/api/portraits/women/43.jpg" class="avatar" alt="User5">
+              </span>
+            </div>
+            <div>
+              <span class="badge-status ongoing">Ongoing</span>
+              <span class="tag react">React</span>
+              <span class="tag python">Python</span>
+              <span class="tag django">Django</span>
+              <span class="tag postgres">PostgreSQL</span>
+            </div>
+            <div class="project-role"><span>💻</span> Fullstack Developer</div>
+            <div class="project-meta">
+              <span><span class="icon">📅</span> Jan 2024 - Present</span>
+            </div>
+            <div class="project-actions">
+              <button class="btn-view"><span class="icon">👁️</span> View Project</button>
+              <button class="btn-edit">Edit</button>
+            </div>
+          </div>
+          <!-- Project Card -->
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-title">AI Recipe Generator</span>
+              <span class="project-users">
+                <img src="https://randomuser.me/api/portraits/women/40.jpg" class="avatar" alt="User6">
+              </span>
+            </div>
+            <div>
+              <span class="badge-status draft">Draft</span>
+              <span class="tag vue">Vue.js</span>
+              <span class="tag fastapi">FastAPI</span>
+              <span class="tag uxai">UX Pilot AI</span>
+            </div>
+            <div class="project-role"><span>🖥️</span> Backend Developer</div>
+            <div class="project-meta">
+              <span><span class="icon">📅</span> Created: Mar 2024</span>
+            </div>
+            <div class="project-actions">
+              <button class="btn-view"><span class="icon">👁️</span> View Project</button>
+              <button class="btn-leave">+ Leave</button>
+            </div>
+          </div>
+          <!-- Pagination -->
+          <nav class="pagination" aria-label="Projects page navigation">
+            <button class="page-link active" aria-current="page">1</button>
+            <button class="page-link">2</button>
+            <button class="page-link">3</button>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
