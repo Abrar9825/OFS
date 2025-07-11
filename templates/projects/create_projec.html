@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create New Project - OnlyForStudents</title>
+  <!-- Bootstrap 5 CDN for grid/layout (reset/normalize) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons for icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0a0a4d;
+      --primary-dark: #080839;
+      --primary-gradient-start: #1f47d9;
+      --primary-gradient-end: #010b55;
+      --blue-light: #e6efff;
+      --blue-bg: #dbe7ff;
+      --light-bg: #f8fbff;
+      --card-bg: #fff;
+      --grey-border: #ececec;
+      --input-bg: #f7f9fb;
+      --input-border: #e6e9f0;
+      --shadow: 0 2px 16px 0 rgba(26, 44, 77, 0.06);
+      --tag-green: #defff0;
+      --tag-green-text: #198754;
+      --tag-red: #fff0f0;
+      --tag-red-text: #dc3545;
+      --summary-shadow: 0 4px 16px 0 rgba(20, 34, 78, 0.10);
+    }
+
+    body {
+      background: var(--light-bg);
+      font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
+      color: #232323;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: transparent;
+      border-bottom: none;
+      box-shadow: none;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 30px 0 12px 10px;
+      background: transparent;
+    }
+
+    .app-logo {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.27rem;
+      letter-spacing: 0.01em;
+      gap: 7px;
+      color: var(--primary);
+    }
+
+    .app-logo-icon {
+      background: var(--primary);
+      color: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 9px 5px 7px;
+      font-size: 1.34rem;
+    }
+
+    .profile-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e3e8f8;
+      background: #fff;
+    }
+
+    .app-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* Main grid */
+    .main-content-grid {
+      display: grid;
+      grid-template-columns: 1.18fr 1fr;
+      gap: 36px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    @media (max-width: 991.98px) {
+      .main-content-grid {
+        grid-template-columns: 1fr;
+      }
+      .summary-section {
+        margin-top: 30px;
+      }
+    }
+
+    .page-title {
+      font-size: 1.58rem;
+      font-weight: 700;
+      color: #181818;
+      margin-bottom: 0.22rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-title .bi {
+      color: var(--primary);
+      font-size: 1.2em;
+    }
+
+    .page-subtitle {
+      color: #65718a;
+      margin-bottom: 1.6rem;
+      font-size: 0.98rem;
+      font-weight: 500;
+    }
+
+    /* Card Styles */
+    .card-custom {
+      background: var(--card-bg);
+      border: none;
+      border-radius: 1.04rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-weight: 700;
+      font-size: 1.07rem;
+      color: var(--primary);
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .bi {
+      font-size: 1.08em;
+      color: var(--primary);
+    }
+
+    /* Project Information */
+    .form-label {
+      font-weight: 600;
+      font-size: 0.93rem;
+      color: #232428;
+      margin-bottom: 0.22rem;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 0.56rem;
+      background: var(--input-bg);
+      border: 1.7px solid var(--input-border);
+      font-size: 1.03rem;
+      font-weight: 500;
+      color: #242e36;
+      transition: border-color 0.2s;
+      box-shadow: none;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px #e2eaff;
+      outline: none;
+      background: #fff;
+    }
+
+    textarea.form-control {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    /* Upload */
+    .upload-box {
+      border: 2px dashed #c3c3c3;
+      border-radius: 0.6rem;
+      min-height: 50px;
+      min-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8786a3;
+      font-weight: 600;
+      font-size: 0.98rem;
+      gap: 10px;
+      background: var(--input-bg);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      user-select: none;
+      padding: 6px 0;
+      outline: none;
+    }
+
+    .upload-box:hover,
+    .upload-box:focus {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .upload-box i {
+      font-size: 1.22rem;
+      margin-right: 0.3rem;
+    }
+
+    /* Roles Table */
+    .roles-table-header {
+      background: transparent;
+      color: #8991a2;
+      font-weight: 600;
+      font-size: 1.01rem;
+      padding-bottom: 2px;
+    }
+
+    .role-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--card-bg);
+      border-radius: 0.6rem;
+      margin-bottom: 10px;
+      padding: 0 0.7rem 0 0;
+      border: 1.2px solid #e7ebf5;
+      box-shadow: 0 1.5px 8px 0 rgba(26, 44, 77, 0.05);
+    }
+    .role-row > * {
+      margin-bottom: 0 !important;
+    }
+    .role-row .form-select {
+      min-width: 140px;
+      font-size: 1rem;
+      height: 40px;
+    }
+    .role-row .tech-stack-tags {
+      display: flex;
+      gap: 0.42rem;
+      flex-wrap: wrap;
+      margin-top: 5px;
+    }
+    .role-row .tech-stack-tags span {
+      background: #ebedf7;
+      color: var(--primary);
+      font-size: 0.85rem;
+      padding: 3px 13px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+    .add-stack-btn {
+      background: none;
+      border: none;
+      color: #6b6b9a;
+      font-size: 1.1rem;
+      margin-left: 6px;
+      border-radius: 50%;
+      padding: 2px 5px;
+      cursor: pointer;
+      transition: color 0.16s;
+    }
+    .add-stack-btn:hover {
+      color: var(--primary);
+      background: #f2f5ff;
+    }
+    .role-row input[type="number"] {
+      width: 56px;
+      border-radius: 0.45rem;
+      font-size: 1.01rem;
+      padding: 4px 8px;
+      background: var(--input-bg);
+      border: 1.3px solid #e7ebf5;
+    }
+    .btn-trash {
+      background: none;
+      border: none;
+      color: #dc3545;
+      font-size: 1.2rem;
+      margin-left: 6px;
+      cursor: pointer;
+      transition: color 0.16s;
+    }
+    .btn-trash:hover {
+      color: #a20d1d;
+    }
+    .add-role {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.02rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      margin-top: 0.4rem;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      outline: none;
+      transition: color 0.16s;
+    }
+    .add-role:hover {
+      text-decoration: underline;
+      color: #1f47d9;
+    }
+
+    /* Modules */
+    .modules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+    }
+    .module-card {
+      background: #f3f6ff;
+      border-radius: 0.7rem;
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      border: 1.2px solid #e0e6fa;
+      box-shadow: 0 1px 4px 0 rgba(26, 44, 77, 0.06);
+    }
+    .module-dot {
+      height: 13px;
+      width: 13px;
+      background: #28c76f;
+      border-radius: 50%;
+      margin-right: 7px;
+    }
+    .module-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+    .module-title {
+      font-weight: 600;
+      font-size: 1.01rem;
+      color: var(--primary);
+    }
+    .module-meta {
+      font-size: 0.89rem;
+      color: #5f6b87;
+    }
+
+    /* Summary Card */
+    .summary-section {
+      min-width: 300px;
+    }
+    .summary-card {
+      border-radius: 1.1rem;
+      background: #fff;
+      box-shadow: var(--summary-shadow);
+      border: none;
+      padding: 2.1rem 1.6rem 2rem;
+      margin-bottom: 26px;
+    }
+    .summary-card .summary-label {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.08rem;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 1.08rem;
+    }
+    .summary-card .summary-label .bi {
+      font-size: 1.21em;
+    }
+    .project-title {
+      font-weight: 700;
+      font-size: 1.08rem;
+      color: #222;
+      margin-bottom: 0.28rem;
+    }
+    .created-by {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.1rem;
+    }
+    .created-by .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--primary);
+    }
+    .created-by-info .name {
+      font-weight: 700;
+      color: #2e2e2e;
+      font-size: 1rem;
+    }
+    .created-by-info .role {
+      font-size: 0.89rem;
+      color: #7a7a8d;
+      font-weight: 600;
+    }
+    .team-overview {
+      margin-bottom: 20px;
+    }
+    .team-overview label {
+      font-weight: 600;
+      color: #2e2e2e;
+      font-size: 0.93rem;
+      margin-bottom: 0.09rem;
+    }
+    .stack-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.32rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .fill-green {
+      background: var(--tag-green);
+      color: var(--tag-green-text);
+      border-radius: 20px;
+      padding: 0 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .fill-red {
+      background: var(--tag-red);
+      color: var(--tag-red-text);
+      border-radius: 20px;
+      padding: 0 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .your-role-summary {
+      background: #edf3ff;
+      border-radius: 0.6rem;
+      padding: 13px 13px 10px 13px;
+      margin: 10px 0 18px 0;
+      border: 1.4px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    /* Button */
+    .btn-primary-gradient {
+      background: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+      border: none;
+      font-weight: 600;
+      font-size: 1.07rem;
+      color: #fff;
+      border-radius: 0.7rem;
+      box-shadow: 0 4px 16px 0 rgba(31, 71, 217, 0.16);
+      padding: 0.78rem 0;
+      transition: filter 0.2s;
+    }
+    .btn-primary-gradient:hover,
+    .btn-primary-gradient:focus {
+      filter: brightness(1.13);
+      box-shadow: 0 6px 19px 0 rgba(31, 71, 217, 0.18);
+    }
+
+    /* Your Role Selector */
+    .role-selectors {
+      display: flex;
+      gap: 16px;
+      margin-top: 7px;
+      margin-bottom: 6px;
+    }
+    .role-selector {
+      flex: 1 1 0;
+      background: #fff;
+      border-radius: 0.7rem;
+      border: 2.1px solid #e1e4ec;
+      padding: 18px 17px 11px;
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .role-selector.selected {
+      background: #edf3ff;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .role-selector .role-tag {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.81rem;
+      padding: 2px 10px 2px 8px;
+      border-radius: 0.45rem;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .role-selector input[type="radio"] {
+      position: absolute;
+      top: 14px;
+      right: 15px;
+      width: 1.18rem;
+      height: 1.18rem;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Additional Options */
+    .form-check {
+      user-select: none;
+      font-weight: 500;
+      font-size: 1.01rem;
+      margin-bottom: 0.8rem;
+    }
+    .form-check-input {
+      accent-color: var(--primary);
+      margin-right: 9px;
+    }
+    .form-check-label {
+      cursor: pointer;
+      color: #384262;
+    }
+
+    /* Project Modules Section (right sidebar override) */
+    .sidebar-modules-section {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0;
+    }
+    .sidebar-modules-section .card-custom {
+      margin-bottom: 0;
+      padding-bottom: 1.6rem;
+    }
+    .summary-section .sidebar-modules-section {
+      margin-top: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="app-header">
+    <span class="app-logo">
+      <span class="app-logo-icon"><i class="bi bi-mortarboard-fill"></i></span>
+      OnlyForStudents
+    </span>
+    <div class="app-actions">
+      <i class="bi bi-bell" style="font-size:1.25rem;color:#b2b9c8;cursor:pointer;"></i>
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7b576c03-e8da-4380-9ad5-b82510c0d07d.png"
+        alt="Profile" class="profile-avatar" />
+    </div>
+  </div>
+
+  <main class="container-fluid" style="padding-top:0;">
+    <section>
+      <div class="page-title">
+        <i class="bi bi-arrow-left"></i>
+        Create New Project
+      </div>
+      <div class="page-subtitle">
+        Define your project details and build your dream team
+      </div>
+    </section>
+    <div class="main-content-grid">
+      <!-- Left form section -->
+      <section>
+        <!-- Project Information -->
+        <div class="card card-custom mb-4 p-4">
+          <div class="section-title mb-3">
+            <i class="bi bi-info-circle-fill"></i>
+            Project Information
+          </div>
+          <form>
+            <div class="mb-3">
+              <label for="projectTitle" class="form-label">Project Title</label>
+              <input type="text" id="projectTitle" class="form-control" placeholder="Enter your project name" autocomplete="off" />
+            </div>
+            <div class="mb-3">
+              <label for="projectDescription" class="form-label">Short Description</label>
+              <textarea id="projectDescription" class="form-control" placeholder="Describe your project in a few sentences..." rows="3"></textarea>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-7">
+                <label for="githubRepo" class="form-label">GitHub Repository</label>
+                <div class="input-group">
+                  <span class="input-group-text" style="background:#f3f6ff;color:#898ca9;font-weight:600;">https://github.com/</span>
+                  <input type="text" id="githubRepo" class="form-control" placeholder="..." autocomplete="off" />
+                </div>
+              </div>
+              <div class="col-md-5">
+                <label for="coverImage" class="form-label">Cover Image</label>
+                <div tabindex="0" role="button" class="upload-box" aria-label="Upload or drag image">
+                  <i class="bi bi-cloud-arrow-up"></i> Upload or drag image
+                </div>
+                <input type="file" id="coverImage" accept="image/*" hidden />
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- Define Team Structure -->
+        <div class="card card-custom mb-4 p-4">
+          <div class="section-title mb-2">
+            <i class="bi bi-people-fill"></i> Define Team Structure
+          </div>
+          <div class="text-muted mb-3" style="font-weight:500;font-size:0.98rem;">Which team members do you need for this project?</div>
+          <div class="roles-table-header row mb-1 d-none d-md-flex" style="margin-left:2px;">
+            <div class="col-md-4">Role</div>
+            <div class="col-md-5">Tech Stack</div>
+            <div class="col-md-2">Count</div>
+            <div class="col-md-1"></div>
+          </div>
+          <div id="roles-container"></div>
+          <button type="button" class="add-role" onclick="addRole()">
+            <i class="bi bi-plus-circle-fill"></i> Add Another Role
+          </button>
+        </div>
+        <!-- Your Role in This Project -->
+        <div class="card card-custom mb-4 p-4">
+          <div class="section-title mb-3">
+            <i class="bi bi-person-fill"></i> Your Role in This Project
+          </div>
+          <div class="mb-2" style="font-size:1.01rem;">Choose which role you will take in this team.</div>
+          <div class="role-selectors" id="your-role-selector">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        <!-- Additional Options -->
+        <div class="card card-custom p-4">
+          <div class="section-title mb-3">Additional Options</div>
+          <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" id="autoGenerate" />
+            <label for="autoGenerate" class="form-check-label">Auto-generate README.md</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="makePublic" checked />
+            <label for="makePublic" class="form-check-label">Make Project Public</label>
+          </div>
+        </div>
+      </section>
+      <!-- Right summary section -->
+      <section class="summary-section">
+        <div class="summary-card">
+          <div class="summary-label">
+            <i class="bi bi-eye-fill"></i> Project Summary
+          </div>
+          <div class="project-title">Your awesome project name</div>
+          <div class="created-by">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7b576c03-e8da-4380-9ad5-b82510c0d07d.png" alt="Profile" class="avatar" />
+            <div class="created-by-info">
+              <div class="name">John Doe</div>
+              <div class="role">Project Leader</div>
+            </div>
+          </div>
+          <div class="team-overview mb-2">
+            <label>Team Overview</label>
+            <div class="stack-row">
+              <div>Frontend (React)</div>
+              <div class="fill-green">1/2 filled</div>
+            </div>
+            <div class="stack-row">
+              <div>UI/UX (Figma)</div>
+              <div class="fill-red">0/1 needed</div>
+            </div>
+          </div>
+          <div>
+            <label>Your Role</label>
+            <div class="your-role-summary mt-2">
+              Frontend Developer<br>
+              <span style="font-weight:400;font-size:0.92em;color:#3e5ba7;">React, TypeScript</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary-gradient w-100 mt-2" aria-label="Create Project">
+            <i class="bi bi-rocket-fill me-2"></i> Create Project
+          </button>
+        </div>
+        <!-- Project Modules Section moved here -->
+        <div class="sidebar-modules-section mt-4">
+          <div class="card card-custom p-4">
+            <div class="section-title mb-3">
+              <i class="bi bi-puzzle-fill"></i> Generate Project Modules
+            </div>
+            <button class="btn w-100 mb-2" style="background:linear-gradient(90deg,#6366f1,#7f35ff);color:#fff;font-weight:600;padding:0.8rem 0;font-size:1.11rem;border-radius:0.7rem;" type="button">
+              <i class="bi bi-stars me-2"></i> Generate via AI
+            </button>
+            <button class="btn w-100 mb-3" style="background:#f3f6ff;color:#252e3e;font-weight:500;padding:0.8rem 0;font-size:1.07rem;border-radius:0.7rem;" type="button" onclick="alert('Manual Module Modal Coming Soon')">
+              <i class="bi bi-pencil-fill me-2"></i> Add Manually
+            </button>
+            <div class="modules-list" id="modules-container"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    // Roles and stacks
+    const roles = ["Frontend Developer", "Backend Developer", "UI/UX Designer", "DevOps Engineer"];
+    const stacks = {
+      "Frontend Developer": ["React", "TypeScript"],
+      "Backend Developer": ["Node.js", "MongoDB"],
+      "UI/UX Designer": ["Figma", "Adobe XD"],
+      "DevOps Engineer": ["Docker", "AWS"]
+    };
+
+    function createRole(roleName = "Frontend Developer", count = 1) {
+      const row = document.createElement("div");
+      row.className = "role-row align-items-center mb-2";
+      row.innerHTML = `
+        <div style="flex:1; min-width:140px;">
+          <select class="form-select role-select" aria-label="Select Role">
+            ${roles.map(r => `<option value="${r}" ${r === roleName ? 'selected' : ''}>${r}</option>`).join('')}
+          </select>
+        </div>
+        <div style="flex:2; min-width:170px;">
+          <div class="tech-stack-tags">${(stacks[roleName] || []).map(s => `<span>${s}</span>`).join('')}</div>
+          <button class="add-stack-btn" title="Add Tech Stack" tabindex="0" type="button"><i class="bi bi-plus-lg"></i></button>
+        </div>
+        <div style="min-width:70px;">
+          <input type="number" min="1" value="${count}" class="form-control" style="width:60px;" />
+        </div>
+        <button class="btn-trash" type="button" title="Remove this role"><i class="bi bi-trash-fill"></i></button>
+      `;
+      row.querySelector(".role-select").addEventListener("change", e => {
+        const newRole = e.target.value;
+        const tagContainer = row.querySelector(".tech-stack-tags");
+        tagContainer.innerHTML = (stacks[newRole] || []).map(s => `<span>${s}</span>`).join('');
+      });
+      row.querySelector(".btn-trash").onclick = () => row.remove();
+      return row;
+    }
+
+    function addRole() {
+      document.getElementById("roles-container").appendChild(createRole());
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("roles-container");
+      container.appendChild(createRole("Frontend Developer", 2));
+      container.appendChild(createRole("UI/UX Designer", 1));
+      renderModules();
+
+      // Your Role select boxes (like pic: two roles, first selected)
+      const yourRoleSelector = document.getElementById("your-role-selector");
+      yourRoleSelector.innerHTML = '';
+      [
+        {
+          name: "Frontend Developer",
+          stack: "React, TypeScript",
+          value: "frontend",
+          selected: true
+        },
+        {
+          name: "UI/UX Designer",
+          stack: "Figma, Adobe XD",
+          value: "uiux",
+          selected: false
+        }
+      ].forEach((r, i) => {
+        const box = document.createElement("label");
+        box.className = "role-selector" + (r.selected ? " selected" : "");
+        box.innerHTML = `
+          <input type="radio" name="yourRole" value="${r.value}" ${r.selected ? "checked" : ""} style="position:absolute;top:18px;right:18px;">
+          <div style="font-weight:700;font-size:1.02rem;margin-bottom:2px;">${r.name}</div>
+          <div style="font-size:0.97em;color:#6c7cb0;font-weight:500;">${r.stack}</div>
+          ${r.selected ? `<div class="role-tag">You are: Frontend (React)</div>` : ""}
+        `;
+        box.onclick = function(e) {
+          // remove .selected from all
+          document.querySelectorAll('.role-selector').forEach(x => x.classList.remove('selected'));
+          box.classList.add('selected');
+          box.querySelector("input[type=radio]").checked = true;
+        }
+        yourRoleSelector.appendChild(box);
+      });
+    });
+
+    // Upload box interaction
+    document.querySelector('.upload-box').onclick = function () {
+      document.getElementById('coverImage').click();
+    }
+    document.querySelector('.upload-box').onkeydown = function (e) {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById('coverImage').click();
+      }
+    }
+
+    // Modules
+    let modules = [
+      { title: "UI Setup & Design System", type: "Frontend", due: "2024-12-15" },
+      { title: "Authentication System", type: "Backend", due: "2024-12-20" },
+      { title: "API Integration", type: "Frontend", due: "2024-12-25" }
+    ];
+
+    function renderModules() {
+      const container = document.getElementById("modules-container");
+      container.innerHTML = '';
+      modules.forEach(mod => {
+        const m = document.createElement("div");
+        m.className = "module-card";
+        m.innerHTML = `
+          <div class="module-dot"></div>
+          <div class="module-content">
+            <div class="module-title">${mod.title}</div>
+            <div class="module-meta">${mod.type} • Due: ${formatDate(mod.due)}</div>
+          </div>
+        `;
+        container.appendChild(m);
+      });
+    }
+    function formatDate(date) {
+      const d = new Date(date);
+      if (isNaN(d)) return date;
+      return d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+  </script>
+</body>
+</html>

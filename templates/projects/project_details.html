@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Fix viewport for true responsiveness! -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow - Project Management App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"/>
+  <style>
+    body { background: #f7f8fa; }
+    .tf-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px 0 #eef3fb;
+      border: none;
+      padding: 1.7rem 2rem;
+      margin-bottom: 30px;
+    }
+    .main-header {
+      background: #fff;
+      border-radius: 14px;
+      padding: 34px 36px;
+      margin-bottom: 34px;
+      box-shadow: 0 2px 10px 0 #eef3fb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .avatars img {
+      width: 38px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      margin-right: -13px;
+      box-shadow: 0 0 0 2px #f7f8fa;
+      object-fit: cover;
+    }
+    .avatars .badge {
+      margin-left: 5px;
+      font-size: 0.9em;
+      background: #f7f8fa;
+      color: #475569;
+      border: 1px solid #e5e7ef;
+    }
+    .timeline-bar {
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #2753e6 0 38%, #e5e7ef 38% 100%);
+      border-radius: 3px;
+      margin-bottom: 22px;
+      margin-top: 8px;
+    }
+    .timeline-steps {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: -6px;
+      flex-wrap: wrap;
+    }
+    .timeline-step {
+      flex: 1;
+      text-align: center;
+      color: #b1b4c5;
+      font-size: 15px;
+      font-weight: 500;
+      position: relative;
+      min-width: 80px;
+    }
+    .timeline-step.active {
+      color: #2753e6;
+      font-weight: 600;
+    }
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-bottom: 4px;
+      background: #e5e7ef;
+    }
+    .timeline-step.active .timeline-dot {
+      background: #2753e6;
+    }
+    .badge-completed {
+      background: #e7f7ef;
+      color: #21b26f;
+      font-weight: 600;
+      padding: 3px 15px;
+      font-size: 0.95em;
+      border-radius: 8px;
+    }
+    .badge-progress {
+      background: #fef6e7;
+      color: #f59f0b;
+      font-weight: 600;
+      padding: 3px 15px;
+      font-size: 0.95em;
+      border-radius: 8px;
+    }
+    .badge-notstarted {
+      background: #f2f2f5;
+      color: #9ca3af;
+      font-weight: 600;
+      padding: 3px 15px;
+      font-size: 0.95em;
+      border-radius: 8px;
+    }
+    .xp {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #2753e6;
+    }
+    .level-bar {
+      background: #f2f3fa;
+      height: 8px;
+      border-radius: 5px;
+      margin-top: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .level-bar-inner {
+      background: #fde68a;
+      height: 100%;
+      width: 65%;
+      border-radius: 5px 0 0 5px;
+    }
+    .activity-icon {
+      font-size: 1.1em;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    .pinned {
+      color: #2753e6;
+      font-weight: 600;
+    }
+    .list-group-item {
+      background: transparent;
+      border: none;
+    }
+    .module-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .module-row:last-child { margin-bottom: 0;}
+    .module-row .bi {
+      font-size: 1.2em;
+      margin-right: 8px;
+    }
+    .tf-section-title {
+      font-weight: 600;
+      color: #212464;
+      font-size: 1.16em;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tf-section-link {
+      font-size: 0.97em;
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .tf-section-link:hover { text-decoration: underline;}
+    .badge.bg-warning.text-dark {
+      background: #fdf6e3!important;
+      color: #f59f0b!important;
+      border-radius: 8px;
+    }
+    .badge.bg-success.text-white {
+      background: #e7f7ef!important;
+      color: #21b26f!important;
+      border-radius: 8px;
+    }
+    .badge.bg-primary.text-white {
+      background: #f2f2f5!important;
+      color: #2563eb!important;
+      border-radius: 8px;
+    }
+
+    /* RESPONSIVE: Medium screens */
+    @media (max-width: 991.98px) {
+      .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 14px;
+        gap: 1rem;
+      }
+      .tf-card {
+        padding: 1rem;
+      }
+      .row.g-4 > [class^="col-"] {
+        margin-bottom: 1.5rem;
+      }
+    }
+    /* RESPONSIVE: Small screens */
+    @media (max-width: 767.98px) {
+      .main-header {
+        padding: 16px 6px;
+      }
+      .tf-card { padding: 0.8rem 0.5rem; }
+      .tf-section-title { font-size: 1.02em; margin-bottom: 0.7rem; }
+      .xp { font-size: 1.25rem; }
+      .avatars img { width: 32px; }
+      .avatars .badge { font-size: 0.83em; }
+      .row.g-4 { margin-left: 0; margin-right: 0; }
+      .module-row { font-size: 0.96em; padding: 10px 7px; }
+      .timeline-step { font-size: 13px; min-width: 60px; }
+      .timeline-dot { width: 10px; height: 10px; }
+      .level-bar { height: 6px; }
+      .level-bar-inner { width: 65%; }
+      .list-group-item { font-size: 0.97em; }
+    }
+    /* RESPONSIVE: Stack columns on xs */
+    @media (max-width: 575.98px) {
+      .main-header h3 { font-size: 1.1rem; }
+      .main-header { padding: 8px 3px; }
+      .tf-section-title { font-size: 0.98em; }
+      .xp { font-size: 1rem; }
+      .tf-card { padding: 0.5rem 0.2rem; }
+      .avatars img { width: 24px; }
+      .avatars .badge { font-size: 0.8em; padding: 2px 7px; }
+      .module-row { padding: 6px 3px; font-size: 0.9em; }
+      .timeline-step { font-size: 11px; min-width: 40px; }
+      .timeline-dot { width: 8px; height: 8px; }
+      .list-group-item { font-size: 0.94em; }
+    }
+    /* Hide overflow and prevent horizontal scroll */
+    html,body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4 px-1 px-sm-2">
+    <!-- Header -->
+    <div class="main-header mb-4">
+      <div>
+        <h3 class="fw-bold mb-2" style="color: #212464;">TaskFlow - Project Management App</h3>
+        <div class="d-flex align-items-center flex-wrap">
+          <span class="me-2">Leader:</span>
+          <div class="avatars d-flex align-items-center me-2 flex-wrap">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Alex Chen" title="Alex Chen"/>
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Kim" title="Sarah Kim"/>
+            <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="Mike Johnson" title="Mike Johnson"/>
+            <span class="badge rounded-pill">+2</span>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+        <span class="badge rounded-pill bg-warning text-dark px-3 py-2 me-2" style="font-size: 1em;">In Development</span>
+        <button class="btn btn-dark btn-sm"><i class="bi bi-github me-1"></i>View Repo</button>
+      </div>
+    </div>
+    <!-- Timeline -->
+    <div class="tf-card mb-4">
+      <div class="tf-section-title"><i class="bi bi-calendar2-week"></i> Project Timeline</div>
+      <div class="timeline-steps">
+        <div class="timeline-step active"><span class="timeline-dot"></span><br>Planning<br><small>Completed</small></div>
+        <div class="timeline-step active"><span class="timeline-dot"></span><br>Development<br><small>In Progress</small></div>
+        <div class="timeline-step"><span class="timeline-dot"></span><br>Testing<br><small>Pending</small></div>
+        <div class="timeline-step"><span class="timeline-dot"></span><br>Review<br><small>Pending</small></div>
+        <div class="timeline-step"><span class="timeline-dot"></span><br>Launch<br><small>Pending</small></div>
+      </div>
+      <div class="timeline-bar"></div>
+    </div>
+    <!-- Main grid -->
+    <div class="row g-4">
+      <!-- Module Overview -->
+      <div class="col-lg-7 col-12">
+        <div class="tf-card mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div class="tf-section-title"><i class="bi bi-layout-text-sidebar-reverse"></i>Module Overview</div>
+            <a href="#" class="tf-section-link">View All</a>
+          </div>
+          <div>
+            <div class="module-row">
+              <span>
+                <i class="bi bi-shield-lock-fill text-success"></i>
+                Authentication System
+                <span class="text-muted small ms-1">Assigned to Sarah Kim</span>
+              </span>
+              <span class="badge badge-completed">Completed</span>
+            </div>
+            <div class="module-row">
+              <span>
+                <i class="bi bi-layout-text-window-reverse text-primary"></i>
+                Dashboard UI
+                <span class="text-muted small ms-1">Assigned to You</span>
+              </span>
+              <span class="badge badge-progress">In Progress</span>
+            </div>
+            <div class="module-row">
+              <span>
+                <i class="bi bi-plug text-info"></i>
+                API Integration
+                <span class="text-muted small ms-1">Unassigned</span>
+              </span>
+              <span class="badge badge-notstarted">Not Started</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Your Contributions -->
+      <div class="col-lg-5 col-12">
+        <div class="tf-card mb-4">
+          <div class="tf-section-title"><i class="bi bi-trophy"></i>Your Contributions</div>
+          <div class="xp mb-2">1,240 <span class="fs-6 fw-normal" style="color:#8895b3">XP Gained</span></div>
+          <div class="mb-2">
+            <span class="badge bg-success text-white me-2">8 Tasks Done</span>
+            <span class="badge bg-primary text-white">15 Tests Passed</span>
+          </div>
+          <div class="d-flex align-items-center justify-content-between mt-2 flex-wrap gap-2">
+            <span class="fw-semibold text-dark">Frontend Developer</span>
+            <span class="badge bg-warning text-dark">Level 3</span>
+          </div>
+          <div class="level-bar mt-2">
+            <div class="level-bar-inner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bottom grid -->
+    <div class="row g-4">
+      <!-- Recent GitHub Activity -->
+      <div class="col-lg-6 col-12">
+        <div class="tf-card mb-4">
+          <div class="tf-section-title"><i class="bi bi-github"></i>Recent GitHub Activity</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex align-items-center px-0 pb-2">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle me-2" style="width:32px;"/>
+              <span>
+                <strong>Added authentication middleware</strong>
+                <div class="small text-muted mb-0">by Alex Chen • 2 hours ago <i class="bi bi-fire text-warning activity-icon"></i></div>
+              </span>
+            </li>
+            <li class="list-group-item d-flex align-items-center px-0 pb-2">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-2" style="width:32px;"/>
+              <span>
+                <strong>Fixed responsive design issues</strong>
+                <div class="small text-muted mb-0">by Emma Wilson • 4 hours ago <i class="bi bi-x-circle text-primary activity-icon"></i></div>
+              </span>
+            </li>
+            <li class="list-group-item d-flex align-items-center px-0">
+              <img src="https://randomuser.me/api/portraits/men/46.jpg" class="rounded-circle me-2" style="width:32px;"/>
+              <span>
+                <strong>Updated API documentation</strong>
+                <div class="small text-muted mb-0">by Mike Johnson • 6 hours ago <i class="bi bi-file-earmark-text text-info activity-icon"></i></div>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Team Updates -->
+      <div class="col-lg-6 col-12">
+        <div class="tf-card mb-4">
+          <div class="tf-section-title"><i class="bi bi-chat-left-dots"></i>Team Updates</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item px-0 pb-2">
+              <span class="pinned"><i class="bi bi-pin-angle-fill me-1"></i>Pinned</span>
+              <div>Team meeting scheduled for tomorrow at 3 PM to discuss testing phase.</div>
+              <div class="small text-muted">Alex Chen • 1 day ago</div>
+            </li>
+            <li class="list-group-item px-0 pb-2">
+              Great progress on the authentication module! 🎉
+              <div class="small text-muted">Sarah Kim • 3 hours ago</div>
+            </li>
+            <li class="list-group-item px-0">
+              Need help with the database schema design. Anyone available?
+              <div class="small text-muted">Mike Johnson • 5 hours ago</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
