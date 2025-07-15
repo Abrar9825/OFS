@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My Projects</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} My Projects {% endblock title %}
+{% block css %}
   <style>
     body {
       background: #f8f9fb;
@@ -257,8 +254,9 @@
       .page-title { font-size: 1.09rem;}
     }
   </style>
-</head>
-<body>
+{% endblock css %}
+
+{% block body %}
   <div class="container-fluid px-0">
     <div class="px-4 py-3 border-bottom" style="background:#fff;">
       <div class="page-title">
@@ -403,5 +401,5 @@
       </div>
     </div>
   </div>
-</body>
-</html>
+
+ {% endblock %} 
