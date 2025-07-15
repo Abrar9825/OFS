@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>OnlyForStudents</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet"/>
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} OnlyForStudents Profile {% endblock title %}
+{% block css %}
     <style>
       body {
         font-family: "Inter", sans-serif;
       }
     </style>
-  </head>
-  <body class="bg-[#f8fafc] min-h-screen text-gray-900">
-    <main class="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+
+
+{% endblock css %}
+
+{% block body %}
+
+    <main class="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 bg-[#f8fafc] min-h-screen text-gray-900">
       <section class="lg:col-span-2 space-y-6">
         <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 text-center select-none" style="box-shadow: 0 4px 8px rgb(0 0 0 / 0.05)">
           <div class="text-4xl mb-2">😅</div>
@@ -141,5 +140,7 @@
         </div>
       </aside>
     </main>
-  </body>
-</html>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+  {% endblock %}
