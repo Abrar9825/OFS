@@ -19,7 +19,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [    
-        path('skill-popup',views.skill_popup,name="skill-popup"),
         path('skill-qa',views.skill_qa,name="skill-qa"),
         path('skill-test-intro',views.skill_test_intro,name="skill-test-intro"),
         path('skill-verification',views.skill_verification,name="skill-verification"),

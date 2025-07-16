@@ -7,8 +7,14 @@
       background-color: #f6f9fc;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       padding: 1rem;
+      /* For blur effect when popup is open */
+      transition: filter 0.3s;
     }
-    
+    .blurred {
+      filter: blur(5px) grayscale(0.15) brightness(0.96);
+      pointer-events: none;
+      user-select: none;
+    }
     .card {
       max-width: 720px;
       margin: 1rem auto;
@@ -17,8 +23,8 @@
         0 4px 6px rgb(0 0 0 / 0.1),
         0 1px 3px rgb(0 0 0 / 0.06);
       padding: 1.5rem;
+      background: white;
     }
-    
     .section-header {
       display: flex;
       align-items: center;
@@ -28,7 +34,6 @@
       gap: 0.6rem;
       user-select: none;
     }
-    
     .underline {
       width: 70px;
       height: 4px;
@@ -36,7 +41,6 @@
       border-radius: 4px;
       margin: 0.4rem auto 1.9rem auto;
     }
-    
     .btn-role, .btn-tech {
       border-radius: 10px;
       min-width: 110px;
@@ -58,31 +62,26 @@
       flex: 1;
       text-align: center;
     }
-    
     .btn-role:hover, .btn-tech:hover {
       background-color: #e0e7ff;
       border-color: #3b82f6;
       color: #1e40af;
     }
-    
     .btn-role svg, .btn-tech svg {
       width: 18px;
       height: 18px;
       flex-shrink: 0;
     }
-    
     .btn-role.active, .btn-tech.active {
       background-color: #3b82f6;
       border-color: #2563eb;
       color: white;
     }
-    
     .btn-role.active svg path,
     .btn-tech.active svg path {
       stroke: #ecf0ff;
       fill: #ecf0ff;
     }
-    
     select.form-select {
       width: 100%;
       max-width: 320px;
@@ -97,13 +96,11 @@
       transition: border-color 0.25s ease;
       user-select: none;
     }
-    
     select.form-select:focus {
       border-color: #3b82f6;
       box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
       outline: none;
     }
-    
     .btn-primary-custom {
       border-radius: 12px;
       padding: 0.75rem 2rem;
@@ -114,146 +111,263 @@
       width: 100%;
       max-width: 300px;
     }
-    
     .btn-primary-custom:hover {
       background-color: #1e40af;
       box-shadow: 0 7px 22px rgb(30 64 175 / 0.6);
     }
-    
-    /* Container for role and tech buttons */
     .btn-group-wrap {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 0.75rem;
       margin-bottom: 1.8rem;
     }
-    
     /* Mobile responsiveness */
     @media (max-width: 576px) {
       body {
         padding: 0.5rem;
       }
-      
       .card {
         margin: 0.5rem auto;
         padding: 1rem;
         border-radius: 8px;
       }
-      
       .section-header {
         font-size: 1rem;
         gap: 0.4rem;
         flex-wrap: wrap;
       }
-      
       .section-header svg {
         width: 18px;
         height: 18px;
       }
-      
       .btn-group-wrap {
         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
         gap: 0.5rem;
       }
-      
       .btn-role, .btn-tech {
         min-width: unset;
         padding: 0.5rem 0.75rem;
         font-size: 13px;
         margin: 0;
       }
-      
       .btn-role svg, .btn-tech svg {
         width: 16px;
         height: 16px;
       }
-      
       select.form-select {
         font-size: 0.9rem;
         padding-left: 0.75rem;
       }
-      
       .btn-primary-custom {
         padding: 0.75rem 1.5rem;
         font-size: 0.95rem;
       }
-      
       .underline {
         width: 50px;
         height: 3px;
       }
-      
       h3 {
         font-size: 1.3rem;
       }
     }
-    
-    /* Tablet responsiveness */
     @media (min-width: 577px) and (max-width: 768px) {
       .card {
         margin: 1.5rem auto;
         padding: 1.75rem;
       }
-      
       .btn-group-wrap {
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
         gap: 0.6rem;
       }
-      
       .btn-role, .btn-tech {
         padding: 0.5rem 0.85rem;
       }
     }
-    
-    /* Large mobile landscape */
     @media (max-width: 576px) and (orientation: landscape) {
       .btn-group-wrap {
         grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
       }
-      
       .card {
         margin: 0.25rem auto;
       }
     }
-    
-    /* Extra small screens */
     @media (max-width: 380px) {
       .btn-group-wrap {
         grid-template-columns: repeat(2, 1fr);
       }
-      
       .btn-role, .btn-tech {
         font-size: 12px;
         padding: 0.4rem 0.5rem;
         min-width: unset;
       }
-      
       .section-header {
         font-size: 0.95rem;
       }
-      
       .card {
         padding: 0.75rem;
       }
     }
-    
-    /* Ensure buttons don't become too narrow */
     @media (min-width: 992px) {
       .btn-group-wrap {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       }
     }
+    /* Popup styles */
+    .popup-bg {
+      position: fixed;
+      z-index: 10000;
+      left: 0; top: 0; right: 0; bottom: 0;
+      min-height: 100vh;
+      min-width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(43,47,80,0.25);
+      backdrop-filter: blur(3.5px) brightness(0.94);
+      transition: opacity 0.23s;
+    }
+    .popup-bg.hide {
+      display: none;
+    }
+    .popup-card {
+      width: 340px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(24,28,50,0.12);
+      border: 1.5px solid #171c38;
+      padding: 32px 28px 22px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    }
+    .popup-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 18px;
+      color: #6c6c78;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+      border-radius: 50%;
+      transition: background 0.15s;
+    }
+    .popup-close:hover {
+      background: #f0f0fa;
+      color: #09094b;
+    }
+    .popup-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #171c38;
+      margin-bottom: 10px;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.45em;
+      justify-content: center;
+    }
+    .popup-title .emoji {
+      font-size: 1.15em;
+      margin-right: 0.2em;
+    }
+    .popup-hand {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+      margin-top: 2px;
+      display: block;
+      text-align: center;
+    }
+    .popup-heading {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #23283a;
+      margin-bottom: 13px;
+      text-align: center;
+    }
+    .popup-desc {
+      font-size: 0.92rem;
+      color: #585d6e;
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+    .popup-desc .emoji {
+      vertical-align: -2px;
+    }
+    .popup-desc strong {
+      font-weight: 600;
+      color: #23283a;
+    }
+    .popup-hint {
+      font-size: 0.90rem;
+      color: #585d6e;
+      text-align: center;
+      margin-bottom: 18px;
+      margin-top: 6px;
+    }
+    .popup-hint .emoji {
+      vertical-align: -2px;
+    }
+    .popup-button {
+      width: 100%;
+      background: #181c32;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 22px;
+      padding: 0.78em 0;
+      margin-top: 5px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 7px 0 rgba(24,28,50,0.08);
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4em;
+      transition: background 0.18s;
+    }
+    .popup-button:hover, .popup-button:focus {
+      background: #09094b;
+    }
+    .popup-later {
+      margin-top: 4px;
+      font-size: 0.89rem;
+      color: #585d6e;
+      display: flex;
+      align-items: center;
+      gap: 0.25em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .popup-later:hover {
+      text-decoration: underline;
+      color: #171c38;
+    }
+    @media (max-width: 450px) {
+      .popup-card {
+        width: 98vw;
+        padding: 18px 2vw 15px 2vw;
+      }
+      .popup-title { font-size: 1.04rem;}
+    }
   </style>
 {% endblock css %}
 
 {% block body %}
+<div id="main-content">
   <div class="card bg-white">
     <h3 class="text-center fw-semibold mb-2">Set Your Preferences</h3>
     <p class="text-center text-secondary mb-3">
       Choose your roles and tech stack to get personalized opportunities
     </p>
     <div class="underline"></div>
-
     <!-- Choose Your Roles -->
     <div class="mb-4">
       <div class="section-header text-primary">
@@ -295,7 +409,6 @@
         </button>
       </div>
     </div>
-
     <!-- Choose Your Tech Stack -->
     <div class="mb-4">
       <div class="section-header text-primary">
@@ -304,68 +417,55 @@
       </div>
       <div class="btn-group-wrap">
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- React Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#3b82f6" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M12 2v3.6m0 12.8V22m7.071-10.929l-2.54 1.46m-9.06-1.46l2.54 1.46M16.949 7.05l-2.54-1.46M7.05 16.949l2.54 1.46"/></svg>
           React
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Vue Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#22c55e" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L1 21h22L12 3z"/></svg>
           Vue.js
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Angular Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#ef4444" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L1 7l4 14 7 3 7-3 4-14-11-5z"/></svg>
           Angular
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Node.js Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#22c55e" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16l8 4 8-4V4L12 0 4 4z"/></svg>
           Node.js
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Python Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#facc15" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c-5 0-7 2-7 5v3h7v2H5c-2 0-3 2-3 3s1 3 3 3h7v-2h-7v-3"/></svg>
           Python
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Java Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#ea580c" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3s-1 2-2 3 1 2 2 3 1-1 2-3-2-3-2-3z"/></svg>
           Java
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- JavaScript Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#fbbf24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/></svg>
           JavaScript
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- MongoDB Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
           MongoDB
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- MySQL Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#f97316" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg>
           MySQL
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Docker Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="10" rx="2" ry="2"/></svg>
           Docker
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- AWS Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#f97316" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h20"/></svg>
           AWS
         </button>
         <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Git Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" fill="#ea580c" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l12 12"/></svg>
           Git
         </button>
       </div>
     </div>
-
     <!-- Experience Level -->
     <div class="mb-4">
       <div class="section-header text-primary">
@@ -380,7 +480,6 @@
         <option value="lead">Lead</option>
       </select>
     </div>
-
     <!-- Save and Continue Button -->
     <div class="text-center mt-4">
       <button id="save-btn" class="btn btn-primary btn-primary-custom" type="button">
@@ -389,32 +488,89 @@
       </button>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Make roles and tech stack buttons toggle active states and aria-pressed
-    document.querySelectorAll('.btn-role, .btn-tech').forEach(button => {
-      button.addEventListener('click', () => {
-        const isActive = button.classList.contains('active');
-        button.classList.toggle('active');
-        button.setAttribute('aria-pressed', !isActive);
-      });
+</div>
+<!-- Popup -->
+<div class="popup-bg hide" id="popup-bg" tabindex="-1" aria-modal="true" role="dialog">
+  <div class="popup-card shadow">
+    <button class="popup-close" id="closeBtn" aria-label="Close">&times;</button>
+    <div class="popup-title">
+      <span class="emoji" aria-hidden="true">❓</span>
+      Show What You Know
+    </div>
+    <span class="popup-hand" aria-hidden="true">👋</span>
+    <div class="popup-heading">
+      Hey there, curious dev!
+    </div>
+    <div class="popup-desc">
+      We noticed you've selected your skills. Take a short test now to earn your first badge <span class="emoji" aria-label="badge">🥇</span> and unlock your real developer profile.
+    </div>
+    <div class="popup-hint">
+      It's just a few questions. Let your skills shine. <span class="emoji" aria-label="light bulb">💡</span>
+    </div>
+    <button type="button" class="popup-button" id="startTestBtn" aria-label="Start Test Now">
+      <span style="font-weight:bold;">&#9679;</span> Start Test Now
+    </button>
+    <div class="popup-later" id="maybeLater" tabindex="0" role="button" aria-label="Maybe Later">
+      &copy; Maybe Later
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Role & Tech toggle
+  document.querySelectorAll('.btn-role, .btn-tech').forEach(button => {
+    button.addEventListener('click', () => {
+      const isActive = button.classList.contains('active');
+      button.classList.toggle('active');
+      button.setAttribute('aria-pressed', !isActive);
     });
+  });
 
-    document.getElementById('save-btn').addEventListener('click', () => {
-      const selectedRoles = [...document.querySelectorAll('.btn-role.active')]
-        .map(btn => btn.textContent.trim());
-      const selectedTech = [...document.querySelectorAll('.btn-tech.active')]
-        .map(btn => btn.textContent.trim());
-      const experience = document.getElementById('experience-level').value;
+  // Save & Continue with Popup
+  document.getElementById('save-btn').addEventListener('click', () => {
+    const selectedRoles = [...document.querySelectorAll('.btn-role.active')]
+      .map(btn => btn.textContent.trim());
+    const selectedTech = [...document.querySelectorAll('.btn-tech.active')]
+      .map(btn => btn.textContent.trim());
+    const experience = document.getElementById('experience-level').value;
 
-      if (!experience) {
-        alert('Please select your experience level.');
-        return;
-      }
+    if (!experience) {
+      alert('Please select your experience level.');
+      return;
+    }
 
-      alert('Preferences Saved:\n\nRoles: ' + (selectedRoles.length ? selectedRoles.join(', ') : 'None') + '\nTech Stack: ' + (selectedTech.length ? selectedTech.join(', ') : 'None') + '\nExperience Level: ' + experience);
-    });
-  </script>
+    // Show popup, blur background
+    document.getElementById('popup-bg').classList.remove('hide');
+    document.getElementById('main-content').classList.add('blurred');
+    // Optionally: Prevent scrolling in background while popup is open
+    document.body.style.overflow = "hidden";
+    // Set focus to popup for accessibility
+    document.getElementById('popup-bg').focus();
+  });
 
+  // Close popup and unblur
+  function closePopup() {
+    document.getElementById('popup-bg').classList.add('hide');
+    document.getElementById('main-content').classList.remove('blurred');
+    document.body.style.overflow = "";
+  }
+  document.getElementById('closeBtn').addEventListener('click', closePopup);
+  document.getElementById('maybeLater').addEventListener('click', closePopup);
+  document.getElementById('maybeLater').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      closePopup();
+    }
+  });
+  document.getElementById('popup-bg').addEventListener('click', function(e) {
+    if(e.target === this) closePopup();
+  });
+
+  // Start Test button
+  document.getElementById('startTestBtn').addEventListener('click', function() {
+    closePopup();
+    alert('Test starting...');
+    // Replace above alert with your test start logic or window.location.href
+  });
+</script>
 {% endblock %}
