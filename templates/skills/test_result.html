@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>React Skill Test - Results</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} React Skill Test - Results {% endblock title %}
+{% block css %}
   <style>
     :root {
       --primary: #0a0a4d;
@@ -391,9 +388,9 @@
       .score-box, .time-taken-box { min-width: 80px; max-width: 120px; font-size: .90rem;}
     }
   </style>
-</head>
+{% endblock css %}
 
-<body>
+{% block body %}
   <main class="container" role="main">
     <h1>React Skill Test – Results</h1>
 
@@ -491,5 +488,5 @@
     }
     updateCountdown();
   </script>
-</body>
-</html>
+
+{% endblock %}

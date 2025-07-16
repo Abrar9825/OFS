@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>React Skill Test</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}React Skill Test{% endblock title %}
+{% block css %}
   <style>
     :root { --bs-primary: #0a0a4d; }
     html, body {
@@ -201,8 +198,9 @@
       }
     }
   </style>
-</head>
-<body>
+{% endblock css %}
+
+{% block body %}
   <!-- HEADER CARD -->
   <div class="quiz-header-card">
     <div class="quiz-header">
@@ -285,5 +283,4 @@
       </button>
     </nav>
   </main>
-</body>
-</html>
+{% endblock %}
