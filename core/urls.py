@@ -19,5 +19,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [    
+        path('contact/',views.core,name="core"),
         path('',views.core,name="core"),
+        # path('landing/',views.landing_page,name="landing_page"),
 ]
