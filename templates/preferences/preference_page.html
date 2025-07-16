@@ -1,0 +1,420 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} Set Your Preferences {% endblock title %}
+{% block css %}
+  <style>
+    body {
+      background-color: #f6f9fc;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      padding: 1rem;
+    }
+    
+    .card {
+      max-width: 720px;
+      margin: 1rem auto;
+      border-radius: 12px;
+      box-shadow:
+        0 4px 6px rgb(0 0 0 / 0.1),
+        0 1px 3px rgb(0 0 0 / 0.06);
+      padding: 1.5rem;
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      gap: 0.6rem;
+      user-select: none;
+    }
+    
+    .underline {
+      width: 70px;
+      height: 4px;
+      background-color: #2563eb;
+      border-radius: 4px;
+      margin: 0.4rem auto 1.9rem auto;
+    }
+    
+    .btn-role, .btn-tech {
+      border-radius: 10px;
+      min-width: 110px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      font-size: 14px;
+      color: #1f2937;
+      background-color: #f9fafb;
+      border: 1.2px solid #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+      user-select: none;
+      margin: 0.3rem;
+      white-space: nowrap;
+      flex: 1;
+      text-align: center;
+    }
+    
+    .btn-role:hover, .btn-tech:hover {
+      background-color: #e0e7ff;
+      border-color: #3b82f6;
+      color: #1e40af;
+    }
+    
+    .btn-role svg, .btn-tech svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    
+    .btn-role.active, .btn-tech.active {
+      background-color: #3b82f6;
+      border-color: #2563eb;
+      color: white;
+    }
+    
+    .btn-role.active svg path,
+    .btn-tech.active svg path {
+      stroke: #ecf0ff;
+      fill: #ecf0ff;
+    }
+    
+    select.form-select {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      padding-left: 0.9rem;
+      padding-right: 2.6rem;
+      cursor: pointer;
+      border-color: #e5e7eb;
+      box-shadow: none;
+      transition: border-color 0.25s ease;
+      user-select: none;
+    }
+    
+    select.form-select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+      outline: none;
+    }
+    
+    .btn-primary-custom {
+      border-radius: 12px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 5px 15px rgb(59 130 246 / 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      width: 100%;
+      max-width: 300px;
+    }
+    
+    .btn-primary-custom:hover {
+      background-color: #1e40af;
+      box-shadow: 0 7px 22px rgb(30 64 175 / 0.6);
+    }
+    
+    /* Container for role and tech buttons */
+    .btn-group-wrap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.8rem;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 576px) {
+      body {
+        padding: 0.5rem;
+      }
+      
+      .card {
+        margin: 0.5rem auto;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+      
+      .section-header {
+        font-size: 1rem;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      
+      .section-header svg {
+        width: 18px;
+        height: 18px;
+      }
+      
+      .btn-group-wrap {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.5rem;
+      }
+      
+      .btn-role, .btn-tech {
+        min-width: unset;
+        padding: 0.5rem 0.75rem;
+        font-size: 13px;
+        margin: 0;
+      }
+      
+      .btn-role svg, .btn-tech svg {
+        width: 16px;
+        height: 16px;
+      }
+      
+      select.form-select {
+        font-size: 0.9rem;
+        padding-left: 0.75rem;
+      }
+      
+      .btn-primary-custom {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+      }
+      
+      .underline {
+        width: 50px;
+        height: 3px;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+      }
+    }
+    
+    /* Tablet responsiveness */
+    @media (min-width: 577px) and (max-width: 768px) {
+      .card {
+        margin: 1.5rem auto;
+        padding: 1.75rem;
+      }
+      
+      .btn-group-wrap {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 0.6rem;
+      }
+      
+      .btn-role, .btn-tech {
+        padding: 0.5rem 0.85rem;
+      }
+    }
+    
+    /* Large mobile landscape */
+    @media (max-width: 576px) and (orientation: landscape) {
+      .btn-group-wrap {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      }
+      
+      .card {
+        margin: 0.25rem auto;
+      }
+    }
+    
+    /* Extra small screens */
+    @media (max-width: 380px) {
+      .btn-group-wrap {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .btn-role, .btn-tech {
+        font-size: 12px;
+        padding: 0.4rem 0.5rem;
+        min-width: unset;
+      }
+      
+      .section-header {
+        font-size: 0.95rem;
+      }
+      
+      .card {
+        padding: 0.75rem;
+      }
+    }
+    
+    /* Ensure buttons don't become too narrow */
+    @media (min-width: 992px) {
+      .btn-group-wrap {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+{% endblock css %}
+
+{% block body %}
+  <div class="card bg-white">
+    <h3 class="text-center fw-semibold mb-2">Set Your Preferences</h3>
+    <p class="text-center text-secondary mb-3">
+      Choose your roles and tech stack to get personalized opportunities
+    </p>
+    <div class="underline"></div>
+
+    <!-- Choose Your Roles -->
+    <div class="mb-4">
+      <div class="section-header text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5" width="20" height="20" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zM4.5 17.5a4.5 4.5 0 019 0v.5h-9v-.5z"/></svg>
+        Choose Your Roles
+      </div>
+      <div class="btn-group-wrap">
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" stroke="#3b82f6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Frontend
+        </button>
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" stroke="#22c55e" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="icon-backend" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2" ry="2"/><line x1="7" y1="7" x2="7" y2="17"/><line x1="17" y1="7" x2="17" y2="17"/></svg>
+          Backend
+        </button>
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#a855f7" viewBox="0 0 24 24" class="icon-mobile" aria-hidden="true" height="18" width="18"><path d="M7 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM12 20a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"/></svg>
+          Mobile
+        </button>
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#db2777" viewBox="0 0 24 24" class="icon-uiux" aria-hidden="true" height="18" width="18"><path d="M12 2c-3 0-8 1.5-8 7.5 0 3.47 2.59 7.5 8 7.5 5.29 0 8-3.6 8-7.5S16 2 12 2z"/></svg>
+          UI/UX
+        </button>
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#dc6a13" viewBox="0 0 24 24" class="icon-aiml" aria-hidden="true" height="18" width="18"><path d="M12 2.25c-5.73 0-7.5 5.28-7.5 8.25 0 1.93.97 4.95 3.88 6.57 1.35.85 2.73 1 3.62 1.06 1.8.11 3.19-.93 3.19-3.18 0-.38-.07-3.45-.07-3.45L12 2.25z"/></svg>
+          AI/ML
+        </button>
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-devops" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M17 4h5v5"/><path d="M7 17H2v-5"/></svg>
+          DevOps
+        </button>
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" stroke="#2563eb" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-data" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 6h16"/><path d="M7 18h10"/></svg>
+          Data Science
+        </button>
+        <button type="button" class="btn-role" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#ef4444" viewBox="0 0 24 24" class="icon-security" aria-hidden="true" height="18" width="18"><path d="M12 3l7 4v6c0 4-7 7-7 7s-7-3-7-7V7l7-4z"/></svg>
+          Security
+        </button>
+      </div>
+    </div>
+
+    <!-- Choose Your Tech Stack -->
+    <div class="mb-4">
+      <div class="section-header text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5" width="20" height="20" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7M3 7l9 6 9-6"/></svg>
+        Choose Your Tech Stack
+      </div>
+      <div class="btn-group-wrap">
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- React Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#3b82f6" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M12 2v3.6m0 12.8V22m7.071-10.929l-2.54 1.46m-9.06-1.46l2.54 1.46M16.949 7.05l-2.54-1.46M7.05 16.949l2.54 1.46"/></svg>
+          React
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- Vue Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#22c55e" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L1 21h22L12 3z"/></svg>
+          Vue.js
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- Angular Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#ef4444" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L1 7l4 14 7 3 7-3 4-14-11-5z"/></svg>
+          Angular
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- Node.js Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#22c55e" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16l8 4 8-4V4L12 0 4 4z"/></svg>
+          Node.js
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- Python Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#facc15" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c-5 0-7 2-7 5v3h7v2H5c-2 0-3 2-3 3s1 3 3 3h7v-2h-7v-3"/></svg>
+          Python
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- Java Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#ea580c" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3s-1 2-2 3 1 2 2 3 1-1 2-3-2-3-2-3z"/></svg>
+          Java
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- JavaScript Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#fbbf24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/></svg>
+          JavaScript
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- MongoDB Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
+          MongoDB
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- MySQL Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#f97316" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg>
+          MySQL
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- Docker Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="10" rx="2" ry="2"/></svg>
+          Docker
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- AWS Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#f97316" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h20"/></svg>
+          AWS
+        </button>
+        <button type="button" class="btn-tech" aria-pressed="false">
+          <!-- Git Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#ea580c" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l12 12"/></svg>
+          Git
+        </button>
+      </div>
+    </div>
+
+    <!-- Experience Level -->
+    <div class="mb-4">
+      <div class="section-header text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 17h16M4 10h16"/><path d="M10 3h4"/></svg>
+        Experience Level
+      </div>
+      <select id="experience-level" class="form-select" aria-label="Select your experience level">
+        <option selected disabled>Select your experience level</option>
+        <option value="junior">Junior</option>
+        <option value="mid">Mid-level</option>
+        <option value="senior">Senior</option>
+        <option value="lead">Lead</option>
+      </select>
+    </div>
+
+    <!-- Save and Continue Button -->
+    <div class="text-center mt-4">
+      <button id="save-btn" class="btn btn-primary btn-primary-custom" type="button">
+        Save & Continue
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-1" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Make roles and tech stack buttons toggle active states and aria-pressed
+    document.querySelectorAll('.btn-role, .btn-tech').forEach(button => {
+      button.addEventListener('click', () => {
+        const isActive = button.classList.contains('active');
+        button.classList.toggle('active');
+        button.setAttribute('aria-pressed', !isActive);
+      });
+    });
+
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const selectedRoles = [...document.querySelectorAll('.btn-role.active')]
+        .map(btn => btn.textContent.trim());
+      const selectedTech = [...document.querySelectorAll('.btn-tech.active')]
+        .map(btn => btn.textContent.trim());
+      const experience = document.getElementById('experience-level').value;
+
+      if (!experience) {
+        alert('Please select your experience level.');
+        return;
+      }
+
+      alert('Preferences Saved:\n\nRoles: ' + (selectedRoles.length ? selectedRoles.join(', ') : 'None') + '\nTech Stack: ' + (selectedTech.length ? selectedTech.join(', ') : 'None') + '\nExperience Level: ' + experience);
+    });
+  </script>
+
+{% endblock %}

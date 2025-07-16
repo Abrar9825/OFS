@@ -1,0 +1,233 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} OnlyForStudents Leaderboard {% endblock title %}
+{% block css %}
+  <style>
+    body { background-color: #f5f8fd; font-family: 'Inter', Arial, sans-serif; }
+    .logo-square { width:32px; height:32px; background:#355cf6; border-radius:8px; display:inline-block; }
+    .profile-level {position:absolute;bottom:0;left:50%;transform:translateX(-50%);background:#355cf6;color:#fff;border-radius:50%;font-size:.9rem;font-weight:700;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+    .profile-img {width:70px;height:70px;border-radius:50%;object-fit:cover;border:4px solid #fff;}
+    .badge-color, .badge-rect {width:32px;height:32px;border-radius:8px;display:inline-block;}
+    .badge-rect {margin-right:4px;margin-bottom:6px;}
+    .bg-yellow {background:#ffd338!important;}
+    .bg-green {background:#20c997!important;}
+    .bg-purple {background:#b967ff!important;}
+    .bg-red {background:#ff6b6b!important;}
+    .bg-blue {background:#355cf6!important;}
+    .bg-light {background:#f2f7fc!important;}
+    .bg-beige {background: #fff8ed!important;}
+    .bg-purple-light {background:#e1d8fa!important;color:#b967ff!important;}
+    .bg-green-light {background:#e9f9f4!important;color:#20c997!important;}
+    .bg-blue-light {background:#e4ebfa!important;color:#355cf6!important;}
+    .mini-avatar {width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #fff;}
+    .badge-dot {width:18px;height:18px;border-radius:50%;display:inline-block;margin-right:3px;}
+    .role-badge {font-weight:500;font-size:.95rem;padding:.4em 1em;}
+    .progress-bar {border-radius:8px;}
+    .card {border-radius:18px;}
+    .search-bar {width:210px;border-radius:8px;background:#f2f7fc;border:1px solid #e6eaf5;}
+    @media (max-width:991.98px){
+      .profile-img {width:48px!important;height:48px!important;}
+      .profile-level {width:20px;height:20px;font-size:.7rem;}
+      .mini-avatar {width:28px;height:28px;}
+      .badge-dot {width:12px;height:12px;}
+      .badge-color,.badge-rect {width:24px;height:24px;}
+      .search-bar {width:120px;}
+    }
+    @media (max-width:575.98px){
+      .search-bar {width:80px;font-size:.85rem;}
+      .badge-color,.badge-rect {width:18px;height:18px;}
+      .card {padding:1rem;}
+    }
+  </style>
+
+{% endblock css %}
+
+{% block body %}
+
+  <!-- Main Content -->
+  <div class="container-xl my-4">
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <!-- Profile Card -->
+        <div class="card p-4 mb-4 shadow-sm">
+          <div class="d-flex align-items-center flex-wrap">
+            <div class="position-relative me-3 mb-3 mb-md-0">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Alex Johnson" class="profile-img">
+              <span class="profile-level">23</span>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="mb-0 fw-bold">Alex Johnson</h5>
+              <a href="#" class="text-decoration-none text-primary fw-semibold small">Frontend Developer</a>
+              <div class="text-muted small mt-1">Rank #23 out of 1,500 students</div>
+              <div class="mt-3 d-flex gap-2">
+                <span class="badge-color bg-yellow"></span>
+                <span class="badge-color bg-green"></span>
+                <span class="badge-color bg-purple"></span>
+                <span class="badge-color bg-light"></span>
+              </div>
+            </div>
+            <div class="ms-auto text-end">
+              <div class="fs-3 fw-bold text-primary">2,450 XP</div>
+              <div class="text-muted small">Level 12</div>
+              <div class="progress mt-2" style="height: 6px; width: 150px;">
+                <div class="progress-bar bg-primary" style="width: 66%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Top Performers Card -->
+        <div class="card p-4 shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+            <h5 class="fw-bold mb-0">Top Performers</h5>
+            <div class="d-flex align-items-center gap-2">
+              <select class="form-select form-select-sm" style="width:120px;">
+                <option>All Roles</option>
+                <option>Frontend</option>
+                <option>Backend</option>
+                <option>Full Stack</option>
+              </select>
+              <button class="btn btn-light btn-sm px-3 fw-semibold">Sort by XP</button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th class="text-muted small">Rank</th>
+                  <th class="text-muted small">Student</th>
+                  <th class="text-muted small">Role</th>
+                  <th class="text-muted small">XP Points</th>
+                  <th class="text-muted small">Badges</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="fw-bold fs-5">1</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="https://randomuser.me/api/portraits/women/44.jpg" class="mini-avatar me-2" alt="Sarah Chen">
+                      <div>
+                        <div class="fw-semibold">Sarah Chen</div>
+                        <div class="small text-muted">Level 18</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill role-badge bg-purple-light">Full Stack</span>
+                  </td>
+                  <td class="fw-bold text-primary">4,280 XP</td>
+                  <td>
+                    <span class="badge-dot bg-yellow"></span>
+                    <span class="badge-dot bg-green"></span>
+                    <span class="badge-dot bg-purple"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold fs-5">2</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="https://randomuser.me/api/portraits/men/45.jpg" class="mini-avatar me-2" alt="Marcus Rodriguez">
+                      <div>
+                        <div class="fw-semibold">Marcus Rodriguez</div>
+                        <div class="small text-muted">Level 16</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill role-badge bg-blue-light">Backend</span>
+                  </td>
+                  <td class="fw-bold text-primary">3,950 XP</td>
+                  <td>
+                    <span class="badge-dot bg-red"></span>
+                    <span class="badge-dot bg-green"></span>
+                    <span class="badge-dot bg-yellow"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold fs-5">3</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="https://randomuser.me/api/portraits/women/47.jpg" class="mini-avatar me-2" alt="Emily Watson">
+                      <div>
+                        <div class="fw-semibold">Emily Watson</div>
+                        <div class="small text-muted">Level 15</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill role-badge bg-green-light">Frontend</span>
+                  </td>
+                  <td class="fw-bold text-primary">3,720 XP</td>
+                  <td>
+                    <span class="badge-dot bg-purple"></span>
+                    <span class="badge-dot bg-blue"></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Right Aside -->
+      <div class="col-lg-4">
+        <div class="d-flex flex-column gap-4 h-100">
+          <!-- Progress Card -->
+          <div class="card p-4 shadow-sm">
+            <h6 class="fw-bold mb-3">Your Progress</h6>
+            <div class="bg-beige rounded-3 p-3 d-flex justify-content-between align-items-center mb-3">
+              <span class="fw-semibold">15 Day Streak<br><span class="text-muted fw-normal small">Keep it up!</span></span>
+              <span class="fs-4">🔥</span>
+            </div>
+            <div class="small text-muted mb-1">Next Level Progress</div>
+            <div class="d-flex align-items-center mb-2">
+              <div class="progress flex-grow-1" style="height:8px;">
+                <div class="progress-bar bg-primary" style="width: 75%"></div>
+              </div>
+              <span class="ms-2 fw-semibold small">750/1000 XP</span>
+            </div>
+          </div>
+          <!-- Badge Collection Card -->
+          <div class="card p-4 shadow-sm">
+            <h6 class="fw-bold mb-3">Badge Collection</h6>
+            <div class="d-flex flex-wrap gap-1 mb-2">
+              <span class="badge-rect bg-yellow"></span>
+              <span class="badge-rect bg-green"></span>
+              <span class="badge-rect bg-purple"></span>
+              <span class="badge-rect bg-red"></span>
+              <span class="badge-rect bg-light"></span>
+              <span class="badge-rect bg-light"></span>
+              <span class="badge-rect bg-light"></span>
+              <span class="badge-rect bg-light"></span>
+            </div>
+            <div class="small text-muted">4 of 12 badges earned</div>
+          </div>
+          <!-- Earn More XP Button -->
+          <button class="btn btn-primary btn-lg fw-bold shadow-sm w-100 mt-auto" style="height:56px;">
+            Earn More XP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Toggle Weekly/All-time button
+    document.addEventListener('DOMContentLoaded', function() {
+      const weeklyBtn = document.getElementById('weeklyBtn');
+      const allTimeBtn = document.getElementById('allTimeBtn');
+      if (weeklyBtn && allTimeBtn) {
+        weeklyBtn.addEventListener('click', function() {
+          weeklyBtn.classList.add('active', 'btn-primary');
+          allTimeBtn.classList.remove('active', 'btn-primary');
+          allTimeBtn.classList.add('btn-light');
+        });
+        allTimeBtn.addEventListener('click', function() {
+          allTimeBtn.classList.add('active', 'btn-primary');
+          weeklyBtn.classList.remove('active', 'btn-primary');
+          weeklyBtn.classList.add('btn-light');
+        });
+      }
+    });
+  </script>
+
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} Show What You Know Popup {% endblock title %}
+{% block css %}
+  <style>
+    body, html {
+      min-height: 100vh;
+      background: #f5f6fa;
+    }
+    .popup-bg {
+      min-height: 100vh;
+      min-width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f6fa;
+    }
+    .popup-card {
+      width: 340px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(24,28,50,0.12);
+      border: 1.5px solid #171c38;
+      padding: 32px 28px 22px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    }
+    .popup-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 18px;
+      color: #6c6c78;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+      border-radius: 50%;
+      transition: background 0.15s;
+    }
+    .popup-close:hover {
+      background: #f0f0fa;
+      color: #09094b;
+    }
+    .popup-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #171c38;
+      margin-bottom: 10px;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.45em;
+      justify-content: center;
+    }
+    .popup-title .emoji {
+      font-size: 1.15em;
+      margin-right: 0.2em;
+    }
+    .popup-hand {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+      margin-top: 2px;
+      display: block;
+      text-align: center;
+    }
+    .popup-heading {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #23283a;
+      margin-bottom: 13px;
+      text-align: center;
+    }
+    .popup-desc {
+      font-size: 0.92rem;
+      color: #585d6e;
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+    .popup-desc .emoji {
+      vertical-align: -2px;
+    }
+    .popup-desc strong {
+      font-weight: 600;
+      color: #23283a;
+    }
+    .popup-hint {
+      font-size: 0.90rem;
+      color: #585d6e;
+      text-align: center;
+      margin-bottom: 18px;
+      margin-top: 6px;
+    }
+    .popup-hint .emoji {
+      vertical-align: -2px;
+    }
+    .popup-button {
+      width: 100%;
+      background: #181c32;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 22px;
+      padding: 0.78em 0;
+      margin-top: 5px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 7px 0 rgba(24,28,50,0.08);
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4em;
+      transition: background 0.18s;
+    }
+    .popup-button:hover, .popup-button:focus {
+      background: #09094b;
+    }
+    .popup-later {
+      margin-top: 4px;
+      font-size: 0.89rem;
+      color: #585d6e;
+      display: flex;
+      align-items: center;
+      gap: 0.25em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .popup-later:hover {
+      text-decoration: underline;
+      color: #171c38;
+    }
+    @media (max-width: 450px) {
+      .popup-card {
+        width: 98vw;
+        padding: 18px 2vw 15px 2vw;
+      }
+      .popup-title { font-size: 1.04rem;}
+    }
+  </style>
+
+{% endblock css %}
+
+{% block body %}
+  <div class="popup-bg">
+    <div class="popup-card shadow">
+      <button class="popup-close" id="closeBtn" aria-label="Close">&times;</button>
+      <div class="popup-title">
+        <span class="emoji" aria-hidden="true">❓</span>
+        Show What You Know
+      </div>
+      <span class="popup-hand" aria-hidden="true">👋</span>
+      <div class="popup-heading">
+        Hey there, curious dev!
+      </div>
+      <div class="popup-desc">
+        We noticed you've selected your skills. Take a short test now to earn your first badge <span class="emoji" aria-label="badge">🥇</span> and unlock your real developer profile.
+      </div>
+      <div class="popup-hint">
+        It's just a few questions. Let your skills shine. <span class="emoji" aria-label="light bulb">💡</span>
+      </div>
+      <button type="button" class="popup-button" id="startTestBtn" aria-label="Start Test Now">
+        <span style="font-weight:bold;">&#9679;</span> Start Test Now
+      </button>
+      <div class="popup-later" id="maybeLater" tabindex="0" role="button" aria-label="Maybe Later">
+        &copy; Maybe Later
+      </div>
+    </div>
+  </div>
+  <script>
+    // Close popup on clicking X or Maybe Later
+    function closePopup() {
+      document.querySelector('.popup-bg').style.display = 'none';
+    }
+    document.getElementById('closeBtn').addEventListener('click', closePopup);
+    document.getElementById('maybeLater').addEventListener('click', closePopup);
+    document.getElementById('maybeLater').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        closePopup();
+      }
+    });
+    // Start Test button (replace with your logic)
+    document.getElementById('startTestBtn').addEventListener('click', function() {
+      alert('Test starting...');
+    });
+  </script>
+
+{% endblock %}

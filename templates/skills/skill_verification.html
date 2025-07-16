@@ -1,0 +1,837 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} Skill Test Hub {% endblock title %}
+{% block css %}
+
+<style>
+  /* Improved mobile touch targets */
+  .skill-pill,
+  .role-btn,
+  .test-btn,
+  .badge-btn {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Better scrolling on mobile */
+  .sidebar,
+  .main-content {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent horizontal overflow */
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    background: #f7f8fa;
+    color: #181c32;
+  }
+
+  body {
+    min-height: 100vh;
+    min-width: 100vw;
+  }
+
+
+  /* Base Layout Improvements for Better Responsiveness */
+  .container-main {
+    display: flex;
+    min-width: 100vw;
+
+    min-height: calc(100vh - 60px);
+    overflow-x: hidden;
+  }
+
+  .sidebar {
+    background: #fff;
+    border-right: 1.5px solid #eceff4;
+    width: 270px;
+    min-width: 200px;
+    max-width: 350px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 100%;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .sidebar-header {
+    padding: 22px 16px 14px 22px;
+    border-bottom: 1px solid #f3f4fa;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .sidebar-header .logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #181c32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.21rem;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .sidebar-header .hub-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .sidebar-header .hub-title {
+    font-size: 1.09rem;
+    font-weight: 700;
+    color: #23283a;
+  }
+
+  .sidebar-header .hub-desc {
+    font-size: 0.89rem;
+    color: #888d94;
+    letter-spacing: 0.01em;
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .sidebar-section {
+    padding: 22px 18px 6px 22px;
+    border-bottom: 1px solid #f3f4fa;
+  }
+
+  .section-title {
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #181c32;
+    margin-bottom: 13px;
+    display: flex;
+    align-items: center;
+    gap: 0.36em;
+  }
+
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 7px;
+    margin-bottom: 14px;
+  }
+
+  .skill-pill {
+    background: #f2f3fa;
+    color: #23283a;
+    font-size: 0.90rem;
+    border-radius: 16px;
+    padding: 4px 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .skill-pill.selected {
+    background: #181c32;
+    color: #fff;
+  }
+
+  .sidebar-section label {
+    font-size: 0.91rem;
+    color: #8a909d;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+    letter-spacing: 0.01em;
+  }
+
+  .role-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 9px;
+  }
+
+  .role-btn {
+    padding: 7px 0 7px 7px;
+    background: #f6f7fb;
+    border: none;
+    border-radius: 7px;
+    font-size: 0.99rem;
+    text-align: left;
+    color: #23283a;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.13s;
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+  }
+
+  .role-btn:hover,
+  .role-btn.active {
+    background: #e4e6f6;
+  }
+
+  .role-btn svg {
+    font-size: 1.1em;
+  }
+
+  .sidebar-section.more {
+    border-bottom: none;
+    padding-bottom: 18px;
+  }
+
+  .search-tech {
+    width: 95%;
+    border: 1px solid #eceff4;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 0.97rem;
+    margin-top: 5px;
+    background: #f7f8fa;
+    color: #23283a;
+    outline: none;
+    transition: border 0.13s;
+  }
+
+  .search-tech:focus {
+    border: 1.5px solid #181c32;
+    background: #fff;
+  }
+
+  /* Main Content Area */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f7f8fa;
+    min-width: 0;
+    min-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .tests-content {
+    padding: 32px 34px 32px 34px;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tests-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 26px;
+  }
+
+  .tests-title {
+    font-weight: 700;
+    color: #181c32;
+    font-size: 1.27rem;
+    margin-bottom: 2px;
+  }
+
+  .tests-desc {
+    font-size: 0.99rem;
+    color: #81869b;
+    font-weight: 400;
+    margin-bottom: 0;
+  }
+
+  .tests-list {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .test-card {
+    flex: 1 1 260px;
+    max-width: 270px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 14px 0 rgba(35, 39, 58, 0.07);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 22px;
+    border: 1px solid #f1f2f7;
+    min-width: 238px;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px 0 rgba(35, 39, 58, 0.12);
+  }
+
+  .test-card .top-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin-bottom: 10px;
+  }
+
+  .test-card .test-level {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #17b15a;
+    background: #e8f8ee;
+    border-radius: 11px;
+    padding: 2px 10px 2px 10px;
+    margin-right: 5px;
+  }
+
+  .test-card .test-level.beginner {
+    color: #edbe1a;
+    background: #fdf7e2;
+  }
+
+  .test-card .test-level.advanced {
+    color: #0057e7;
+    background: #e6f0fa;
+  }
+
+  .test-card .test-title {
+    font-weight: 600;
+    font-size: 1.09rem;
+    color: #23283a;
+    margin-bottom: 5px;
+    margin-top: 0;
+  }
+
+  .test-card .test-desc {
+    font-size: 0.92rem;
+    color: #585d6e;
+    margin-bottom: 14px;
+    font-weight: 400;
+    min-height: 36px;
+  }
+
+  .test-meta {
+    display: flex;
+    gap: 13px;
+    font-size: 0.93rem;
+    margin-bottom: 7px;
+    color: #888d94;
+    align-items: center;
+  }
+
+  .test-meta .icon {
+    margin-right: 2px;
+    font-size: 1.03em;
+    vertical-align: -1px;
+  }
+
+  .test-card .test-actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .test-card .test-btn {
+    width: 100%;
+    border: none;
+    background: #181c32;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 18px;
+    padding: 9px 0 9px 0;
+    cursor: pointer;
+    transition: background 0.17s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.39em;
+  }
+
+  .test-card .test-btn:hover,
+  .test-card .test-btn:focus {
+    background: #09094b;
+    outline: none;
+  }
+
+  .test-card .badge-btn {
+    background: none;
+    border: none;
+    color: #edbe1a;
+    font-size: 0.93rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+    font-weight: 500;
+    margin-top: 2px;
+    transition: color 0.15s;
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  .test-card .badge-btn .icon {
+    font-size: 1.1em;
+    margin-right: 1px;
+  }
+
+  /* Responsive Design */
+
+  /* Large Desktop */
+  @media (min-width: 1400px) {
+    .test-card {
+      max-width: 320px;
+      min-width: 280px;
+    }
+
+    .tests-content {
+      padding: 40px 48px 0 48px;
+    }
+  }
+
+  /* Medium Desktop */
+  @media (max-width: 1200px) {
+    .sidebar {
+      width: 240px;
+    }
+
+    .test-card {
+      max-width: 250px;
+      min-width: 220px;
+    }
+
+    .tests-content {
+      padding: 32px 24px 0 24px;
+    }
+  }
+
+  /* Small Desktop / Large Tablet */
+  @media (max-width: 1024px) {
+    .sidebar {
+      width: 220px;
+    }
+
+    .test-card {
+      max-width: 230px;
+      min-width: 200px;
+    }
+
+    .tests-content {
+      padding: 28px 20px 0 20px;
+    }
+
+    .tests-title {
+      font-size: 1.2rem;
+    }
+  }
+
+  /* Tablet Portrait */
+  @media (max-width: 900px) {
+    .container-main {
+      flex-direction: column;
+      height: auto;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      position: static;
+      border-right: none;
+      border-bottom: 2px solid #eceff4;
+      height: auto;
+      overflow-y: visible;
+    }
+
+    .sidebar-header,
+    .sidebar-section {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .sidebar-section {
+      padding-top: 16px;
+      padding-bottom: 12px;
+    }
+
+    .main-content {
+      width: 100%;
+      height: auto;
+      overflow-y: visible;
+    }
+
+    .tests-content {
+      padding: 24px 20px 32px 20px;
+    }
+
+    .tests-list {
+      gap: 16px;
+    }
+
+    .test-card {
+      max-width: 100%;
+      min-width: 0;
+      margin-bottom: 16px;
+      flex: 1 1 280px;
+    }
+
+  }
+
+  /* Mobile Landscape / Small Tablet */
+  @media (max-width: 768px) {
+    .tests-list {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .test-card {
+      flex: none;
+      margin-bottom: 12px;
+    }
+
+    .tests-content {
+      padding: 20px 16px 24px 16px;
+    }
+
+    .sidebar-header,
+    .sidebar-section {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .tests-title {
+      font-size: 1.15rem;
+    }
+
+    .skills-list {
+      gap: 6px;
+    }
+
+    .skill-pill {
+      font-size: 0.85rem;
+      padding: 3px 10px;
+    }
+  }
+
+  /* Mobile Portrait */
+  @media (max-width: 600px) {
+
+    .container-main {
+      margin-top: 56px;
+      min-height: calc(100vh - 56px);
+    }
+
+    .sidebar-header {
+      padding: 14px 12px 10px 12px;
+    }
+
+    .sidebar-header .logo {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+    }
+
+    .hub-title {
+      font-size: 1rem;
+    }
+
+    .hub-desc {
+      font-size: 0.82rem;
+    }
+
+    .sidebar-section {
+      padding: 14px 12px 10px 12px;
+    }
+
+    .tests-content {
+      padding: 16px 12px 20px 12px;
+    }
+
+    .tests-title {
+      font-size: 1.1rem;
+    }
+
+    .tests-desc {
+      font-size: 0.92rem;
+    }
+
+    .test-card {
+      padding: 16px 14px;
+      border-radius: 10px;
+    }
+
+    .test-card .test-title {
+      font-size: 1.05rem;
+    }
+
+    .test-card .test-desc {
+      font-size: 0.9rem;
+      min-height: 32px;
+    }
+
+    .test-card .test-btn {
+      font-size: 0.95rem;
+      padding: 8px 0;
+      border-radius: 16px;
+    }
+
+    .role-btn {
+      font-size: 0.92rem;
+      padding: 6px 0 6px 6px;
+    }
+
+    .search-tech {
+      font-size: 0.9rem;
+      padding: 6px 10px;
+    }
+  }
+
+  /* Small Mobile */
+  @media (max-width: 480px) {
+
+    .container-main {
+      margin-top: 52px;
+      min-height: calc(100vh - 52px);
+    }
+
+    .sidebar-header {
+      padding: 12px 10px 8px 10px;
+    }
+
+    .sidebar-section {
+      padding: 12px 10px 8px 10px;
+    }
+
+    .tests-content {
+      padding: 14px 10px 18px 10px;
+    }
+
+    .tests-title {
+      font-size: 1.05rem;
+    }
+
+    .tests-desc {
+      font-size: 0.88rem;
+    }
+
+    .test-card {
+      padding: 14px 12px;
+      margin-bottom: 10px;
+    }
+
+    .test-card .test-title {
+      font-size: 1rem;
+    }
+
+    .test-card .test-desc {
+      font-size: 0.86rem;
+      min-height: 28px;
+    }
+
+    .test-card .test-btn {
+      font-size: 0.9rem;
+      padding: 7px 0;
+    }
+
+    .test-card .badge-btn {
+      font-size: 0.86rem;
+    }
+
+    .skill-pill {
+      font-size: 0.8rem;
+      padding: 2px 8px;
+    }
+
+    .role-btn {
+      font-size: 0.88rem;
+      padding: 5px 0 5px 5px;
+    }
+
+    .search-tech {
+      font-size: 0.85rem;
+      padding: 5px 8px;
+    }
+
+    .section-title {
+      font-size: 0.92rem;
+    }
+  }
+
+  /* Extra Small Mobile */
+  @media (max-width: 360px) {
+
+    .tests-content {
+      padding: 12px 8px 16px 8px;
+    }
+
+    .sidebar-header,
+    .sidebar-section {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .test-card {
+      padding: 12px 10px;
+    }
+
+    .tests-title {
+      font-size: 1rem;
+    }
+  }
+
+  /* Landscape Mobile Specific */
+  @media (max-height: 500px) and (orientation: landscape) {
+
+    .container-main {
+      margin-top: 48px;
+      min-height: calc(100vh - 48px);
+    }
+
+    .sidebar-section {
+      padding-top: 10px;
+      padding-bottom: 6px;
+    }
+
+    .tests-content {
+      padding-top: 12px;
+      padding-bottom: 16px;
+    }
+  }
+</style>
+
+{% endblock css %}
+
+{% block body %}
+
+<div class="container-main">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">🧑‍💻</div>
+      <div class="hub-info">
+        <span class="hub-title">Skill Test Hub</span>
+        <span class="hub-desc">Test your knowledge, earn badges</span>
+      </div>
+    </div>
+    <!-- Skills -->
+    <div class="sidebar-section">
+      <div class="section-title" style="margin-bottom:10px;">⭐ Your Skills</div>
+      <div class="skills-list">
+        <button class="skill-pill selected">React</button>
+        <button class="skill-pill selected">Node.js</button>
+        <button class="skill-pill selected">Python</button>
+        <button class="skill-pill">JavaScript</button>
+      </div>
+    </div>
+    <!-- Choose by Role -->
+    <div class="sidebar-section">
+      <div class="section-title">🧑‍💻 Choose by Role</div>
+      <div class="role-list">
+        <button class="role-btn"><span>🖼️</span> Frontend Developer</button>
+        <button class="role-btn"><span>🔗</span> Backend Developer</button>
+        <button class="role-btn"><span>📦</span> Fullstack Developer</button>
+        <button class="role-btn"><span>🎨</span> UI/UX Designer</button>
+        <button class="role-btn"><span>⚙️</span> DevOps Engineer</button>
+      </div>
+    </div>
+    <!-- More Tech Tests -->
+    <div class="sidebar-section more">
+      <div class="section-title" style="font-weight:500;">➕ More Tech Tests</div>
+      <input class="search-tech" type="text" placeholder="Search technologies..." />
+    </div>
+  </aside>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="tests-content">
+      <div class="tests-header">
+        <span class="tests-title">Available Tests</span>
+        <span class="tests-desc">Choose a test to start your skill assessment</span>
+      </div>
+      <div class="tests-list">
+        <!-- React Fundamentals -->
+        <div class="test-card">
+          <div class="top-row">
+            <span class="test-title">React Fundamentals</span>
+            <span class="test-level">Intermediate</span>
+          </div>
+          <div class="test-desc">Test your knowledge of React components, hooks, and state management.</div>
+          <div class="test-meta">
+            <span><span class="icon">⏱️</span> 15 mins</span>
+            <span><span class="icon">📄</span> MCQ</span>
+          </div>
+          <div class="test-actions">
+            <button class="test-btn">Start Test →</button>
+            <button class="badge-btn"><span class="icon">🏅</span> Earn React Badge</button>
+          </div>
+        </div>
+        <!-- Node.js Basics -->
+        <div class="test-card">
+          <div class="top-row">
+            <span class="test-title">Node.js Basics</span>
+            <span class="test-level beginner">Beginner</span>
+          </div>
+          <div class="test-desc">Learn about Node.js runtime, modules, and basic server concepts.</div>
+          <div class="test-meta">
+            <span><span class="icon">⏱️</span> 12 mins</span>
+            <span><span class="icon">💻</span> Code</span>
+          </div>
+          <div class="test-actions">
+            <button class="test-btn">Start Test →</button>
+            <button class="badge-btn"><span class="icon">🏅</span> Earn Node.js Badge</button>
+          </div>
+        </div>
+        <!-- Python Advanced -->
+        <div class="test-card">
+          <div class="top-row">
+            <span class="test-title">Python Advanced</span>
+          </div>
+          <div class="test-desc">Advanced Python concepts including decorators, generators, and async.</div>
+          <div class="test-meta">
+            <span><span class="icon">⏱️</span> 25 mins</span>
+            <span><span class="icon">📁</span> Project</span>
+          </div>
+          <div class="test-actions">
+            <button class="test-btn">Start Test →</button>
+            <button class="badge-btn"><span class="icon">🏅</span> Earn Python Pro Badge</button>
+          </div>
+        </div>
+        <!-- JavaScript ES6+ -->
+        <div class="test-card">
+          <div class="top-row">
+            <span class="test-title">JavaScript ES6+</span>
+            <span class="test-level">Intermediate</span>
+          </div>
+          <div class="test-desc">Modern JavaScript features, arrow functions, promises, and async/await.</div>
+          <div class="test-meta">
+            <span><span class="icon">⏱️</span> 18 mins</span>
+            <span><span class="icon">📄</span> MCQ</span>
+          </div>
+          <div class="test-actions">
+            <button class="test-btn">Start Test →</button>
+            <button class="badge-btn"><span class="icon">🏅</span> Earn JS Expert Badge</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} Facing Issues? | Support Form {% endblock title %}
+{% block css %}
+  <style>
+    body {
+      background: #f7f8fb;
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+    }
+    .primary-color {
+      color: #0a0a4d !important;
+    }
+    .bg-primary-color {
+      background-color: #0a0a4d !important;
+    }
+    .section-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: #0a0a4d;
+      text-align: center;
+      margin-bottom: 0.3rem;
+      letter-spacing: -1px;
+    }
+    .section-sub {
+      text-align: center;
+      color: #6d7599;
+      font-size: 1.08rem;
+      margin-bottom: 2.3rem;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+    }
+    .emoji-wave {
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 0.1rem;
+      display: block;
+    }
+    .main-card {
+      gap: 2.2rem;
+      min-height: 60vh;
+    }
+    .form-card, .help-section {
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 6px 40px 0 rgba(10,10,77,0.07), 0 1.5px 6px 0 rgba(10,10,77,0.02);
+    }
+    .form-card {
+      padding: 2.5rem 2rem 2rem 2rem;
+      flex: 1 1 390px;
+      max-width: 630px;
+    }
+    .help-section {
+      padding: 2.1rem 1.5rem 1.5rem 1.5rem;
+      flex: 1 1 300px;
+      max-width: 370px;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #232378;
+      margin-bottom: 0.45rem;
+    }
+    .form-control, .form-select {
+      border-radius: 10px;
+      border: 1.5px solid #dbe2ef;
+      min-height: 46px;
+      font-size: 1rem;
+      background: #f8fafd;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      box-shadow: none !important;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #0a0a4d;
+      background: #fff;
+      box-shadow: 0 0 0 2px rgba(10,10,77,0.09);
+    }
+    .send-btn {
+      background: #0a0a4d;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      box-shadow: 0 2px 6px 0 rgba(10,10,77,0.10);
+      transition: background 0.17s, box-shadow 0.17s;
+      border: none;
+    }
+    .send-btn:hover, .send-btn:focus {
+      background: #16165e;
+      color: #fff;
+      box-shadow: 0 3px 13px 0 rgba(10,10,77,0.16);
+    }
+    .help-card {
+      background: #f4f7fb;
+      border-radius: 13px;
+      margin-bottom: 18px;
+      padding: 17px 18px 13px 18px;
+      border: none;
+      box-shadow: 0 1.5px 4px 0 rgba(10,10,77,0.05);
+      transition: transform 0.11s, box-shadow 0.11s;
+      cursor: pointer;
+    }
+    .help-card:hover {
+      transform: translateY(-4px) scale(1.012);
+      box-shadow: 0 4px 17px 0 rgba(10,10,77,0.10);
+      background: #e9ebf7;
+    }
+    .help-card-title {
+      font-size: 1.06rem;
+      font-weight: 700;
+      color: #0a0a4d;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 0.42rem;
+    }
+    .help-card-desc {
+      font-size: 0.97rem;
+      color: #4c5270;
+      margin-left: 1.45rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .quick-help-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #0a0a4d;
+      margin-bottom: 19px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-help-title .bi-lightbulb {
+      color: #ffd600;
+      font-size: 1.35rem;
+    }
+    .other-ways {
+      font-size: 1rem;
+      color: #0a0a4d;
+      margin-top: 22px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .contact-info {
+      font-size: 0.97rem;
+      color: #4c5270;
+      margin-bottom: 2.5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 4px;
+    }
+    .char-info {
+      font-size: 0.97rem;
+      color: #b0b2c3;
+      margin-top: 0.3rem;
+      margin-bottom: -0.3rem;
+    }
+    @media (max-width: 991.98px) {
+      .main-card {
+        flex-direction: column;
+        gap: 1.3rem;
+      }
+      .form-card, .help-section {
+        border-radius: 16px !important;
+        box-shadow: 0 3px 13px 0 rgba(10,10,77,0.09);
+      }
+    }
+    @media (max-width: 575.98px) {
+      .section-title { font-size: 1.28rem; }
+      .section-sub { font-size: 0.93rem; }
+      .main-card { gap: 0.8rem; }
+      .form-card, .help-section { border-radius: 0 !important; }
+      .form-card, .help-section { padding: 1.15rem 0.6rem !important; }
+      .help-section { max-width: none; }
+    }
+  </style>
+{% endblock css %}
+
+{% block body %}
+  <div class="container py-3 py-md-5">
+    <div class="mb-2">
+      <span class="emoji-wave">👋</span>
+      <div class="section-title">Facing Issues?</div>
+      <div class="section-sub">We’re here to help—tell us what’s bothering you.</div>
+    </div>
+    <div class="d-flex main-card justify-content-center flex-lg-row flex-column align-items-stretch">
+      <!-- Left: Contact Form -->
+      <div class="form-card shadow-sm">
+        <h5 class="mb-4 fw-bold primary-color">Send us a message</h5>
+        <form autocomplete="off">
+          <div class="mb-3">
+            <label class="form-label" for="fullName">Full Name</label>
+            <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="emailAddress">Email Address</label>
+            <input type="email" id="emailAddress" class="form-control" placeholder="your.email@student.edu" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="issueType">Issue Type</label>
+            <select class="form-select" id="issueType" required>
+              <option selected disabled>Choose an issue type</option>
+              <option>Account Issue</option>
+              <option>Technical Problem</option>
+              <option>Feedback</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label" for="message">Message</label>
+            <textarea id="message" class="form-control" rows="4" maxlength="500" placeholder="Describe your issue clearly..." required></textarea>
+            <div class="d-flex justify-content-between char-info">
+              <span id="charCount">0 characters</span>
+              <span>Max 500 characters</span>
+            </div>
+          </div>
+          <button type="submit" class="btn send-btn w-100 mt-4"><i class="bi bi-send me-2"></i>Send Request</button>
+        </form>
+      </div>
+      <!-- Right: Quick Help -->
+      <div class="help-section shadow-sm mt-lg-0 mt-3">
+        <div class="quick-help-title">
+          <i class="bi bi-lightbulb"></i> Quick Help
+        </div>
+        <div class="help-card">
+          <div class="help-card-title"><i class="bi bi-github"></i>How to connect GitHub?</div>
+          <div class="help-card-desc">Link your GitHub account to sync projects</div>
+        </div>
+        <div class="help-card">
+          <div class="help-card-title"><i class="bi bi-patch-question"></i>Where do I take skill tests?</div>
+          <div class="help-card-desc">Find and complete skill assessments</div>
+        </div>
+        <div class="help-card">
+          <div class="help-card-title"><i class="bi bi-award"></i>How do badges work?</div>
+          <div class="help-card-desc">Understand the badge system and XP</div>
+        </div>
+        <div class="help-card">
+          <div class="help-card-title"><i class="bi bi-shield-lock"></i>Reset my password</div>
+          <div class="help-card-desc">Recover access to your account</div>
+        </div>
+        <div class="other-ways">Other ways to reach us</div>
+        <div class="contact-info">
+          <i class="bi bi-envelope-at"></i> support@onlyforstudents.com
+        </div>
+        <div class="contact-info">
+          <i class="bi bi-clock-history"></i> Response within 24 hours
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Character count for textarea
+    const message = document.getElementById('message');
+    const charCount = document.getElementById('charCount');
+    if (message && charCount) {
+      message.addEventListener('input', function() {
+        charCount.textContent = `${this.value.length} characters`;
+      });
+    }
+  </script>
+
+{% endblock %}

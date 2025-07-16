@@ -1,3 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponse
 
 # Create your views here.
+
+
+def signup(request):
+    return render(request,'accounts/signup.html')
+
+
+def login(request):
+    return render(request,'accounts/login.html')
+
+
+def forgotpassword(request):
+    return render(request,'accounts/forgot_password.html')
+
+
+def github_auth(request):
+    return render(request,'accounts/github_auth.html')
+
+
+def profile(request):
+    return render(request,'accounts/profile.html')
