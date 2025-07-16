@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
+from core.views import landing_page
 
 urlpatterns = [    
     path('admin/', admin.site.urls),
-    path('', include('accounts.urls')),
+    path('', landing_page, name='home'),  # Landing page as home
+    path('accounts/', include('accounts.urls')),
     path('core/', include('core.urls')),
     path('leaderboard/', include('leaderboard.urls')),
     path('preferences/', include('preferences.urls')),
@@ -27,3 +31,6 @@ urlpatterns = [
     path('skills/', include('skills.urls')),
     path('tutorials/', include('tutorials.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
