@@ -1,461 +1,546 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OnlyForStudents - Sign Up</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Google Fonts for Headings -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(120deg, #e0e7ff 0%, #f3e8ff 100%);
-      color: #1e293b;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-    .bg-animated {
-      position: fixed;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
-      background: radial-gradient(circle at 80% 10%, #c7d2fe 0, #e0e7ff 60%);
-      z-index: -2;
-      animation: gradientMove 12s ease-in-out infinite alternate;
-    }
-    @keyframes gradientMove {
-      0% { background-position: 80% 10%; }
-      100% { background-position: 20% 80%; }
-    }
-    .password-wrapper { position: relative; }
-    .toggle-password {
-      position: absolute;
-      top: 50%; right: 0.75rem;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #94a3b8;
-      font-size: 1.15rem;
-      user-select: none;
-      z-index: 10;
-      background: none; border: none;
-    }
-    .btn-gradient {
-      background: linear-gradient(90deg, #2563eb, #8b5cf6);
-      border: none;
-      box-shadow: 0 8px 15px rgb(139 92 246 / 0.18);
-      transition: box-shadow 0.3s, background 0.3s;
-    }
-    .btn-gradient:hover, .btn-gradient:focus {
-      background: linear-gradient(90deg, #1d4ed8, #7c3aed);
-      box-shadow: 0 12px 25px rgb(139 92 246 / 0.25);
-    }
-    .divider-text {
-      position: relative;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 1.5rem 0;
-    }
-    .divider-text span {
-      flex-grow: 0;
-      padding: 0 1rem;
-      font-size: 0.95rem;
-      color: #64748b;
-      user-select: none;
-      background: #fff;
-      z-index: 1;
-    }
-    .divider-text::before, .divider-text::after {
-      content: "";
-      flex: 1;
-      border-bottom: 1.5px solid #cbd5e1;
-      margin: 0 .4em;
-      opacity: 0.7;
-    }
-    .btn-oauth {
-      border-width: 2px;
-    }
-    .btn-google {
-      border-color: #4285F4;
-      color: #4285F4;
-      background: #fff;
-    }
-    .btn-google:hover, .btn-google:focus { background: #e3e7fa !important; }
-    .btn-github {
-      border-color: #24292e;
-      color: #24292e;
-      background: #fff;
-    }
-    .btn-github:hover, .btn-github:focus { background: #e5e7eb !important; }
-    .input-focus-glow:focus {
-      box-shadow: 0 0 0 2px #8b5cf6 !important;
-      border-color: #8b5cf6 !important;
-    }
-    .password-strength {
-      height: 5px;
-      border-radius: 4px;
-      background: #e5e7eb;
-      overflow: hidden;
-      margin-top: 2px;
-      margin-bottom: 6px;
-    }
-    .password-strength-bar {
-      height: 100%;
-      transition: width 0.3s;
-    }
-    .floating-icons {
-      pointer-events: none;
-      position: absolute;
-      user-select: none;
-      z-index: -1;
-      opacity: 0.85;
-      animation: floaty 6s ease-in-out infinite alternate;
-    }
-    @keyframes floaty {
-      from { transform: translateY(0); }
-      to   { transform: translateY(-18px); }
-    }
-    .signup-form-card { transition: box-shadow 0.25s; }
-    .signup-form-card:hover, .signup-form-card:focus-within {
-      box-shadow: 0 12px 36px rgba(124, 58, 237, 0.12), 0 2px 10px rgba(31, 41, 55, 0.09);
-    }
-    .testimonial-card {
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .testimonial-card:hover {
-      box-shadow: 0 8px 28px rgba(124, 58, 237, 0.13);
-      transform: translateY(-3px) scale(1.025);
-    }
-    /* Responsive Tweaks */
-    @media (max-width: 991.98px) {
-      .d-lg-block { display: none !important; }
-      .signup-section {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-      .main-flex-center {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-      }
-      .signup-form-card {
-        margin-left: auto !important;
-        margin-right: auto !important;
-        box-shadow: 0 4px 16px rgba(31, 41, 55, 0.09), 0 1.5px 6px rgba(139, 92, 246, 0.09) !important;
-        border-radius: 1.3rem !important;
-        max-width: 98vw !important;
-        padding: 2rem 0.7rem !important;
-      }
-    }
-    @media (max-width: 575.98px) {
-      .signup-form-card { padding: 1.25rem 0.2rem !important; }
-      .divider-text::before, .divider-text::after { width: 28%; }
-      .signup-section { padding: 1.2rem 0 !important; }
-    }
-    @media (max-width: 400px) {
-      .signup-form-card { padding: 0.9rem 0.1rem !important; }
-    }
-    @media (max-width: 991.98px) {
-      .floating-icons { opacity: 0; }
-    }
-    /* Toast styles */
-    #form-toast {
-      position: fixed;
-      bottom: 2.5rem; left: 50%;
-      transform: translateX(-50%);
-      z-index: 3000;
-      min-width: 240px;
-      max-width: 90vw;
-      border-radius: .8rem;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OnlyForStudents - Create Your Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #0a0a4d;
+            --color-secondary: #1e3a8a;
+            --color-accent: #10b981;
+            --color-success: #22c55e;
+            --color-danger: #ef4444;
+            --color-warning: #facc15;
+            --color-surface: #f8fafc;
+            --color-background: #ffffff;
+            --color-text-primary: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-surface);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 1rem;
+            display: flex;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            background-color: var(--color-background);
+        }
+
+        /* --- Branding Panel (Left Side) --- */
+        .branding-panel {
+            width: 45%;
+            background: linear-gradient(145deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            color: var(--color-background);
+        }
+        .brand-logo .fa-graduation-cap {
+            font-size: 2rem;
+            color: var(--color-accent);
+        }
+        .brand-logo span {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .branding-panel h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+        .branding-panel p {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial {
+            margin-top: auto;
+            border-top: 1px solid var(--color-glass-border);
+            padding-top: 1.5rem;
+        }
+        .testimonial img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+        .testimonial .name { font-weight: 600; }
+        .testimonial .title { font-size: 0.8rem; opacity: 0.7; }
+
+        /* --- Form Panel (Right Side) --- */
+        .form-panel {
+            width: 55%;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+
+        .form-panel h2 {
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+        .form-panel .text-muted {
+            color: var(--color-text-secondary) !important;
+            margin-bottom: 2rem;
+        }
+
+        .input-group { 
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .form-control {
+            height: 52px;
+            border-radius: 0.6rem;
+            border: 1px solid #e5e7eb;
+            padding-left: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+        .form-control:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(10, 10, 77, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        .input-group .form-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-secondary);
+            pointer-events: none;
+            z-index: 10;
+            font-size: 1rem;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+        .input-group:focus-within .form-icon {
+            color: var(--color-primary);
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            z-index: 10;
+            padding: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+        .password-toggle:hover {
+            color: var(--color-primary);
+        }
+
+        .password-strength-bar {
+            height: 4px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        .strength-indicator {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            font-weight: 600;
+            height: 50px;
+            border-radius: 0.6rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border: 1px solid var(--color-primary);
+        }
+        .btn-primary:hover {
+            background-color: var(--color-secondary);
+            border-color: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--color-text-secondary);
+            margin: 2rem 0;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .divider:not(:empty)::before { margin-right: .5em; }
+        .divider:not(:empty)::after { margin-left: .5em; }
+
+        .btn-social {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 50px;
+            border-radius: 0.6rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+            background-color: transparent;
+        }
+        .btn-google { 
+            border-color: #e5e7eb; 
+            color: var(--color-text-primary); 
+        }
+        .btn-google:hover { 
+            background-color: #f8fafc; 
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-github { 
+            border-color: #e5e7eb; 
+            color: var(--color-text-primary); 
+        }
+        .btn-github:hover { 
+            background-color: #f8fafc;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        a { color: var(--color-primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            body { align-items: flex-start; }
+            .branding-panel { display: none; }
+            .form-panel { width: 100%; padding: 2rem; }
+            .signup-container {
+                flex-direction: column;
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+                box-shadow: none;
+            }
+        }
+        @media (max-width: 576px) {
+            .form-panel { padding: 1.5rem; }
+        }
+    </style>
 </head>
-<body class="min-vh-100">
-  <div class="bg-animated"></div>
-  <main class="position-relative min-vh-100 d-flex align-items-center justify-content-center p-4 main-flex-center bg-transparent">
-    <!-- Language selector -->
-    <select class="position-absolute top-0 end-0 mt-3 me-3 btn btn-light border-0 shadow-sm fw-semibold"
-            aria-label="Select Language" disabled>
-      🌐 EN
-    </select>
-    <div class="container-fluid signup-section" style="max-width: 1200px;">
-      <div class="row g-5 align-items-center flex-lg-row flex-column-reverse">
-        <!-- Left Side Content - Hidden on mobile -->
-        <div class="col-lg-6 d-none d-lg-block">
-          <div class="d-flex align-items-center gap-2 mb-5">
-            <div class="position-relative d-inline-block">
-              <svg width="32" height="32" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <rect x="8" y="8" width="48" height="48" rx="12" ry="12" fill="#7c3aed"></rect>
-                <path fill="#fff" d="M24 40c0-4 10-8 10-8v-6s-4 3-7 3-6 4-6 8v7h4Z"></path>
-                <circle fill="#ddd" cx="29" cy="23" r="3"></circle>
-              </svg>
+<body>
+
+    <div class="signup-container">
+        <div class="branding-panel">
+            <div class="glass-card">
+                <div class="brand-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>OnlyForStudents</span>
+                </div>
+                <h1>Code. Collaborate. Get Hired.</h1>
+                <p>Join a community where students build real-world projects, verify their skills, and launch their developer careers.</p>
+                <div class="testimonial">
+                    <blockquote class="mb-3 fst-italic">"This platform was the bridge between my degree and my first job. The project experience was invaluable."</blockquote>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt="Student photo" class="rounded-circle">
+                        <div>
+                            <div class="name">Alex Carter</div>
+                            <div class="title">Full-Stack Developer at TechCorp</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h1 class="h5 fw-bold mb-0" style="font-family:'Inter',sans-serif;letter-spacing:.3px;">OnlyForStudents</h1>
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"
-                 alt="HTML5 orange shield icon" style="height: 1.7rem; width: auto;" />
-          </div>
-          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8c4bf441-ffad-4f21-8065-59b693512efe.png"
-               alt="Illustration of a young Black woman programming"
-               class="img-fluid rounded-3 shadow mb-4 user-select-none"
-               style="max-width: 320px;" />
-          <h2 class="fw-bolder fs-4 mb-2" style="font-family:'Inter',sans-serif;">👨‍💻 Code. Collaborate. Climb the Ranks.</h2>
-          <p class="text-muted lh-base mb-5" style="max-width:350px;">
-            Join thousands of students building real-world projects and earning recognition in the developer community.
-          </p>
-          <blockquote class="bg-white rounded-3 p-4 shadow-sm user-select-none testimonial-card" style="max-width: 350px;">
-            <p class="small text-secondary mb-3">
-              "This platform transformed my coding journey. From beginner to landing my first internship!"
-            </p>
-            <div class="d-flex align-items-center gap-3">
-              <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d0af0758-8483-4b00-80be-dc4fc1b7f03b.png"
-                   alt="Portrait photo of Sarah Chen"
-                   class="rounded-circle shadow-sm"
-                   style="width:36px; height:36px; object-fit:cover;" />
-              <div>
-                <div class="fw-semibold small">Sarah Chen</div>
-                <div class="text-muted" style="font-size:0.75rem;">CS Student, MIT</div>
-              </div>
-            </div>
-          </blockquote>
         </div>
-        <!-- Right Side Signup Form -->
-        <div class="col-lg-6 d-flex align-items-center justify-content-center">
-          <div class="bg-white rounded-4 shadow-lg p-5 mx-auto signup-form-card" style="max-width: 420px; width: 100%;">
-            <h2 class="fw-bold fs-3 mb-1 text-center text-lg-start" style="letter-spacing:.3px;font-family:'Inter',sans-serif;">Create your account</h2>
-            <p class="text-muted small mb-4 text-center text-lg-start">Start your dev journey today</p>
-            <form id="signup-form" novalidate autocomplete="off">
-              <!-- Full Name -->
-              <div class="mb-3">
-                <label for="fullName" class="form-label">Full Name</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-transparent border-end-0 text-muted">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-                      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
-                      <path fill-rule="evenodd" d="M14 14s-1-1.5-6-1.5S2 14 2 14s1-4 6-4 6 4 6 4z"></path>
-                    </svg>
-                  </span>
-                  <input type="text" class="form-control border-start-0 input-focus-glow" id="fullName" placeholder="Enter your full name" required aria-required="true" />
-                  <div class="invalid-feedback">Please enter your full name.</div>
+
+        <div class="form-panel">
+            <div class="mx-auto" style="max-width: 450px;">
+                <h2 class="mb-1">Create an Account</h2>
+                <p class="text-muted mb-4">Let's get you started on your development journey!</p>
+
+                <form id="signupForm" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label fw-medium">First Name</label>
+                            <div class="input-group">
+                                <i class="fas fa-user form-icon"></i>
+                                <input type="text" class="form-control" id="firstName" placeholder="e.g., Shaikh" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label fw-medium">Last Name</label>
+                            <div class="input-group">
+                                <i class="fas fa-user form-icon"></i>
+                                <input type="text" class="form-control" id="lastName" placeholder="e.g., Tofik" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-medium">Email Address</label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope form-icon"></i>
+                            <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-medium">Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock form-icon"></i>
+                            <input type="password" class="form-control" id="password" placeholder="Create a strong password" required minlength="8">
+                            <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength-bar">
+                            <div class="strength-indicator" id="passwordStrengthIndicator"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label fw-medium">Confirm Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock form-icon"></i>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required minlength="8">
+                            <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div id="passwordMatchMessage" class="small mt-1"></div>
+                    </div>
+                    
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                        <label class="form-check-label small text-secondary" for="termsCheck">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                        </label>
+                    </div>
+
+                    <a href="{% url 'preferences' %}" class="btn btn-primary w-100 fw-bold">Create Account</a>
+                </form>
+
+                <div class="divider small">or continue with</div>
+
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="http://github.com/" target="_blank">
+                        <button type="button" class="btn btn-social btn-google">
+                            <i class="fab fa-google me-2"></i>Google 
+                        </button>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="http://github.com/" target="_blank">
+                        <button type="button" class="btn btn-social btn-github">
+                            <i class="fab fa-github me-2"></i>GitHub
+                        </button>
+                        </a>
+                    </div>
                 </div>
-              </div>
-              <!-- Email -->
-              <div class="mb-3">
-                <label for="emailAddress" class="form-label">Email</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-transparent border-end-0 text-muted">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
-                      <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4z" />
-                      <path fill-rule="evenodd" d="M.05 4.555L8 9.414l7.95-4.859A1 1 0 0 0 14 4H2a1 1 0 0 0-.95.555z" />
-                    </svg>
-                  </span>
-                  <input type="email" class="form-control border-start-0 input-focus-glow" id="emailAddress" placeholder="Enter your email" required aria-required="true" />
-                  <div class="invalid-feedback">Please enter a valid email address.</div>
+
+                <div class="text-center my-4">
+                    <small class="text-muted">Already have an account? <a href="{% url 'login' %}" class="fw-semibold">Log In</a></small>
                 </div>
-              </div>
-              <!-- Password -->
-              <div class="mb-2 password-wrapper">
-                <label for="password" class="form-label">Password</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-transparent border-end-0 text-muted">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-                      <path d="M8 1a4 4 0 0 1 4 4v3H4V5a4 4 0 0 1 4-4zM5 8h6v5a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-5z" />
-                    </svg>
-                  </span>
-                  <input type="password" class="form-control border-start-0 input-focus-glow" id="password" placeholder="Create a password" minlength="8" required aria-required="true" autocomplete="new-password" />
-                  <button type="button" class="toggle-password" aria-label="Toggle password visibility" tabindex="0">👁️</button>
-                  <div class="invalid-feedback">Password must be at least 8 characters long.</div>
-                </div>
-                <div class="password-strength" aria-hidden="true">
-                  <div class="password-strength-bar" id="passwordStrengthBar"></div>
-                </div>
-                <div class="text-muted small mt-1 mb-4 user-select-none">At least 8 characters with numbers and symbols</div>
-              </div>
-              <!-- Confirm Password -->
-              <div class="mb-3 password-wrapper">
-                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-transparent border-end-0 text-muted">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-                      <path d="M8 1a4 4 0 0 1 4 4v3H4V5a4 4 0 0 1 4-4zM5 8h6v5a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-5z" />
-                    </svg>
-                  </span>
-                  <input type="password" class="form-control border-start-0 input-focus-glow" id="confirmPassword" placeholder="Confirm your password" minlength="8" required aria-required="true" autocomplete="new-password" />
-                  <button type="button" class="toggle-password" aria-label="Toggle confirm password visibility" tabindex="0">👁️</button>
-                  <div class="invalid-feedback">Please confirm your password.</div>
-                </div>
-              </div>
-              <!-- Terms checkbox -->
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="termsCheck" required aria-required="true" />
-                <label class="form-check-label small text-secondary" for="termsCheck">
-                  I agree to the <a href="#" class="text-decoration-none" target="_blank" rel="noopener noreferrer">Terms of Service</a> and
-                  <a href="#" class="text-decoration-none" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-                </label>
-                <div class="invalid-feedback">You must agree to the terms first.</div>
-              </div>
-              <!-- Submit button -->
-              <button class="btn btn-gradient text-white fw-semibold w-100 py-2 mb-4" type="submit">Sign Up</button>
-            </form>
-            <div class="divider-text"><span>Or sign up with</span></div>
-            <div class="d-flex gap-3 mb-4 flex-column flex-sm-row">
-              <button type="button" class="btn btn-google btn-oauth flex-fill d-flex align-items-center justify-content-center gap-2 mb-2 mb-sm-0" tabindex="0" aria-label="Sign up with Google">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 533.5 544.3">
-                  <path fill="#4285F4" d="M533.5 278.4c0-17.4-1.6-33.9-4.7-50.1H272.1v94.9h146.9c-6.4 34.5-26.5 63.7-56.6 83.5v69.3h91.6c53.5-49.3 84.5-121.8 84.5-197.6z" />
-                  <path fill="#34A853" d="M272.1 544.3c75.3 0 138.7-24.9 184.9-67.4l-91.6-69.3c-25.4 17.1-58 27.3-93.3 27.3-71.5 0-132-48.2-153.6-113.2H24.3v70.9C69 484.9 162.2 544.3 272.1 544.3z" />
-                  <path fill="#FBBC05" d="M118.5 321.7c-5.4-16-8.5-33.1-8.5-50.4s3.1-34.3 8.5-50.4V150H24.3c-18.1 36.1-28.6 76.7-28.6 121.3s10.5 85.3 28.6 121.3l94.2-70.9z" />
-                  <path fill="#EA4335" d="M272.1 107.7c39.9 0 75.7 13.7 103.9 40.6l77.7-77.7c-47.5-44.3-109-69.4-181.6-69.4C162.2 1.2 69 60.6 24.3 150l94.2 70.9c21.6-64.9 82.1-113.2 153.6-113.2z" />
-                </svg>
-                <span class="small fw-semibold">Google</span>
-              </button>
-              <button type="button" class="btn btn-github btn-oauth flex-fill d-flex align-items-center justify-content-center gap-2" tabindex="0" aria-label="Sign up with GitHub">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#24292e">
-                  <path d="M12 .5C5.73.5.5 5.73.5 12.02c0 5.1 3.29 9.44 7.86 10.98.57.1.78-.25.78-.56 0-.28-.01-1.05-.02-2.06-3.2.7-3.88-1.54-3.88-1.54-.52-1.34-1.26-1.69-1.26-1.69-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.16 1.74 1.16 1.01 1.74 2.65 1.24 3.3.95.1-.74.4-1.24.73-1.52-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.3 1.17-3.11-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.19a11.02 11.02 0 0 1 5.73 0c2.19-1.5 3.15-1.19 3.15-1.19.63 1.57.24 2.73.12 3.02.73.8 1.16 1.85 1.16 3.11 0 4.44-2.69 5.4-5.26 5.69.41.35.77 1.04.77 2.1 0 1.52-.01 2.74-.01 3.12 0 .31.2.67.79.56A10.54 10.54 0 0 0 23.5 12c0-6.29-5.23-11.5-11.5-11.5z"/>
-                </svg>
-                <span class="small fw-semibold">GitHub</span>
-              </button>
             </div>
-            <div class="text-center small text-muted user-select-none" aria-live="polite">
-              Already have an account? <a href="#" class="text-decoration-none fw-semibold">Login</a>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-    <!-- Floating decorative icons - Hidden on mobile -->
-    <div class="d-none d-lg-block">
-      <svg class="floating-icons icon-html3" style="top:2rem;right:3rem;width:26px;stroke:#f97316;stroke-width:1.8;" aria-hidden="true" tabindex="-1" viewBox="0 0 64 64">
-        <path stroke="#f97316" d="M12 2 L52 2 L46 58 L32 62 L18 58 Z" />
-      </svg>
-      <svg class="floating-icons icon-css3" style="top:3rem;right:7rem;width:24px;stroke:#2563eb;stroke-width:1.8;" aria-hidden="true" tabindex="-1" viewBox="0 0 64 64">
-        <path stroke="#2563eb" d="M14 2 L50 2 L44 52 L32 58 L20 52 Z" />
-        <text x="32" y="45" font-size="24" font-family="monospace" fill="#2563eb" text-anchor="middle">3</text>
-      </svg>
-      <svg class="floating-icons icon-codegreen" style="top:8rem;right:11rem;width:22px;stroke:#22c55e;stroke-width:2;" aria-hidden="true" tabindex="-1" viewBox="0 0 64 64">
-        <polyline stroke="#22c55e" points="22,12 42,32 22,52" fill="none" stroke-width="3" />
-      </svg>
-      <svg class="floating-icons icon-react" style="bottom:4rem;left:3rem;width:28px;stroke:#06b6d4;stroke-width:1.8;" aria-hidden="true" tabindex="-1" viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="12" stroke="#06b6d4" stroke-width="3" />
-        <ellipse cx="32" cy="32" rx="24" ry="12" stroke="#06b6d4" stroke-width="3" />
-        <ellipse cx="32" cy="32" rx="24" ry="12" stroke="#06b6d4" stroke-width="3" transform="rotate(60 32 32)" />
-        <ellipse cx="32" cy="32" rx="24" ry="12" stroke="#06b6d4" stroke-width="3" transform="rotate(120 32 32)" />
-      </svg>
-      <svg class="floating-icons icon-fb" style="bottom:3rem;right:3rem;width:26px;stroke:#a78bfa;stroke-width:1.5;" aria-hidden="true" tabindex="-1" viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="14" stroke="#a78bfa" stroke-width="3" />
-        <rect x="28" y="22" width="8" height="20" stroke="#a78bfa" stroke-width="3" />
-        <path d="M32 22v-6" stroke="#a78bfa" stroke-width="3" />
-      </svg>
-      <svg class="floating-icons icon-github" style="top:6rem;left:6rem;width:22px;stroke:#475569;stroke-width:2;" aria-hidden="true" tabindex="-1" viewBox="0 0 64 64" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M32 12c-11 0-20 9-20 20 0 8.84 6.06 16.29 14.47 18.96 1.06.2 1.44-.46 1.44-1.02 0-.5-.02-1.82-.03-3.58-5.89 1.28-7.13-2.84-7.13-2.84-0.96-2.43-2.35-3.08-2.35-3.08-1.92-1.31 0-.13 0-.13 2.13.15 3.25 2.19 3.25 2.19 1.89 3.24 4.95 2.3 6.15 1.76 0.19-1.37.74-2.3 1.34-2.83-4.7-.53-9.64-2.35-9.64-10.47 0-2.31.82-4.2 2.19-5.68-.23-.54-.95-2.71.2-5.65 0 0 1.78-.57 5.85 2.17 1.69-.47 3.51-.71 5.32-.72 1.8.01 3.63.24 5.32.72 4.07-2.74 5.84-2.17 5.84-2.17 1.16 2.94.43 5.11.21 5.65 1.37 1.48 2.18 3.37 2.18 5.68 0 8.15-4.96 9.93-9.69 10.46.76.65 1.45 1.93 1.45 3.89 0 2.8-.03 5.06-.03 5.75 0 .56.38 1.24 1.46 1.02C45.95 48.3 52 40.84 52 32 52 21 43 12 32 12z"/>
-      </svg>
+    
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="formToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-circle-info me-2"></i>
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body"></div>
+        </div>
     </div>
-    <!-- Toast for form messages -->
-    <div id="form-toast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="polite" aria-atomic="true" style="display:none;">
-      <div class="d-flex">
-        <div class="toast-body" id="toast-message"></div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close" onclick="document.getElementById('form-toast').style.display='none';"></button>
-      </div>
-    </div>
-  </main>
-  <!-- Bootstrap JS Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Password show/hide
-    document.querySelectorAll('.toggle-password').forEach(function (toggle) {
-      toggle.addEventListener('click', function () {
-        const input = this.parentElement.querySelector('input');
-        if (!input) return;
-        if (input.type === 'password') {
-          input.type = 'text';
-          this.innerHTML = '🙈';
-        } else {
-          input.type = 'password';
-          this.innerHTML = '👁️';
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const signupForm = document.getElementById('signupForm');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthIndicator = document.getElementById('passwordStrengthIndicator');
+        const passwordMatchMessage = document.getElementById('passwordMatchMessage');
+        const toastElement = document.getElementById('formToast');
+        const toast = new bootstrap.Toast(toastElement);
+
+        // --- Password Toggle ---
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            });
+        });
+
+        // --- Password Strength Meter ---
+        const strengthLevels = {
+            0: { width: '0%', color: 'var(--color-danger)' },
+            1: { width: '20%', color: 'var(--color-danger)' },
+            2: { width: '40%', color: 'var(--color-warning)' },
+            3: { width: '60%', color: 'var(--color-warning)' },
+            4: { width: '80%', color: 'var(--color-success)' },
+            5: { width: '100%', color: 'var(--color-success)' }
+        };
+
+        passwordInput.addEventListener('input', function() {
+            const pass = this.value;
+            let score = 0;
+            if (pass.length >= 8) score++;
+            if (/[A-Z]/.test(pass)) score++;
+            if (/[a-z]/.test(pass)) score++;
+            if (/[0-9]/.test(pass)) score++;
+            if (/[^A-Za-z0-9]/.test(pass)) score++;
+            
+            const level = strengthLevels[score] || strengthLevels[0];
+            strengthIndicator.style.width = level.width;
+            strengthIndicator.style.backgroundColor = level.color;
+
+            // Check password match when password changes
+            checkPasswordMatch();
+        });
+
+        // --- Password Match Validation ---
+        function checkPasswordMatch() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            if (confirmPassword === '') {
+                passwordMatchMessage.textContent = '';
+                passwordMatchMessage.className = 'small mt-1';
+                return true;
+            }
+            
+            if (password === confirmPassword) {
+                passwordMatchMessage.textContent = '✓ Passwords match';
+                passwordMatchMessage.className = 'small mt-1 text-success';
+                confirmPasswordInput.setCustomValidity('');
+                return true;
+            } else {
+                passwordMatchMessage.textContent = '✗ Passwords do not match';
+                passwordMatchMessage.className = 'small mt-1 text-danger';
+                confirmPasswordInput.setCustomValidity('Passwords do not match');
+                return false;
+            }
         }
-      });
-      toggle.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          this.click();
+
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+        // --- Form Submission ---
+        function showToast(message, isSuccess = true) {
+            const toastHeader = toastElement.querySelector('.toast-header');
+            const toastBody = toastElement.querySelector('.toast-body');
+            const icon = toastHeader.querySelector('i');
+
+            if (isSuccess) {
+                toastHeader.classList.remove('text-bg-danger');
+                toastHeader.classList.add('text-bg-success');
+                icon.className = 'fas fa-check-circle me-2';
+            } else {
+                toastHeader.classList.remove('text-bg-success');
+                toastHeader.classList.add('text-bg-danger');
+                icon.className = 'fas fa-exclamation-triangle me-2';
+            }
+            toastBody.textContent = message;
+            toast.show();
         }
-      });
+
+        signupForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Check password match before form validation
+            const passwordsMatch = checkPasswordMatch();
+            
+            if (!signupForm.checkValidity() || !passwordsMatch) {
+                signupForm.classList.add('was-validated');
+                showToast('Please correct the errors before submitting.', false);
+                return;
+            }
+            
+            signupForm.classList.remove('was-validated');
+            
+            // --- Simulate successful submission ---
+            const firstName = document.getElementById('firstName').value;
+            showToast(`Welcome, ${firstName}! Your account has been created.`, true);
+            signupForm.reset();
+            strengthIndicator.style.width = '0%';
+            passwordMatchMessage.textContent = '';
+            passwordMatchMessage.className = 'small mt-1';
+        });
     });
-    // Password strength bar
-    function getPasswordStrength(password) {
-      let score = 0;
-      if (password.length >= 8) score++;
-      if (/[A-Z]/.test(password)) score++;
-      if (/[0-9]/.test(password)) score++;
-      if (/[^A-Za-z0-9]/.test(password)) score++;
-      if (password.length >= 12) score++;
-      return score;
-    }
-    const passwordInput = document.getElementById('password');
-    const strengthBar = document.getElementById('passwordStrengthBar');
-    passwordInput.addEventListener('input', function () {
-      const val = passwordInput.value;
-      const score = getPasswordStrength(val);
-      let width = ["0%", "20%", "40%", "60%", "85%", "100%"][score];
-      let color = ["#e5e7eb", "#f87171", "#fb923c", "#facc15", "#22d3ee", "#22c55e"][score];
-      strengthBar.style.width = width;
-      strengthBar.style.background = color;
-    });
-    // Real-time email validation
-    const emailInput = document.getElementById('emailAddress');
-    emailInput.addEventListener('input', function () {
-      if (emailInput.validity.typeMismatch || !emailInput.value.match(/^[^@]+@[^@]+\.[^@]+$/)) {
-        emailInput.setCustomValidity('Invalid email address');
-      } else {
-        emailInput.setCustomValidity('');
-      }
-    });
-    // Form validation on submit + toast feedback
-    const form = document.getElementById('signup-form');
-    function showToast(msg, isSuccess = true) {
-      var toast = document.getElementById('form-toast');
-      toast.className = "toast align-items-center text-white " + (isSuccess ? "bg-success" : "bg-danger") + " border-0";
-      document.getElementById('toast-message').innerText = msg;
-      toast.style.display = "block";
-      setTimeout(()=>{toast.style.display="none"}, 3500);
-    }
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      if (!form.checkValidity()) {
-        form.classList.add('was-validated');
-        return;
-      }
-      // Password match check
-      const password = form.password.value;
-      const confirmPassword = form.confirmPassword.value;
-      if (password !== confirmPassword) {
-        form.confirmPassword.setCustomValidity('Passwords do not match');
-        form.classList.add('was-validated');
-        form.confirmPassword.reportValidity();
-        showToast("Passwords do not match.", false);
-        return;
-      } else {
-        form.confirmPassword.setCustomValidity('');
-      }
-      if (!form.termsCheck.checked) {
-        form.termsCheck.setCustomValidity('You must agree to the terms first.');
-        form.classList.add('was-validated');
-        form.termsCheck.reportValidity();
-        showToast("Please accept the Terms first.", false);
-        return;
-      } else {
-        form.termsCheck.setCustomValidity('');
-      }
-      // Simulate signup success
-      showToast('Thank you for signing up, ' + form.fullName.value + '!', true);
-      form.reset();
-      form.classList.remove('was-validated');
-      strengthBar.style.width = "0%";
-    });
-  </script>
+    </script>
 </body>
 </html>

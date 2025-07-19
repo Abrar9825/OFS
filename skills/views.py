@@ -3,8 +3,6 @@ from django.shortcuts import render,HttpResponse
 # Create your views here.
 
 
-def skill_popup(request):
-   return render(request,'skills/skill_popup.html') 
 
 def skill_qa(request):
    return render(request,'skills/skill_qa.html') 

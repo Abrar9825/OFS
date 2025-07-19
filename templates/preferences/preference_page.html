@@ -1,420 +1,331 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block title %} Set Your Preferences {% endblock title %}
+
 {% block css %}
-  <style>
+<style>
+    :root {
+        --color-primary: #0a0a4d;
+        --color-secondary: #1e3a8a;
+        --color-accent: #10b981;
+        --color-surface: #f8fafc;
+        --color-background: #ffffff;
+        --color-text-primary: #1f2937;
+        --color-text-secondary: #6b7280;
+        --color-border: #eef2f9;
+        --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Base body to work with template */
     body {
-      background-color: #f6f9fc;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      padding: 1rem;
+        background-color: var(--color-surface) !important;
+        font-family: 'Inter', Arial, sans-serif !important;
+        padding-top: 70px; /* Space for fixed navbar */
     }
-    
-    .card {
-      max-width: 720px;
-      margin: 1rem auto;
-      border-radius: 12px;
-      box-shadow:
-        0 4px 6px rgb(0 0 0 / 0.1),
-        0 1px 3px rgb(0 0 0 / 0.06);
-      padding: 1.5rem;
+    main { padding: 2rem 1rem; }
+
+    /* --- Main Preferences Card --- */
+    .preferences-card {
+        background-color: var(--color-background);
+        max-width: 800px;
+        margin: 0 auto;
+        border-radius: 1.25rem;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
     }
-    
-    .section-header {
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      gap: 0.6rem;
-      user-select: none;
-    }
-    
-    .underline {
-      width: 70px;
-      height: 4px;
-      background-color: #2563eb;
-      border-radius: 4px;
-      margin: 0.4rem auto 1.9rem auto;
-    }
-    
-    .btn-role, .btn-tech {
-      border-radius: 10px;
-      min-width: 110px;
-      padding: 0.5rem 1rem;
-      font-weight: 500;
-      font-size: 14px;
-      color: #1f2937;
-      background-color: #f9fafb;
-      border: 1.2px solid #e5e7eb;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-      user-select: none;
-      margin: 0.3rem;
-      white-space: nowrap;
-      flex: 1;
-      text-align: center;
-    }
-    
-    .btn-role:hover, .btn-tech:hover {
-      background-color: #e0e7ff;
-      border-color: #3b82f6;
-      color: #1e40af;
-    }
-    
-    .btn-role svg, .btn-tech svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-    
-    .btn-role.active, .btn-tech.active {
-      background-color: #3b82f6;
-      border-color: #2563eb;
-      color: white;
-    }
-    
-    .btn-role.active svg path,
-    .btn-tech.active svg path {
-      stroke: #ecf0ff;
-      fill: #ecf0ff;
-    }
-    
-    select.form-select {
-      width: 100%;
-      max-width: 320px;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      padding-left: 0.9rem;
-      padding-right: 2.6rem;
-      cursor: pointer;
-      border-color: #e5e7eb;
-      box-shadow: none;
-      transition: border-color 0.25s ease;
-      user-select: none;
-    }
-    
-    select.form-select:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
-      outline: none;
-    }
-    
-    .btn-primary-custom {
-      border-radius: 12px;
-      padding: 0.75rem 2rem;
-      font-weight: 600;
-      font-size: 1rem;
-      box-shadow: 0 5px 15px rgb(59 130 246 / 0.4);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      width: 100%;
-      max-width: 300px;
-    }
-    
-    .btn-primary-custom:hover {
-      background-color: #1e40af;
-      box-shadow: 0 7px 22px rgb(30 64 175 / 0.6);
-    }
-    
-    /* Container for role and tech buttons */
-    .btn-group-wrap {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1.8rem;
-    }
-    
-    /* Mobile responsiveness */
-    @media (max-width: 576px) {
-      body {
-        padding: 0.5rem;
-      }
-      
-      .card {
-        margin: 0.5rem auto;
+
+    /* --- Wizard Step Navigator --- */
+    .wizard-steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        background-color: var(--color-surface);
         padding: 1rem;
-        border-radius: 8px;
-      }
-      
-      .section-header {
-        font-size: 1rem;
-        gap: 0.4rem;
-        flex-wrap: wrap;
-      }
-      
-      .section-header svg {
-        width: 18px;
-        height: 18px;
-      }
-      
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 0.5rem;
-      }
-      
-      .btn-role, .btn-tech {
-        min-width: unset;
-        padding: 0.5rem 0.75rem;
-        font-size: 13px;
-        margin: 0;
-      }
-      
-      .btn-role svg, .btn-tech svg {
-        width: 16px;
-        height: 16px;
-      }
-      
-      select.form-select {
-        font-size: 0.9rem;
-        padding-left: 0.75rem;
-      }
-      
-      .btn-primary-custom {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.95rem;
-      }
-      
-      .underline {
-        width: 50px;
-        height: 3px;
-      }
-      
-      h3 {
-        font-size: 1.3rem;
-      }
+        border-bottom: 1px solid var(--color-border);
+    }
+    .step { text-align: center; padding: 0.5rem; color: var(--color-text-secondary); font-weight: 500; }
+    .step.active { color: var(--color-primary); font-weight: 600; }
+    .step .step-number {
+        width: 32px; height: 32px; border-radius: 50%;
+        background-color: #e0e9ff; color: var(--color-secondary);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 0.5rem auto; font-weight: 700; transition: all 0.3s ease;
+    }
+    .step.active .step-number { background-color: var(--color-primary); color: #fff; }
+    .step.completed .step-number { background-color: var(--color-accent); color: #fff; }
+
+    /* --- Wizard Content --- */
+    .wizard-content { padding: 2.5rem; }
+    .wizard-pane { display: none; }
+    .wizard-pane.active { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .wizard-pane h2 { font-weight: 700; color: var(--color-primary); text-align: center; }
+    .wizard-pane p.lead { text-align: center; color: var(--color-text-secondary); margin-bottom: 2rem; }
+    
+    .search-input {
+        height: 48px;
+        border-radius: 0.5rem;
+    }
+    .search-input:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(10, 10, 77, 0.1);
+    }
+
+    /* --- Tag Selection --- */
+    .tag-selection-group {
+        display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;
+        margin-top: 1.5rem;
+    }
+    .tag-checkbox input[type="checkbox"], .tag-radio input[type="radio"] { display: none; }
+    .tag-checkbox label, .tag-radio label {
+        display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.25rem;
+        border: 1px solid #d1d5db; border-radius: 2rem; font-weight: 500;
+        color: var(--color-text-primary); cursor: pointer; transition: all 0.2s ease;
+    }
+    .tag-checkbox input:checked + label, .tag-radio input:checked + label {
+        background-color: var(--color-primary); border-color: var(--color-primary); color: #fff;
+    }
+    .tag-checkbox label:hover, .tag-radio label:hover {
+        border-color: var(--color-secondary); background-color: #f0f5ff;
     }
     
-    /* Tablet responsiveness */
-    @media (min-width: 577px) and (max-width: 768px) {
-      .card {
-        margin: 1.5rem auto;
-        padding: 1.75rem;
-      }
-      
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 0.6rem;
-      }
-      
-      .btn-role, .btn-tech {
-        padding: 0.5rem 0.85rem;
-      }
+    /* --- Wizard Actions --- */
+    .wizard-actions {
+        border-top: 1px solid var(--color-border);
+        padding: 1.5rem 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--color-surface);
     }
     
-    /* Large mobile landscape */
-    @media (max-width: 576px) and (orientation: landscape) {
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      }
-      
-      .card {
-        margin: 0.25rem auto;
-      }
+    /* --- Reusable Button Styles --- */
+    .btn-primary { 
+        background-color: var(--color-primary); border-color: var(--color-primary);
+        padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 0.5rem;
+    }
+    .btn-secondary { 
+        background-color: #e2e8f0; border-color: #e2e8f0; color: var(--color-text-primary);
+        padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 0.5rem;
+    }
+    .btn-outline-secondary {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+    .btn-outline-secondary:hover {
+        background-color: var(--color-primary);
+        color: #fff;
     }
     
-    /* Extra small screens */
-    @media (max-width: 380px) {
-      .btn-group-wrap {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .btn-role, .btn-tech {
-        font-size: 12px;
-        padding: 0.4rem 0.5rem;
-        min-width: unset;
-      }
-      
-      .section-header {
-        font-size: 0.95rem;
-      }
-      
-      .card {
-        padding: 0.75rem;
-      }
+    /* --- Popup --- */
+    .preferences-popup-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(10, 10, 77, 0.3);
+        backdrop-filter: blur(5px);
+        display: none; align-items: center; justify-content: center; z-index: 1050;
     }
-    
-    /* Ensure buttons don't become too narrow */
-    @media (min-width: 992px) {
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      }
+    .preferences-popup {
+        background: var(--color-background); border-radius: 1rem; padding: 2rem;
+        width: 100%; max-width: 400px; text-align: center;
     }
-  </style>
+    .preferences-popup h3 { color: var(--color-primary); font-weight: 700; }
+    .preferences-popup .btn-light { /* Use our secondary style instead of default light */
+        background-color: #e2e8f0; border-color: #e2e8f0; color: var(--color-text-primary);
+        padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 0.5rem;
+    }
+
+    /* --- Responsive Fixes --- */
+    @media (max-width: 576px) {
+        main { padding: 1rem 0; }
+        .preferences-card { border-radius: 0; }
+        .wizard-content { padding: 1.5rem; }
+        .wizard-actions { 
+            padding: 1rem 1.5rem; 
+            flex-direction: column-reverse; /* Stack buttons with primary on top */
+            gap: 0.75rem;
+        }
+        .wizard-actions .btn {
+            width: 100%;
+        }
+        .step-label { display: none; }
+    }
+</style>
 {% endblock css %}
 
 {% block body %}
-  <div class="card bg-white">
-    <h3 class="text-center fw-semibold mb-2">Set Your Preferences</h3>
-    <p class="text-center text-secondary mb-3">
-      Choose your roles and tech stack to get personalized opportunities
-    </p>
-    <div class="underline"></div>
+<main>
+    <div class="preferences-card">
+        <div class="wizard-steps">
+            <div class="step active" data-step="1">
+                <div class="step-number"><i class="fas fa-user-tie"></i></div>
+                <div class="step-label">Your Role</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-number"><i class="fas fa-code"></i></div>
+                <div class="step-label">Your Tech</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-number"><i class="fas fa-layer-group"></i></div>
+                <div class="step-label">Experience</div>
+            </div>
+        </div>
 
-    <!-- Choose Your Roles -->
-    <div class="mb-4">
-      <div class="section-header text-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5" width="20" height="20" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zM4.5 17.5a4.5 4.5 0 019 0v.5h-9v-.5z"/></svg>
-        Choose Your Roles
-      </div>
-      <div class="btn-group-wrap">
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#3b82f6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          Frontend
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#22c55e" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="icon-backend" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2" ry="2"/><line x1="7" y1="7" x2="7" y2="17"/><line x1="17" y1="7" x2="17" y2="17"/></svg>
-          Backend
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#a855f7" viewBox="0 0 24 24" class="icon-mobile" aria-hidden="true" height="18" width="18"><path d="M7 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM12 20a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"/></svg>
-          Mobile
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#db2777" viewBox="0 0 24 24" class="icon-uiux" aria-hidden="true" height="18" width="18"><path d="M12 2c-3 0-8 1.5-8 7.5 0 3.47 2.59 7.5 8 7.5 5.29 0 8-3.6 8-7.5S16 2 12 2z"/></svg>
-          UI/UX
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#dc6a13" viewBox="0 0 24 24" class="icon-aiml" aria-hidden="true" height="18" width="18"><path d="M12 2.25c-5.73 0-7.5 5.28-7.5 8.25 0 1.93.97 4.95 3.88 6.57 1.35.85 2.73 1 3.62 1.06 1.8.11 3.19-.93 3.19-3.18 0-.38-.07-3.45-.07-3.45L12 2.25z"/></svg>
-          AI/ML
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-devops" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M17 4h5v5"/><path d="M7 17H2v-5"/></svg>
-          DevOps
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#2563eb" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-data" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 6h16"/><path d="M7 18h10"/></svg>
-          Data Science
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ef4444" viewBox="0 0 24 24" class="icon-security" aria-hidden="true" height="18" width="18"><path d="M12 3l7 4v6c0 4-7 7-7 7s-7-3-7-7V7l7-4z"/></svg>
-          Security
-        </button>
-      </div>
+        <div class="wizard-content">
+            <div class="wizard-pane active" id="step-1">
+                <h2>What's Your Role?</h2>
+                <p class="lead">Select roles that best describe you.</p>
+                <div class="input-group">
+                    <input type="search" class="form-control search-input" placeholder="🔍 Search or add a new role..." id="role-search">
+                    <button class="btn btn-outline-secondary d-none" type="button" id="add-role-btn">Add</button>
+                </div>
+                <div class="tag-selection-group" id="role-list">
+                    </div>
+            </div>
+
+            <div class="wizard-pane" id="step-2">
+                <h2>What's Your Tech Stack?</h2>
+                <p class="lead">Choose the technologies you love to work with.</p>
+                 <div class="input-group">
+                    <input type="search" class="form-control search-input" placeholder="🔍 Search or add a new technology..." id="tech-search">
+                    <button class="btn btn-outline-secondary d-none" type="button" id="add-tech-btn">Add</button>
+                </div>
+                <div class="tag-selection-group" id="tech-list">
+                    </div>
+            </div>
+
+            <div class="wizard-pane" id="step-3">
+                <h2>What's Your Experience Level?</h2>
+                <p class="lead">This helps us recommend suitable projects for you.</p>
+                <div class="tag-selection-group justify-content-center">
+                    <span class="tag-radio"><input type="radio" name="experience" id="exp1" value="Junior"><label for="exp1">🌱 Junior (0-2 years)</label></span>
+                    <span class="tag-radio"><input type="radio" name="experience" id="exp2" value="Mid-level"><label for="exp2">🚀 Mid-level (2-5 years)</label></span>
+                    <span class="tag-radio"><input type="radio" name="experience" id="exp3" value="Senior"><label for="exp3">⭐ Senior (5+ years)</label></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wizard-actions">
+            <button class="btn btn-secondary" id="prev-btn" style="display: none;">Previous Step</button>
+            <button class="btn btn-primary" id="next-btn">Next Step</button>
+            <button class="btn btn-primary" id="save-btn" style="display: none;">Save Preferences</button>
+        </div>
     </div>
+</main>
 
-    <!-- Choose Your Tech Stack -->
-    <div class="mb-4">
-      <div class="section-header text-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5" width="20" height="20" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7M3 7l9 6 9-6"/></svg>
-        Choose Your Tech Stack
-      </div>
-      <div class="btn-group-wrap">
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- React Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#3b82f6" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M12 2v3.6m0 12.8V22m7.071-10.929l-2.54 1.46m-9.06-1.46l2.54 1.46M16.949 7.05l-2.54-1.46M7.05 16.949l2.54 1.46"/></svg>
-          React
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Vue Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#22c55e" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L1 21h22L12 3z"/></svg>
-          Vue.js
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Angular Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ef4444" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L1 7l4 14 7 3 7-3 4-14-11-5z"/></svg>
-          Angular
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Node.js Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#22c55e" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16l8 4 8-4V4L12 0 4 4z"/></svg>
-          Node.js
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Python Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#facc15" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c-5 0-7 2-7 5v3h7v2H5c-2 0-3 2-3 3s1 3 3 3h7v-2h-7v-3"/></svg>
-          Python
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Java Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ea580c" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3s-1 2-2 3 1 2 2 3 1-1 2-3-2-3-2-3z"/></svg>
-          Java
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- JavaScript Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#fbbf24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/></svg>
-          JavaScript
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- MongoDB Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
-          MongoDB
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- MySQL Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#f97316" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg>
-          MySQL
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Docker Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="10" rx="2" ry="2"/></svg>
-          Docker
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- AWS Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#f97316" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h20"/></svg>
-          AWS
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <!-- Git Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ea580c" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l12 12"/></svg>
-          Git
-        </button>
-      </div>
+<div class="preferences-popup-overlay" id="popup-overlay">
+    <div class="preferences-popup">
+        <h3 class="mb-3">Preferences Saved! 🎉</h3>
+        <p class="text-secondary">Ready to test your skills? Take a short quiz to earn your first badge.</p>
+        <div class="d-grid gap-2 mt-4">
+            <a href="#" class="btn btn-primary">Start Skill Test</a>
+            <button type="button" class="btn btn-secondary" id="close-popup-btn">Maybe Later</button>
+        </div>
     </div>
-
-    <!-- Experience Level -->
-    <div class="mb-4">
-      <div class="section-header text-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 17h16M4 10h16"/><path d="M10 3h4"/></svg>
-        Experience Level
-      </div>
-      <select id="experience-level" class="form-select" aria-label="Select your experience level">
-        <option selected disabled>Select your experience level</option>
-        <option value="junior">Junior</option>
-        <option value="mid">Mid-level</option>
-        <option value="senior">Senior</option>
-        <option value="lead">Lead</option>
-      </select>
-    </div>
-
-    <!-- Save and Continue Button -->
-    <div class="text-center mt-4">
-      <button id="save-btn" class="btn btn-primary btn-primary-custom" type="button">
-        Save & Continue
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-1" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Make roles and tech stack buttons toggle active states and aria-pressed
-    document.querySelectorAll('.btn-role, .btn-tech').forEach(button => {
-      button.addEventListener('click', () => {
-        const isActive = button.classList.contains('active');
-        button.classList.toggle('active');
-        button.setAttribute('aria-pressed', !isActive);
-      });
-    });
-
-    document.getElementById('save-btn').addEventListener('click', () => {
-      const selectedRoles = [...document.querySelectorAll('.btn-role.active')]
-        .map(btn => btn.textContent.trim());
-      const selectedTech = [...document.querySelectorAll('.btn-tech.active')]
-        .map(btn => btn.textContent.trim());
-      const experience = document.getElementById('experience-level').value;
-
-      if (!experience) {
-        alert('Please select your experience level.');
-        return;
-      }
-
-      alert('Preferences Saved:\n\nRoles: ' + (selectedRoles.length ? selectedRoles.join(', ') : 'None') + '\nTech Stack: ' + (selectedTech.length ? selectedTech.join(', ') : 'None') + '\nExperience Level: ' + experience);
-    });
-  </script>
-
+</div>
 {% endblock %}
+
+{% block js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- DATA ---
+    const allRoles = [
+        { id: 'frontend', name: 'Frontend', icon: 'fa-desktop' }, { id: 'backend', name: 'Backend', icon: 'fa-server' },
+        { id: 'fullstack', name: 'Full Stack', icon: 'fa-layer-group' }, { id: 'mobile', name: 'Mobile', icon: 'fa-mobile-alt' },
+        { id: 'uiux', name: 'UI/UX', icon: 'fa-palette' }, { id: 'devops', name: 'DevOps', icon: 'fa-cogs' }
+    ];
+    const allTech = [
+        { id: 'react', name: 'React', icon: 'fa-react' }, { id: 'python', name: 'Python', icon: 'fa-python' },
+        { id: 'nodejs', name: 'Node.js', icon: 'fa-node-js' }, { id: 'javascript', name: 'JavaScript', icon: 'fa-js' },
+        { id: 'vuejs', name: 'Vue.js', icon: 'fa-vuejs' }, { id: 'django', name: 'Django', icon: 'fa-file-code' },
+        { id: 'aws', name: 'AWS', icon: 'fa-aws' }
+    ];
+
+    // --- STATE ---
+    let currentStep = 1;
+    const totalSteps = 3;
+    const userSelections = { roles: new Set(), tech: new Set() };
+    
+    // --- DOM ELEMENTS ---
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const saveBtn = document.getElementById('save-btn');
+
+    // --- WIZARD LOGIC ---
+    function updateWizard() {
+        document.querySelectorAll('.wizard-pane').forEach(p => p.classList.remove('active'));
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+        
+        document.querySelectorAll('.step').forEach((step, index) => {
+            const stepNum = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            if (stepNum < currentStep) step.classList.add('completed');
+            else if (stepNum === currentStep) step.classList.add('active');
+        });
+
+        prevBtn.style.display = currentStep > 1 ? 'inline-block' : 'none';
+        nextBtn.style.display = currentStep < totalSteps ? 'inline-block' : 'none';
+        saveBtn.style.display = currentStep === totalSteps ? 'inline-block' : 'none';
+    }
+
+    nextBtn.addEventListener('click', () => { if (currentStep < totalSteps) { currentStep++; updateWizard(); } });
+    prevBtn.addEventListener('click', () => { if (currentStep > 1) { currentStep--; updateWizard(); } });
+
+    // --- DYNAMIC RENDERING & SEARCH ---
+    function setupSearchAndRender(dataType, allData, listElement, searchInput, addBtn) {
+        function render(filter = '') {
+            const lowerFilter = filter.toLowerCase();
+            const filteredData = allData.filter(item => item.name.toLowerCase().includes(lowerFilter));
+            
+            listElement.innerHTML = filteredData.map(item => `
+                <span class="tag-checkbox">
+                    <input type="checkbox" id="${dataType}-${item.id}" value="${item.name}" ${userSelections[dataType].has(item.name) ? 'checked' : ''}>
+                    <label for="${dataType}-${item.id}"><i class="fas ${item.icon}"></i> ${item.name}</label>
+                </span>
+            `).join('');
+
+            const exactMatch = allData.some(item => item.name.toLowerCase() === lowerFilter);
+            if (filter && !exactMatch) {
+                addBtn.classList.remove('d-none');
+            } else {
+                addBtn.classList.add('d-none');
+            }
+        }
+
+        searchInput.addEventListener('input', () => render(searchInput.value));
+        
+        addBtn.addEventListener('click', () => {
+            const value = searchInput.value.trim();
+            if (value) {
+                const newItem = { id: value.toLowerCase().replace(/\s+/g, '-'), name: value, icon: 'fa-star' };
+                allData.push(newItem);
+                userSelections[dataType].add(value);
+                searchInput.value = '';
+                render();
+            }
+        });
+        
+        listElement.addEventListener('change', e => {
+            if (e.target.type === 'checkbox') {
+                if (e.target.checked) {
+                    userSelections[dataType].add(e.target.value);
+                } else {
+                    userSelections[dataType].delete(e.target.value);
+                }
+            }
+        });
+
+        render(); // Initial render
+    }
+
+    setupSearchAndRender('roles', allRoles, document.getElementById('role-list'), document.getElementById('role-search'), document.getElementById('add-role-btn'));
+    setupSearchAndRender('tech', allTech, document.getElementById('tech-list'), document.getElementById('tech-search'), document.getElementById('add-tech-btn'));
+
+    // --- POPUP LOGIC ---
+    const popupOverlay = document.getElementById('popup-overlay');
+    saveBtn.addEventListener('click', () => popupOverlay.style.display = 'flex');
+    document.getElementById('close-popup-btn').addEventListener('click', () => popupOverlay.style.display = 'none');
+
+    // --- INITIALIZE ---
+    updateWizard();
+});
+</script>
+{% endblock js %}
