@@ -6,7 +6,7 @@
     body { background-color: #f5f8fd; font-family: 'Inter', Arial, sans-serif; }
     .logo-square { width:32px; height:32px; background:#355cf6; border-radius:8px; display:inline-block; }
     .profile-level {position:absolute;bottom:0;left:50%;transform:translateX(-50%);background:#355cf6;color:#fff;border-radius:50%;font-size:.9rem;font-weight:700;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
-    .profile-img {width:70px;height:70px;border-radius:50%;object-fit:cover;border:4px solid #fff;}
+    .profile-img {width:140px;height:140px;border-radius:1rem;object-fit:cover;border:4px solid #fff;}
     .badge-color, .badge-rect {width:32px;height:32px;border-radius:8px;display:inline-block;}
     .badge-rect {margin-right:4px;margin-bottom:6px;}
     .bg-yellow {background:#ffd338!important;}
@@ -25,8 +25,25 @@
     .progress-bar {border-radius:8px;}
     .card {border-radius:18px;}
     .search-bar {width:210px;border-radius:8px;background:#f2f7fc;border:1px solid #e6eaf5;}
+    .show-more-btn {
+      background: #eaf4ff;
+      color: #4f47ff;
+      border: none;
+      border-radius: 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.47em 2em;
+      cursor: pointer;
+      margin: 1em auto 0 auto;
+      display: block;
+      transition: background .18s;
+    }
+    .show-more-btn:hover {
+      background: #4f47ff;
+      color: #fff;
+    }
     @media (max-width:991.98px){
-      .profile-img {width:48px!important;height:48px!important;}
+      .profile-img {width:96px!important;height:96px!important;}
       .profile-level {width:20px;height:20px;font-size:.7rem;}
       .mini-avatar {width:28px;height:28px;}
       .badge-dot {width:12px;height:12px;}
@@ -39,7 +56,6 @@
       .card {padding:1rem;}
     }
   </style>
-
 {% endblock css %}
 
 {% block body %}
@@ -166,6 +182,8 @@
               </tbody>
             </table>
           </div>
+          <!-- Show More Students Button -->
+          <button class="show-more-btn" onclick="location.href='/leaderboard/all-students';">Show More Students</button>
         </div>
       </div>
       <!-- Right Aside -->
@@ -229,5 +247,4 @@
       }
     });
   </script>
-
 {% endblock %}

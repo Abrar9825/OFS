@@ -21,3 +21,6 @@ def github_auth(request):
 
 def profile(request):
     return render(request,'accounts/profile.html')
+
+def edit_profile(request):
+    return render(request,'accounts/edit_profile.html')

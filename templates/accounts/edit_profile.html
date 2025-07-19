@@ -1,0 +1,263 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} Edit Profile | OnlyForStudents {% endblock title %}
+{% block css %}
+<style>
+  body {
+    background: #f7f9fc;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .edit-profile-main {
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 24px 0 rgb(10 10 77 / 0.10);
+    padding: 2.6rem 2.3rem 2.3rem 2.3rem;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+  .edit-profile-title {
+    color: #0a0a4d;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 1.1rem;
+    text-align: center;
+  }
+  .profile-img-edit-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+  }
+  .profile-img-edit {
+    width: 92px;
+    height: 92px;
+    object-fit: cover;
+    border-radius: 0.7rem;
+    box-shadow: 0 2px 10px #0a0a4d18;
+    border: 2.5px solid #e3e8f0;
+  }
+  .edit-img-btn {
+    background: #eaf4ff;
+    color: #4f47ff;
+    border: none;
+    border-radius: 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.41em 1.2em;
+    cursor: pointer;
+    transition: background .18s;
+  }
+  .edit-img-btn:hover {
+    background: #4f47ff;
+    color: #fff;
+  }
+  .form-label {
+    font-weight: 600;
+    color: #0a0a4d;
+    margin-bottom: .4rem;
+  }
+  .form-control, .form-select {
+    border-radius: 0.7rem;
+    border: 1.5px solid #e3e8f0;
+    background: #f7f9fc;
+    color: #0a0a4d;
+    font-size: 1.01rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 4px #4f47ff0c;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: #4f47ff;
+    box-shadow: 0 1px 8px #4f47ff1d;
+    background: #fff;
+  }
+  .profile-badges-edit, .profile-tech-edit, .profile-expertise-edit {
+    margin-bottom: 1.2rem;
+  }
+  .badge-edit-item,
+  .tech-edit-item,
+  .expertise-edit-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .3em;
+    padding: .28em .85em;
+    margin: .18em .18em .18em 0;
+    border-radius: 1.1rem;
+    font-size: .96em;
+    font-weight: 600;
+    background: #eaf0ff;
+    color: #0a0a4d;
+    border: 1.5px solid #e3e8f0;
+    cursor: pointer;
+    transition: background .18s;
+    user-select: none;
+  }
+  .badge-edit-item.selected,
+  .tech-edit-item.selected,
+  .expertise-edit-item.selected {
+    background: linear-gradient(90deg, #4f47ff, #a53aff);
+    color: #fff;
+    border-color: #4f47ff;
+  }
+  .add-tag-btn {
+    background: #f7f9fc;
+    color: #0a0a4d;
+    border: 1px solid #e3e8f0;
+    border-radius: 1rem;
+    font-size: .94rem;
+    font-weight: 600;
+    padding: 0.2em 0.8em;
+    cursor: pointer;
+    margin-left: .5em;
+    margin-bottom: .5em;
+    transition: background .18s;
+  }
+  .add-tag-btn:hover {
+    background: #eaf4ff;
+    color: #4f47ff;
+  }
+  .edit-profile-actions {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-top: 2.2rem;
+  }
+  .btn-save-profile {
+    background: linear-gradient(90deg, #4f47ff, #a53aff);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 1.2rem;
+    padding: 0.49em 2.2em;
+    font-size: 1.1em;
+    box-shadow: 0 2px 10px #4f47ff1a;
+    transition: background .18s;
+  }
+  .btn-save-profile:hover {
+    background: linear-gradient(90deg, #6ba4ff, #a53aff);
+    color: #fff;
+  }
+  .btn-cancel-profile {
+    background: #fff;
+    color: #4f47ff;
+    font-weight: 600;
+    border: 1.5px solid #e3e8f0;
+    border-radius: 1.2rem;
+    padding: 0.49em 2.2em;
+    font-size: 1.1em;
+    transition: background .18s;
+  }
+  .btn-cancel-profile:hover {
+    background: #eaf4ff;
+    color: #4f47ff;
+  }
+  @media (max-width: 575.98px) {
+    .edit-profile-main { padding: .7rem .4rem; }
+    .profile-img-edit { width: 60px; height: 60px; }
+    .edit-profile-title { font-size: 1.13rem; }
+    .edit-profile-actions { flex-direction: column; gap: .7rem; }
+  }
+</style>
+{% endblock css %}
+
+{% block body %}
+<main class="container py-4">
+  <div class="edit-profile-main">
+    <div class="edit-profile-title">Edit Profile</div>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="profile-img-edit-wrap">
+        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/36b134c2-3867-4ec2-b3df-667169155351.png"
+          class="profile-img-edit" id="profile-img-preview" alt="Profile Image" />
+        <label class="edit-img-btn" for="profile-img-input">
+          Change Photo
+          <input type="file" id="profile-img-input" name="profile_image" accept="image/*" style="display:none;" onchange="previewProfileImage(this)">
+        </label>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="profile-name">Full Name</label>
+        <input type="text" class="form-control" id="profile-name" name="name" value="Alex Thompson" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="profile-title">Title / Role</label>
+        <input type="text" class="form-control" id="profile-title" name="title" value="Frontend Developer">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="profile-university">University</label>
+        <input type="text" class="form-control" id="profile-university" name="university" value="MIT">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="profile-bio">Bio</label>
+        <textarea class="form-control" id="profile-bio" name="bio" rows="2">React Ninja | Computer Science @ MIT | Building the future, one component at a time</textarea>
+      </div>
+      <div class="profile-tech-edit">
+        <label class="form-label">Tech Stack</label>
+        <div id="tech-stack-edit-list">
+          <span class="tech-edit-item selected">React</span>
+          <span class="tech-edit-item selected">Node.js</span>
+          <span class="tech-edit-item">Figma</span>
+          <span class="tech-edit-item">JavaScript</span>
+          <span class="tech-edit-item">MongoDB</span>
+          <span class="tech-edit-item">Docker</span>
+        </div>
+        <button type="button" class="add-tag-btn" onclick="addTag('tech')">+ Add</button>
+      </div>
+      <div class="profile-expertise-edit">
+        <label class="form-label">Expertise</label>
+        <div id="expertise-edit-list">
+          <span class="expertise-edit-item selected">Frontend</span>
+          <span class="expertise-edit-item selected">UI/UX</span>
+          <span class="expertise-edit-item">Team Lead</span>
+        </div>
+        <button type="button" class="add-tag-btn" onclick="addTag('expertise')">+ Add</button>
+      </div>
+      <div class="profile-badges-edit">
+        <label class="form-label">Verified Badges</label>
+        <div id="badges-edit-list">
+          <span class="badge-edit-item selected">React Pro</span>
+          <span class="badge-edit-item selected">GitHub Expert</span>
+          <span class="badge-edit-item">Team Player</span>
+          <span class="badge-edit-item">Code Master</span>
+        </div>
+        <button type="button" class="add-tag-btn" onclick="addTag('badge')">+ Add</button>
+      </div>
+      <div class="edit-profile-actions">
+        <button type="submit" class="btn-save-profile">Save Changes</button>
+        <a href="/profile" class="btn-cancel-profile">Cancel</a>
+      </div>
+    </form>
+  </div>
+</main>
+<script>
+function previewProfileImage(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('profile-img-preview').src = e.target.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+// Select/unselect items
+document.querySelectorAll('.tech-edit-item').forEach(function(el){
+  el.onclick = function(){ el.classList.toggle('selected'); }
+});
+document.querySelectorAll('.expertise-edit-item').forEach(function(el){
+  el.onclick = function(){ el.classList.toggle('selected'); }
+});
+document.querySelectorAll('.badge-edit-item').forEach(function(el){
+  el.onclick = function(){ el.classList.toggle('selected'); }
+});
+// Add tag (fake, just for UI demo)
+function addTag(type) {
+  let val = prompt('Enter new '+type+' tag:');
+  if(val && val.trim() !== '') {
+    let span = document.createElement('span');
+    span.textContent = val;
+    span.className = type+'-edit-item selected';
+    span.onclick = function(){ span.classList.toggle('selected'); }
+    document.getElementById(type+'-edit-list').appendChild(span);
+  }
+}
+</script>
+{% endblock %}
