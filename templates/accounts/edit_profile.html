@@ -1,263 +1,268 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block title %} Edit Profile | OnlyForStudents {% endblock title %}
+
 {% block css %}
 <style>
+  :root {
+    --color-primary: #0a0a4d;
+    --color-secondary: #1e3a8a;
+    --color-accent: #10b981;
+    --color-surface: #f8fafc;
+    --color-background: #ffffff;
+    --color-text-primary: #1f2937;
+    --color-text-secondary: #6b7280;
+    --color-border: #eef2f9;
+    --shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+  }
+
+  /* Base body to work with template */
   body {
-    background: #f7f9fc;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-surface) !important;
+    font-family: 'Inter', Arial, sans-serif !important;
+    padding-top: 70px;
+    /* Space for fixed navbar */
   }
-  .edit-profile-main {
-    background: #fff;
-    border-radius: 1.2rem;
-    box-shadow: 0 4px 24px 0 rgb(10 10 77 / 0.10);
-    padding: 2.6rem 2.3rem 2.3rem 2.3rem;
-    max-width: 650px;
+
+  main {
+    padding: 2rem 1rem;
+  }
+
+  /* --- Main Edit Card --- */
+  .edit-profile-card {
+    background-color: var(--color-background);
+    max-width: 700px;
     margin: 0 auto;
+    padding: 2.5rem;
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow);
   }
-  .edit-profile-title {
-    color: #0a0a4d;
+
+  .edit-profile-header h1 {
     font-weight: 700;
-    font-size: 1.5rem;
-    margin-bottom: 1.1rem;
+    color: var(--color-primary);
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
     text-align: center;
   }
-  .profile-img-edit-wrap {
+
+  /* --- Profile Image Upload --- */
+  .profile-image-upload {
     display: flex;
     align-items: center;
-    gap: 1.4rem;
+    gap: 1.5rem;
     margin-bottom: 2rem;
-    justify-content: center;
   }
-  .profile-img-edit {
-    width: 92px;
-    height: 92px;
+
+  .profile-image-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
     object-fit: cover;
-    border-radius: 0.7rem;
-    box-shadow: 0 2px 10px #0a0a4d18;
-    border: 2.5px solid #e3e8f0;
+    border: 3px solid var(--color-background);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
-  .edit-img-btn {
-    background: #eaf4ff;
-    color: #4f47ff;
-    border: none;
-    border-radius: 1.2rem;
-    font-size: 1rem;
+
+  .btn-upload {
     font-weight: 600;
-    padding: 0.41em 1.2em;
+    background-color: #f0f5ff;
+    color: var(--color-primary);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
     cursor: pointer;
-    transition: background .18s;
+    transition: all 0.2s ease;
   }
-  .edit-img-btn:hover {
-    background: #4f47ff;
+
+  .btn-upload:hover {
+    background-color: var(--color-secondary);
     color: #fff;
   }
+
+  /* --- Form Styles --- */
   .form-label {
-    font-weight: 600;
-    color: #0a0a4d;
-    margin-bottom: .4rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
   }
-  .form-control, .form-select {
-    border-radius: 0.7rem;
-    border: 1.5px solid #e3e8f0;
-    background: #f7f9fc;
-    color: #0a0a4d;
-    font-size: 1.01rem;
-    margin-bottom: 1.25rem;
-    box-shadow: 0 1px 4px #4f47ff0c;
+
+  .form-control {
+    height: 48px;
+    border-color: #d1d5db;
+    border-radius: 0.5rem;
   }
-  .form-control:focus, .form-select:focus {
-    border-color: #4f47ff;
-    box-shadow: 0 1px 8px #4f47ff1d;
-    background: #fff;
+
+  .form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(10, 10, 77, 0.1);
   }
-  .profile-badges-edit, .profile-tech-edit, .profile-expertise-edit {
-    margin-bottom: 1.2rem;
-  }
-  .badge-edit-item,
-  .tech-edit-item,
-  .expertise-edit-item {
-    display: inline-flex;
-    align-items: center;
-    gap: .3em;
-    padding: .28em .85em;
-    margin: .18em .18em .18em 0;
-    border-radius: 1.1rem;
-    font-size: .96em;
-    font-weight: 600;
-    background: #eaf0ff;
-    color: #0a0a4d;
-    border: 1.5px solid #e3e8f0;
-    cursor: pointer;
-    transition: background .18s;
-    user-select: none;
-  }
-  .badge-edit-item.selected,
-  .tech-edit-item.selected,
-  .expertise-edit-item.selected {
-    background: linear-gradient(90deg, #4f47ff, #a53aff);
-    color: #fff;
-    border-color: #4f47ff;
-  }
-  .add-tag-btn {
-    background: #f7f9fc;
-    color: #0a0a4d;
-    border: 1px solid #e3e8f0;
-    border-radius: 1rem;
-    font-size: .94rem;
-    font-weight: 600;
-    padding: 0.2em 0.8em;
-    cursor: pointer;
-    margin-left: .5em;
-    margin-bottom: .5em;
-    transition: background .18s;
-  }
-  .add-tag-btn:hover {
-    background: #eaf4ff;
-    color: #4f47ff;
-  }
-  .edit-profile-actions {
+
+  /* --- Tag Selection (Checkboxes) --- */
+  .tag-selection-group {
     display: flex;
-    gap: 1.2rem;
-    justify-content: center;
-    margin-top: 2.2rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
-  .btn-save-profile {
-    background: linear-gradient(90deg, #4f47ff, #a53aff);
+
+  .tag-checkbox input[type="checkbox"] {
+    display: none;
+    /* Hide the actual checkbox */
+  }
+
+  .tag-checkbox label {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 2rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tag-checkbox input[type="checkbox"]:checked+label {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
     color: #fff;
+  }
+
+  .tag-checkbox label:hover {
+    border-color: var(--color-secondary);
+  }
+
+  /* --- Action Buttons --- */
+  .form-actions {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    padding: 0.75rem 1.5rem;
     font-weight: 600;
-    border: none;
-    border-radius: 1.2rem;
-    padding: 0.49em 2.2em;
-    font-size: 1.1em;
-    box-shadow: 0 2px 10px #4f47ff1a;
-    transition: background .18s;
+    border-radius: 0.5rem;
   }
-  .btn-save-profile:hover {
-    background: linear-gradient(90deg, #6ba4ff, #a53aff);
-    color: #fff;
-  }
-  .btn-cancel-profile {
-    background: #fff;
-    color: #4f47ff;
+
+  .btn-light {
+    background-color: #f1f5f9;
+    border-color: #f1f5f9;
+    padding: 0.75rem 1.5rem;
     font-weight: 600;
-    border: 1.5px solid #e3e8f0;
-    border-radius: 1.2rem;
-    padding: 0.49em 2.2em;
-    font-size: 1.1em;
-    transition: background .18s;
+    border-radius: 0.5rem;
   }
-  .btn-cancel-profile:hover {
-    background: #eaf4ff;
-    color: #4f47ff;
-  }
-  @media (max-width: 575.98px) {
-    .edit-profile-main { padding: .7rem .4rem; }
-    .profile-img-edit { width: 60px; height: 60px; }
-    .edit-profile-title { font-size: 1.13rem; }
-    .edit-profile-actions { flex-direction: column; gap: .7rem; }
+
+  @media (max-width: 576px) {
+    .edit-profile-card {
+      padding: 1.5rem;
+    }
+
+    .profile-image-upload {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .form-actions .btn {
+      width: 100%;
+    }
   }
 </style>
 {% endblock css %}
 
 {% block body %}
-<main class="container py-4">
-  <div class="edit-profile-main">
-    <div class="edit-profile-title">Edit Profile</div>
+<main>
+  <div class="edit-profile-card">
+    <div class="edit-profile-header">
+      <h1>Edit Your Profile</h1>
+    </div>
+
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="profile-img-edit-wrap">
-        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/36b134c2-3867-4ec2-b3df-667169155351.png"
-          class="profile-img-edit" id="profile-img-preview" alt="Profile Image" />
-        <label class="edit-img-btn" for="profile-img-input">
-          Change Photo
-          <input type="file" id="profile-img-input" name="profile_image" accept="image/*" style="display:none;" onchange="previewProfileImage(this)">
-        </label>
+
+      <div class="profile-image-upload">
+        <img src="https://i.pravatar.cc/80" id="profile-img-preview" class="profile-image-preview"
+          alt="Profile Image Preview" />
+        <div>
+          <label for="profile-img-input" class="btn-upload">Upload New Photo</label>
+          <input type="file" id="profile-img-input" name="profile_image" accept="image/*" class="d-none"
+            onchange="previewProfileImage(this)">
+          <p class="text-secondary small mt-2">Recommended: 200x200px, JPG or PNG</p>
+        </div>
       </div>
-      <div class="mb-3">
-        <label class="form-label" for="profile-name">Full Name</label>
-        <input type="text" class="form-control" id="profile-name" name="name" value="Alex Thompson" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="profile-title">Title / Role</label>
-        <input type="text" class="form-control" id="profile-title" name="title" value="Frontend Developer">
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="profile-university">University</label>
-        <input type="text" class="form-control" id="profile-university" name="university" value="MIT">
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label" for="profile-name">Full Name</label>
+          <input type="text" class="form-control" id="profile-name" name="name" value="Alex Thompson" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label" for="profile-title">Title / Role</label>
+          <input type="text" class="form-control" id="profile-title" name="title" value="Frontend Developer">
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="profile-bio">Bio</label>
-        <textarea class="form-control" id="profile-bio" name="bio" rows="2">React Ninja | Computer Science @ MIT | Building the future, one component at a time</textarea>
+        <textarea class="form-control" id="profile-bio" name="bio"
+          rows="3">React Ninja | Computer Science @ MIT | Building the future, one component at a time</textarea>
       </div>
-      <div class="profile-tech-edit">
-        <label class="form-label">Tech Stack</label>
-        <div id="tech-stack-edit-list">
-          <span class="tech-edit-item selected">React</span>
-          <span class="tech-edit-item selected">Node.js</span>
-          <span class="tech-edit-item">Figma</span>
-          <span class="tech-edit-item">JavaScript</span>
-          <span class="tech-edit-item">MongoDB</span>
-          <span class="tech-edit-item">Docker</span>
+
+      <hr class="my-4">
+
+      <div class="mb-3">
+        <label class="form-label d-block mb-2">Tech Stack</label>
+        <div class="tag-selection-group">
+          <span class="tag-checkbox"><input type="checkbox" id="tech1" value="React" checked><label
+              for="tech1">React</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech2" value="Node.js" checked><label
+              for="tech2">Node.js</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech3" value="Figma"><label
+              for="tech3">Figma</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech4" value="JavaScript"><label
+              for="tech4">JavaScript</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech5" value="MongoDB"><label
+              for="tech5">MongoDB</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech6" value="Docker"><label
+              for="tech6">Docker</label></span>
         </div>
-        <button type="button" class="add-tag-btn" onclick="addTag('tech')">+ Add</button>
       </div>
-      <div class="profile-expertise-edit">
-        <label class="form-label">Expertise</label>
-        <div id="expertise-edit-list">
-          <span class="expertise-edit-item selected">Frontend</span>
-          <span class="expertise-edit-item selected">UI/UX</span>
-          <span class="expertise-edit-item">Team Lead</span>
+
+      <div class="mb-3">
+        <label class="form-label d-block mb-2">Expertise</label>
+        <div class="tag-selection-group">
+          <span class="tag-checkbox"><input type="checkbox" id="exp1" value="Frontend" checked><label
+              for="exp1">Frontend</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="exp2" value="UI/UX" checked><label
+              for="exp2">UI/UX</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="exp3" value="Team Lead"><label for="exp3">Team
+              Lead</label></span>
         </div>
-        <button type="button" class="add-tag-btn" onclick="addTag('expertise')">+ Add</button>
       </div>
-      <div class="profile-badges-edit">
-        <label class="form-label">Verified Badges</label>
-        <div id="badges-edit-list">
-          <span class="badge-edit-item selected">React Pro</span>
-          <span class="badge-edit-item selected">GitHub Expert</span>
-          <span class="badge-edit-item">Team Player</span>
-          <span class="badge-edit-item">Code Master</span>
-        </div>
-        <button type="button" class="add-tag-btn" onclick="addTag('badge')">+ Add</button>
-      </div>
-      <div class="edit-profile-actions">
-        <button type="submit" class="btn-save-profile">Save Changes</button>
-        <a href="/profile" class="btn-cancel-profile">Cancel</a>
+
+      <div class="form-actions d-flex justify-content-end gap-2">
+        <a href="/accounts/profile" class="btn btn-light">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
       </div>
     </form>
   </div>
 </main>
-<script>
-function previewProfileImage(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      document.getElementById('profile-img-preview').src = e.target.result;
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-// Select/unselect items
-document.querySelectorAll('.tech-edit-item').forEach(function(el){
-  el.onclick = function(){ el.classList.toggle('selected'); }
-});
-document.querySelectorAll('.expertise-edit-item').forEach(function(el){
-  el.onclick = function(){ el.classList.toggle('selected'); }
-});
-document.querySelectorAll('.badge-edit-item').forEach(function(el){
-  el.onclick = function(){ el.classList.toggle('selected'); }
-});
-// Add tag (fake, just for UI demo)
-function addTag(type) {
-  let val = prompt('Enter new '+type+' tag:');
-  if(val && val.trim() !== '') {
-    let span = document.createElement('span');
-    span.textContent = val;
-    span.className = type+'-edit-item selected';
-    span.onclick = function(){ span.classList.toggle('selected'); }
-    document.getElementById(type+'-edit-list').appendChild(span);
-  }
-}
-</script>
 {% endblock %}
+
+{% block js %}
+<script>
+  // Live preview for profile image
+  function previewProfileImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById('profile-img-preview').src = e.target.result;
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+{% endblock js %}
