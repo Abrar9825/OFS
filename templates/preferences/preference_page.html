@@ -82,6 +82,99 @@
       stroke: #ecf0ff;
       fill: #ecf0ff;
     }
+    .btn-add-more {
+      border: 2px dashed #d1d5db !important;
+      background-color: #f9fafb !important;
+      color: #6b7280 !important;
+      font-weight: 500 !important;
+    }
+    .btn-add-more:hover {
+      border-color: #3b82f6 !important;
+      background-color: #eff6ff !important;
+      color: #1e40af !important;
+      transform: scale(1.02);
+    }
+    .btn-add-more svg {
+      transition: transform 0.2s ease;
+    }
+    .btn-add-more:hover svg {
+      transform: rotate(90deg);
+    }
+    .btn-add-more.active {
+      background-color: #f3f4f6 !important;
+      border-color: #9ca3af !important;
+      color: #4b5563 !important;
+    }
+    .custom-item {
+      position: relative;
+      border-radius: 10px;
+      min-width: 110px;
+      padding: 0.5rem 2.5rem 0.5rem 1rem;
+      font-weight: 500;
+      font-size: 14px;
+      color: #1f2937;
+      background-color: #f0f9ff;
+      border: 1.2px solid #0ea5e9;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      user-select: none;
+      margin: 0.3rem;
+      white-space: nowrap;
+      flex: 1;
+      text-align: center;
+    }
+    .custom-item:hover {
+      background-color: #e0e7ff;
+      border-color: #3b82f6;
+      color: #1e40af;
+      transform: translateY(-1px);
+    }
+    .custom-item.active {
+      background-color: #0ea5e9;
+      border-color: #0284c7;
+      color: white;
+    }
+    .custom-item .btn-remove {
+      position: absolute;
+      right: 0.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(239, 68, 68, 0.1);
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ef4444;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      opacity: 0;
+    }
+    .custom-item:hover .btn-remove {
+      opacity: 1;
+    }
+    .custom-item .btn-remove:hover {
+      background: #ef4444;
+      color: white;
+      transform: translateY(-50%) scale(1.1);
+    }
+    .custom-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .preview-btn {
+      pointer-events: none;
+      opacity: 0.8;
+    }
     select.form-select {
       width: 100%;
       max-width: 420px;
@@ -493,6 +586,10 @@
           <svg xmlns="http://www.w3.org/2000/svg" stroke="#f97316" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-gamedev" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"/><circle cx="7" cy="12" r="1"/><circle cx="17" cy="10" r="1"/><circle cx="17" cy="14" r="1"/></svg>
           Game Dev
         </button>
+        <button type="button" class="btn-role btn-add-more" id="addMoreRoles" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-add" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Add More
+        </button>
       </div>
     </div>
     <!-- Choose Your Tech Stack -->
@@ -574,6 +671,10 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="#06b6d4" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zM6.001 12c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"/></svg>
           Tailwind
         </button>
+        <button type="button" class="btn-tech btn-add-more" id="addMoreTech" aria-pressed="false">
+          <svg xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-add" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Add More
+        </button>
       </div>
     </div>
     <!-- Experience Level -->
@@ -634,13 +735,212 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   // Role & Tech toggle
-  document.querySelectorAll('.btn-role, .btn-tech').forEach(button => {
-    button.addEventListener('click', () => {
-      const isActive = button.classList.contains('active');
-      button.classList.toggle('active');
-      button.setAttribute('aria-pressed', !isActive);
-    });
+  document.addEventListener('click', function(e) {
+    const button = e.target.closest('.btn-role, .btn-tech');
+    if (!button) return;
+    
+    // Don't toggle "Add More" buttons like regular selection buttons
+    if (button.classList.contains('btn-add-more')) {
+      return; // We'll handle these separately
+    }
+    
+    // Don't toggle if clicking the remove button on custom items
+    if (e.target.closest('.btn-remove')) {
+      return;
+    }
+    
+    const isActive = button.classList.contains('active');
+    button.classList.toggle('active');
+    button.setAttribute('aria-pressed', !isActive);
   });
+
+  // Add More Roles functionality
+  document.getElementById('addMoreRoles').addEventListener('click', function() {
+    showAddMoreModal('Role', 'role');
+  });
+
+  // Add More Tech functionality  
+  document.getElementById('addMoreTech').addEventListener('click', function() {
+    showAddMoreModal('Tech Stack', 'tech');
+  });
+
+  // Modal functionality for Add More
+  function showAddMoreModal(title, type) {
+    // Create modal HTML with input field
+    const modalHTML = `
+      <div class="modal fade" id="addMoreModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-0 pb-2">
+              <h5 class="modal-title fw-bold text-primary">
+                <i class="fas fa-plus-circle me-2"></i>Add Custom ${title}
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-2">
+              <p class="text-muted mb-3">Enter a custom ${title.toLowerCase()} to add to your preferences:</p>
+              <div class="input-group mb-3">
+                <span class="input-group-text bg-primary text-white">
+                  <i class="fas ${type === 'role' ? 'fa-user-tag' : 'fa-code'}"></i>
+                </span>
+                <input type="text" class="form-control custom-input" placeholder="e.g., ${type === 'role' ? 'Cloud Architect' : 'Svelte'}" maxlength="20" id="customItemInput">
+                <button class="btn btn-primary" type="button" id="addCustomItem">
+                  <i class="fas fa-plus"></i> Add
+                </button>
+              </div>
+              <div id="customItemPreview" class="d-none">
+                <p class="small text-muted mb-2">Preview:</p>
+                <button type="button" class="btn btn-${type} preview-btn" disabled>
+                  <i class="fas ${type === 'role' ? 'fa-user' : 'fa-code'} me-2"></i>
+                  <span id="previewText"></span>
+                </button>
+              </div>
+            </div>
+            <div class="modal-footer border-0 pt-2">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('addMoreModal');
+    if (existingModal) {
+      existingModal.remove();
+    }
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Initialize and show modal
+    const modal = new bootstrap.Modal(document.getElementById('addMoreModal'));
+    modal.show();
+    
+    // Get modal elements
+    const customInput = document.getElementById('customItemInput');
+    const addButton = document.getElementById('addCustomItem');
+    const preview = document.getElementById('customItemPreview');
+    const previewText = document.getElementById('previewText');
+    
+    // Focus on input when modal opens
+    modal._element.addEventListener('shown.bs.modal', () => {
+      customInput.focus();
+    });
+    
+    // Real-time preview
+    customInput.addEventListener('input', function() {
+      const value = this.value.trim();
+      if (value) {
+        previewText.textContent = value;
+        preview.classList.remove('d-none');
+        addButton.disabled = false;
+      } else {
+        preview.classList.add('d-none');
+        addButton.disabled = true;
+      }
+    });
+    
+    // Add custom item functionality
+    function addCustomItem() {
+      const customValue = customInput.value.trim();
+      if (!customValue) return;
+      
+      // Create new button element
+      const newButton = document.createElement('button');
+      newButton.type = 'button';
+      newButton.className = `btn-${type} custom-item`;
+      newButton.setAttribute('aria-pressed', 'false');
+      
+      // Random color for custom items
+      const customColors = ['#8b5cf6', '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#f97316', '#ec4899'];
+      const randomColor = customColors[Math.floor(Math.random() * customColors.length)];
+      
+      newButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" stroke="${randomColor}" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" class="icon-custom">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        ${customValue}
+        <button type="button" class="btn-remove" aria-label="Remove ${customValue}">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      // Add click handler for selection
+      newButton.addEventListener('click', function(e) {
+        // Don't toggle if clicking the remove button
+        if (e.target.closest('.btn-remove')) return;
+        
+        const isActive = this.classList.contains('active');
+        this.classList.toggle('active');
+        this.setAttribute('aria-pressed', !isActive);
+      });
+      
+      // Add remove functionality
+      const removeBtn = newButton.querySelector('.btn-remove');
+      removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (confirm(`Remove "${customValue}" from your ${type === 'role' ? 'roles' : 'tech stack'}?`)) {
+          newButton.remove();
+        }
+      });
+      
+      // Find the appropriate container and add before "Add More" button
+      let container;
+      if (type === 'role') {
+        // Find the roles section by looking for the "Add More Roles" button
+        const addMoreRolesBtn = document.getElementById('addMoreRoles');
+        container = addMoreRolesBtn ? addMoreRolesBtn.parentElement : null;
+      } else {
+        // Find the tech section by looking for the "Add More Tech" button  
+        const addMoreTechBtn = document.getElementById('addMoreTech');
+        container = addMoreTechBtn ? addMoreTechBtn.parentElement : null;
+      }
+      
+      if (!container) {
+        console.error('Could not find container for', type);
+        return;
+      }
+      
+      const addMoreBtn = container.querySelector('.btn-add-more');
+      container.insertBefore(newButton, addMoreBtn);
+      
+      // Close modal and show success message
+      modal.hide();
+      
+      // Show a brief success indicator
+      const successToast = document.createElement('div');
+      successToast.className = 'toast show position-fixed top-0 start-50 translate-middle-x mt-3';
+      successToast.style.zIndex = '9999';
+      successToast.innerHTML = `
+        <div class="toast-body bg-success text-white d-flex align-items-center">
+          <i class="fas fa-check-circle me-2"></i>
+          "${customValue}" added successfully!
+        </div>
+      `;
+      document.body.appendChild(successToast);
+      
+      setTimeout(() => {
+        successToast.remove();
+      }, 3000);
+    }
+    
+    // Add button click handler
+    addButton.addEventListener('click', addCustomItem);
+    
+    // Enter key handler
+    customInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !addButton.disabled) {
+        addCustomItem();
+      }
+    });
+    
+    // Clean up modal on hide
+    document.getElementById('addMoreModal').addEventListener('hidden.bs.modal', function() {
+      this.remove();
+    });
+  }
 
   // Save & Continue with Popup
   document.getElementById('save-btn').addEventListener('click', () => {
