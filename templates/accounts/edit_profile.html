@@ -1,0 +1,268 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %} Edit Profile | OnlyForStudents {% endblock title %}
+
+{% block css %}
+<style>
+  :root {
+    --color-primary: #0a0a4d;
+    --color-secondary: #1e3a8a;
+    --color-accent: #10b981;
+    --color-surface: #f8fafc;
+    --color-background: #ffffff;
+    --color-text-primary: #1f2937;
+    --color-text-secondary: #6b7280;
+    --color-border: #eef2f9;
+    --shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+  }
+
+  /* Base body to work with template */
+  body {
+    background-color: var(--color-surface) !important;
+    font-family: 'Inter', Arial, sans-serif !important;
+    padding-top: 70px;
+    /* Space for fixed navbar */
+  }
+
+  main {
+    padding: 2rem 1rem;
+  }
+
+  /* --- Main Edit Card --- */
+  .edit-profile-card {
+    background-color: var(--color-background);
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+
+  .edit-profile-header h1 {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  /* --- Profile Image Upload --- */
+  .profile-image-upload {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .profile-image-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-background);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-upload {
+    font-weight: 600;
+    background-color: #f0f5ff;
+    color: var(--color-primary);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-upload:hover {
+    background-color: var(--color-secondary);
+    color: #fff;
+  }
+
+  /* --- Form Styles --- */
+  .form-label {
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    height: 48px;
+    border-color: #d1d5db;
+    border-radius: 0.5rem;
+  }
+
+  .form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(10, 10, 77, 0.1);
+  }
+
+  /* --- Tag Selection (Checkboxes) --- */
+  .tag-selection-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag-checkbox input[type="checkbox"] {
+    display: none;
+    /* Hide the actual checkbox */
+  }
+
+  .tag-checkbox label {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 2rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tag-checkbox input[type="checkbox"]:checked+label {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  .tag-checkbox label:hover {
+    border-color: var(--color-secondary);
+  }
+
+  /* --- Action Buttons --- */
+  .form-actions {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+  }
+
+  .btn-light {
+    background-color: #f1f5f9;
+    border-color: #f1f5f9;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+  }
+
+  @media (max-width: 576px) {
+    .edit-profile-card {
+      padding: 1.5rem;
+    }
+
+    .profile-image-upload {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .form-actions .btn {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock css %}
+
+{% block body %}
+<main>
+  <div class="edit-profile-card">
+    <div class="edit-profile-header">
+      <h1>Edit Your Profile</h1>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="profile-image-upload">
+        <img src="https://i.pravatar.cc/80" id="profile-img-preview" class="profile-image-preview"
+          alt="Profile Image Preview" />
+        <div>
+          <label for="profile-img-input" class="btn-upload">Upload New Photo</label>
+          <input type="file" id="profile-img-input" name="profile_image" accept="image/*" class="d-none"
+            onchange="previewProfileImage(this)">
+          <p class="text-secondary small mt-2">Recommended: 200x200px, JPG or PNG</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label" for="profile-name">Full Name</label>
+          <input type="text" class="form-control" id="profile-name" name="name" value="Alex Thompson" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label" for="profile-title">Title / Role</label>
+          <input type="text" class="form-control" id="profile-title" name="title" value="Frontend Developer">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="profile-bio">Bio</label>
+        <textarea class="form-control" id="profile-bio" name="bio"
+          rows="3">React Ninja | Computer Science @ MIT | Building the future, one component at a time</textarea>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="mb-3">
+        <label class="form-label d-block mb-2">Tech Stack</label>
+        <div class="tag-selection-group">
+          <span class="tag-checkbox"><input type="checkbox" id="tech1" value="React" checked><label
+              for="tech1">React</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech2" value="Node.js" checked><label
+              for="tech2">Node.js</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech3" value="Figma"><label
+              for="tech3">Figma</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech4" value="JavaScript"><label
+              for="tech4">JavaScript</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech5" value="MongoDB"><label
+              for="tech5">MongoDB</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="tech6" value="Docker"><label
+              for="tech6">Docker</label></span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label d-block mb-2">Expertise</label>
+        <div class="tag-selection-group">
+          <span class="tag-checkbox"><input type="checkbox" id="exp1" value="Frontend" checked><label
+              for="exp1">Frontend</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="exp2" value="UI/UX" checked><label
+              for="exp2">UI/UX</label></span>
+          <span class="tag-checkbox"><input type="checkbox" id="exp3" value="Team Lead"><label for="exp3">Team
+              Lead</label></span>
+        </div>
+      </div>
+
+      <div class="form-actions d-flex justify-content-end gap-2">
+        <a href="/accounts/profile" class="btn btn-light">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block js %}
+<script>
+  // Live preview for profile image
+  function previewProfileImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById('profile-img-preview').src = e.target.result;
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+{% endblock js %}
