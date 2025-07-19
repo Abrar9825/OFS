@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
-urlpatterns = [    
-        path('signup',views.signup,name="signup"),
-        path('login',views.login,name="login"),
-        path('forgotpassword',views.forgotpassword,name="forgotpassword"),
-        path('github-auth',views.github_auth,name="github-auth"),
-        path('profile',views.profile,name="profile"),
+urlpatterns = [
+    path('signup', views.signup, name="signup"),
+    path('login', views.login, name="login"),
+    path('forgotpassword', views.forgotpassword, name="forgotpassword"),
+    path('github-auth', views.github_auth, name="github-auth"),
+    path('profile', views.profile, name="profile"),
+    path('set_new_password', views.set_new_password, name="set_new_password"),
 ]
