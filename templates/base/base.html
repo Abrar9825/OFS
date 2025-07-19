@@ -432,10 +432,10 @@
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#">Explore Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Skill Tests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Leaderboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">My Projects</a></li>
+                    <li class="nav-item"><a class="nav-link"  href="{% url 'explore-projects' %}">Explore Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'skill-verification' %}">Skill Tests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'leaderboard' %}">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'my-projects' %}">My Projects</a></li>
                     <li class="nav-item navbar-search">
                         <form class="w-100" role="search" autocomplete="off">
                             <input class="form-control" type="search" placeholder="Search..." aria-label="Search">
@@ -448,7 +448,7 @@
                         <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="Profile" class="profile-img">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
