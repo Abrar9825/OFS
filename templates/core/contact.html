@@ -1,285 +1,258 @@
 {% extends "base/base.html" %}
 {% load static %}
-{% block title %} Facing Issues? | Support Form & FAQ {% endblock title %}
+{% block title %} Support & FAQ | OnlyForStudents {% endblock title %}
+
 {% block css %}
-  <style>
+<style>
+    :root {
+        --color-primary: #0a0a4d;
+        --color-secondary: #1e3a8a;
+        --color-accent: #10b981;
+        --color-surface: #f8fafc;
+        --color-background: #ffffff;
+        --color-text-primary: #1f2937;
+        --color-text-secondary: #6b7280;
+        --color-border: #eef2f9;
+        --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Base body to work with template */
     body {
-      background: #f7f8fb;
-      font-family: 'Inter', Arial, sans-serif;
-      min-height: 100vh;
+        background-color: var(--color-surface) !important;
+        font-family: 'Inter', Arial, sans-serif !important;
+        padding-top: 80px; /* Space for fixed navbar */
     }
-    .primary-color {
-      color: #0a0a4d !important;
+
+    main {
+        padding: 2rem 1rem;
     }
-    .bg-primary-color {
-      background-color: #0a0a4d !important;
+
+    /* --- Page Header --- */
+    .support-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
     }
-    .section-title {
-      font-size: 2.3rem;
-      font-weight: 800;
-      color: #0a0a4d;
-      text-align: center;
-      margin-bottom: 0.3rem;
-      letter-spacing: -1px;
+    .support-header h1 {
+        font-weight: 800;
+        font-size: 2.5rem;
+        color: var(--color-primary);
     }
-    .section-sub {
-      text-align: center;
-      color: #6d7599;
-      font-size: 1.08rem;
-      margin-bottom: 2.3rem;
-      font-weight: 500;
-      letter-spacing: 0.1px;
+    .support-header p {
+        font-size: 1.1rem;
+        color: var(--color-text-secondary);
+        max-width: 500px;
+        margin: 0.5rem auto 0 auto;
     }
-    .emoji-wave {
-      font-size: 2.2rem;
-      text-align: center;
-      margin-bottom: 0.1rem;
-      display: block;
+
+    /* --- Main Container --- */
+    .support-container {
+        display: flex;
+        gap: 2rem;
+        background-color: var(--color-background);
+        padding: 2rem;
+        border-radius: 1.25rem;
+        box-shadow: var(--shadow-md);
     }
-    .main-card {
-      gap: 2.2rem;
-      min-height: 60vh;
+
+    /* --- Form Section (Left) --- */
+    .form-section {
+        flex: 1 1 60%;
     }
-    .form-card, .faq-section {
-      background: #fff;
-      border-radius: 22px;
-      box-shadow: 0 6px 40px 0 rgba(10,10,77,0.07), 0 1.5px 6px 0 rgba(10,10,77,0.02);
+    .form-section h3 {
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 1.5rem;
     }
-    .form-card {
-      padding: 2.5rem 2rem 2rem 2rem;
-      flex: 1 1 390px;
-      max-width: 630px;
-    }
-    .faq-section {
-      padding: 2.1rem 1.5rem 1.5rem 1.5rem;
-      flex: 1 1 300px;
-      max-width: 370px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .form-label {
-      font-weight: 600;
-      color: #232378;
-      margin-bottom: 0.45rem;
-    }
+    .form-label { font-weight: 500; }
     .form-control, .form-select {
-      border-radius: 10px;
-      border: 1.5px solid #dbe2ef;
-      min-height: 46px;
-      font-size: 1rem;
-      background: #f8fafd;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      box-shadow: none !important;
+        height: 48px;
+        border-color: #d1d5db;
+        border-radius: 0.5rem;
     }
     .form-control:focus, .form-select:focus {
-      border-color: #0a0a4d;
-      background: #fff;
-      box-shadow: 0 0 0 2px rgba(10,10,77,0.09);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(10, 10, 77, 0.1);
     }
-    .send-btn {
-      background: #0a0a4d;
-      color: #fff;
-      font-weight: 700;
-      border-radius: 10px;
-      padding: 12px 0;
-      font-size: 1.1rem;
-      letter-spacing: 0.05em;
-      box-shadow: 0 2px 6px 0 rgba(10,10,77,0.10);
-      transition: background 0.17s, box-shadow 0.17s;
-      border: none;
+    .btn-primary {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
     }
-    .send-btn:hover, .send-btn:focus {
-      background: #16165e;
-      color: #fff;
-      box-shadow: 0 3px 13px 0 rgba(10,10,77,0.16);
+    .btn-primary:hover {
+        transform: translateY(-2px);
     }
-    .faq-title {
-      font-weight: 800;
-      font-size: 1.15rem;
-      color: #0a0a4d;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+
+    /* --- FAQ Section (Right) --- */
+    .faq-section {
+        flex: 1 1 40%;
+        background-color: var(--color-surface);
+        padding: 1.5rem;
+        border-radius: 1rem;
     }
-    .accordion-button {
-      font-weight: 700;
-      color: #0a0a4d;
-      background: #f4f7fb;
-      border-radius: 13px !important;
-      box-shadow: none;
-      margin-bottom: 7px;
-      transition: background .13s;
+    .faq-section h3 {
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 1.5rem;
     }
-    .accordion-button:focus, .accordion-button:not(.collapsed) {
-      background: #e9ebf7;
-      color: #4f47ff;
+    
+    /* Custom Accordion */
+    .custom-accordion .accordion-item {
+        background: none;
+        border: none;
+        border-bottom: 1px solid var(--color-border);
     }
-    .accordion-body {
-      color: #5a5e7b;
-      font-size: 0.97rem;
-      background: #f8fafd;
-      border-radius: 0 0 13px 13px;
+    .custom-accordion .accordion-button {
+        background: none;
+        color: var(--color-text-primary);
+        font-weight: 600;
+        padding: 1rem 0;
+        box-shadow: none !important;
     }
-    .other-ways {
-      font-size: 1rem;
-      color: #0a0a4d;
-      margin-top: 22px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+    .custom-accordion .accordion-button:not(.collapsed) {
+        color: var(--color-primary);
+    }
+    .custom-accordion .accordion-button::after {
+        content: '\f067'; /* Font Awesome Plus */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        background-image: none;
+        transform: rotate(0deg);
+        transition: transform 0.3s ease;
+    }
+    .custom-accordion .accordion-button:not(.collapsed)::after {
+        content: '\f068'; /* Font Awesome Minus */
+        transform: rotate(180deg);
+    }
+    .custom-accordion .accordion-body {
+        padding: 0 0 1rem 0;
+        font-size: 0.95rem;
     }
     .contact-info {
-      font-size: 0.97rem;
-      color: #4c5270;
-      margin-bottom: 2.5px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-top: 4px;
+        border-top: 1px solid var(--color-border);
+        padding-top: 1rem;
+        margin-top: 1rem;
     }
-    .char-info {
-      font-size: 0.97rem;
-      color: #b0b2c3;
-      margin-top: 0.3rem;
-      margin-bottom: -0.3rem;
+    .contact-info p {
+        margin-bottom: 0.5rem;
     }
-    @media (max-width: 991.98px) {
-      .main-card {
-        flex-direction: column;
-        gap: 1.3rem;
-      }
-      .form-card, .faq-section {
-        border-radius: 16px !important;
-        box-shadow: 0 3px 13px 0 rgba(10,10,77,0.09);
-      }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .support-container {
+            flex-direction: column;
+        }
     }
-    @media (max-width: 575.98px) {
-      .section-title { font-size: 1.28rem; }
-      .section-sub { font-size: 0.93rem; }
-      .main-card { gap: 0.8rem; }
-      .form-card, .faq-section { border-radius: 0 !important; }
-      .form-card, .faq-section { padding: 1.15rem 0.6rem !important; }
-      .faq-section { max-width: none; }
-    }
-  </style>
+</style>
 {% endblock css %}
 
 {% block body %}
-  <div class="container py-3 py-md-5">
-    <div class="mb-2">
-      <span class="emoji-wave">👋</span>
-      <div class="section-title">Facing Issues?</div>
-      <div class="section-sub">We’re here to help—tell us what’s bothering you.</div>
+<main class="container">
+    <div class="support-header">
+        <h1>How can we help?</h1>
+        <p>From account issues to technical bugs, we're here to assist. Check the FAQ or send us a message directly.</p>
     </div>
-    <div class="d-flex main-card justify-content-center flex-lg-row flex-column align-items-stretch">
-      <!-- Left: Contact Form -->
-      <div class="form-card shadow-sm">
-        <h5 class="mb-4 fw-bold primary-color">Send us a message</h5>
-        <form autocomplete="off">
-          <div class="mb-3">
-            <label class="form-label" for="fullName">Full Name</label>
-            <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="emailAddress">Email Address</label>
-            <input type="email" id="emailAddress" class="form-control" placeholder="your.email@student.edu" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="issueType">Issue Type</label>
-            <select class="form-select" id="issueType" required>
-              <option selected disabled>Choose an issue type</option>
-              <option>Account Issue</option>
-              <option>Technical Problem</option>
-              <option>Feedback</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="mb-2">
-            <label class="form-label" for="message">Message</label>
-            <textarea id="message" class="form-control" rows="4" maxlength="500" placeholder="Describe your issue clearly..." required></textarea>
-            <div class="d-flex justify-content-between char-info">
-              <span id="charCount">0 characters</span>
-              <span>Max 500 characters</span>
-            </div>
-          </div>
-          <button type="submit" class="btn send-btn w-100 mt-4"><i class="bi bi-send me-2"></i>Send Request</button>
-        </form>
-      </div>
-      <!-- Right: FAQ Section -->
-      <div class="faq-section shadow-sm mt-lg-0 mt-3">
-        <div class="faq-title">
-          <i class="bi bi-question-circle"></i> Frequently Asked Questions
+
+    <div class="support-container">
+        <div class="form-section">
+            <h3>Send us a Message</h3>
+            <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="fullName">Full Name</label>
+                        <input type="text" id="fullName" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="emailAddress">Email Address</label>
+                        <input type="email" id="emailAddress" class="form-control" placeholder="your.email@example.com" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="issueType">Issue Type</label>
+                    <select class="form-select" id="issueType" required>
+                        <option selected disabled value="">Please select an issue type...</option>
+                        <option>Account & Billing</option>
+                        <option>Technical Problem / Bug Report</option>
+                        <option>Project Collaboration Issue</option>
+                        <option>Feedback & Suggestions</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="message">Message</label>
+                    <textarea id="message" class="form-control" rows="5" maxlength="500" placeholder="Please describe your issue in detail..." required></textarea>
+                    <div class="d-flex justify-content-end text-secondary small mt-1">
+                        <span id="charCount">0 / 500</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100"><i class="fas fa-paper-plane me-2"></i>Send Message</button>
+            </form>
         </div>
-        <div class="accordion" id="faqAccordion">
-          <div class="accordion-item mb-2">
-            <h2 class="accordion-header" id="faq1">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1body">
-                How do I connect my GitHub account?
-              </button>
-            </h2>
-            <div id="faq1body" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                Go to <b>Settings &gt; Integrations</b> and click "Connect GitHub". Follow the prompts to link your account and sync your projects.
-              </div>
+
+        <div class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <div class="accordion accordion-flush custom-accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-1">
+                            How do I connect my GitHub account?
+                        </button>
+                    </h2>
+                    <div id="faq-1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-secondary">
+                            Navigate to <strong>Account Settings > Profile</strong> and you will find the "Connect GitHub" button. Follow the on-screen prompts to authorize access.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-2">
+                            Where can I find my skill test certificates?
+                        </button>
+                    </h2>
+                    <div id="faq-2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-secondary">
+                            All your earned certificates are available on your main <strong>Profile Page</strong> under the "Verified Skills" section.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-3">
+                           How do I reset my password?
+                        </button>
+                    </h2>
+                    <div id="faq-3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-secondary">
+                            You can reset your password by clicking the "Forgot Password?" link on the main Login page. An email with instructions will be sent to your registered address.
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="accordion-item mb-2">
-            <h2 class="accordion-header" id="faq2">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2body">
-                Where do I take skill tests?
-              </button>
-            </h2>
-            <div id="faq2body" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                Visit the <b>Skill Tests</b> page from your dashboard and select a test to begin. Your progress and certificates will appear in your profile.
-              </div>
+            <div class="contact-info mt-auto">
+                <h6 class="fw-bold">Can't find an answer?</h6>
+                <p class="text-secondary small mb-0">
+                    <i class="fas fa-envelope me-2"></i> Email us directly at <a href="mailto:support@onlyforstudents.com">support@onlyforstudents.com</a>
+                </p>
             </div>
-          </div>
-          <div class="accordion-item mb-2">
-            <h2 class="accordion-header" id="faq3">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3body">
-                How do badges and XP work?
-              </button>
-            </h2>
-            <div id="faq3body" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                Badges are earned by completing challenges, projects, or tests. Each badge gives you experience points (XP) that help you level up and unlock new features.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item mb-2">
-            <h2 class="accordion-header" id="faq4">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4body">
-                How do I reset my password?
-              </button>
-            </h2>
-            <div id="faq4body" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                Click "Forgot Password" on the login page. You’ll receive a recovery link at your registered email to set a new password.
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="other-ways">Other ways to reach us</div>
-        <div class="contact-info">
-          <i class="bi bi-envelope-at"></i> support@onlyforstudents.com
-        </div>
-        <div class="contact-info">
-          <i class="bi bi-clock-history"></i> Response within 24 hours
-        </div>
-      </div>
     </div>
-  </div>
-  <script>
+</main>
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
     // Character count for textarea
     const message = document.getElementById('message');
     const charCount = document.getElementById('charCount');
     if (message && charCount) {
-      message.addEventListener('input', function() {
-        charCount.textContent = `${this.value.length} characters`;
-      });
+        message.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCount.textContent = `${currentLength} / 500`;
+        });
     }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-{% endblock %}
+</script>
+{% endblock js %}

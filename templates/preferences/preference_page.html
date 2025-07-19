@@ -1,985 +1,331 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block title %} Set Your Preferences {% endblock title %}
+
 {% block css %}
-  <style>
+<style>
+    :root {
+        --color-primary: #0a0a4d;
+        --color-secondary: #1e3a8a;
+        --color-accent: #10b981;
+        --color-surface: #f8fafc;
+        --color-background: #ffffff;
+        --color-text-primary: #1f2937;
+        --color-text-secondary: #6b7280;
+        --color-border: #eef2f9;
+        --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Base body to work with template */
     body {
-      background-color: #f6f9fc;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      padding: 1rem;
-      /* For blur effect when popup is open */
-      transition: filter 0.3s;
+        background-color: var(--color-surface) !important;
+        font-family: 'Inter', Arial, sans-serif !important;
+        padding-top: 70px; /* Space for fixed navbar */
     }
-    .blurred {
-      filter: blur(5px) grayscale(0.15) brightness(0.96);
-      pointer-events: none;
-      user-select: none;
+    main { padding: 2rem 1rem; }
+
+    /* --- Main Preferences Card --- */
+    .preferences-card {
+        background-color: var(--color-background);
+        max-width: 800px;
+        margin: 0 auto;
+        border-radius: 1.25rem;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
     }
-    .card {
-      max-width: 720px;
-      margin: 1rem auto;
-      border-radius: 12px;
-      box-shadow:
-        0 4px 6px rgb(0 0 0 / 0.1),
-        0 1px 3px rgb(0 0 0 / 0.06);
-      padding: 1.5rem;
-      background: white;
-    }
-    .section-header {
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      gap: 0.6rem;
-      user-select: none;
-    }
-    .underline {
-      width: 70px;
-      height: 4px;
-      background-color: #2563eb;
-      border-radius: 4px;
-      margin: 0.4rem auto 1.9rem auto;
-    }
-    .btn-role, .btn-tech {
-      border-radius: 10px;
-      min-width: 110px;
-      padding: 0.5rem 1rem;
-      font-weight: 500;
-      font-size: 14px;
-      color: #1f2937;
-      background-color: #f9fafb;
-      border: 1.2px solid #e5e7eb;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-      user-select: none;
-      margin: 0.3rem;
-      white-space: nowrap;
-      flex: 1;
-      text-align: center;
-    }
-    .btn-role:hover, .btn-tech:hover {
-      background-color: #e0e7ff;
-      border-color: #3b82f6;
-      color: #1e40af;
-    }
-    .btn-role svg, .btn-tech svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-    .btn-role.active, .btn-tech.active {
-      background-color: #3b82f6;
-      border-color: #2563eb;
-      color: white;
-    }
-    .btn-role.active svg path,
-    .btn-tech.active svg path {
-      stroke: #ecf0ff;
-      fill: #ecf0ff;
-    }
-    .btn-add-more {
-      border: 2px dashed #d1d5db !important;
-      background-color: #f9fafb !important;
-      color: #6b7280 !important;
-      font-weight: 500 !important;
-    }
-    .btn-add-more:hover {
-      border-color: #3b82f6 !important;
-      background-color: #eff6ff !important;
-      color: #1e40af !important;
-      transform: scale(1.02);
-    }
-    .btn-add-more svg {
-      transition: transform 0.2s ease;
-    }
-    .btn-add-more:hover svg {
-      transform: rotate(90deg);
-    }
-    .btn-add-more.active {
-      background-color: #f3f4f6 !important;
-      border-color: #9ca3af !important;
-      color: #4b5563 !important;
-    }
-    .custom-item {
-      position: relative;
-      border-radius: 10px;
-      min-width: 110px;
-      padding: 0.5rem 2.5rem 0.5rem 1rem;
-      font-weight: 500;
-      font-size: 14px;
-      color: #1f2937;
-      background-color: #f0f9ff;
-      border: 1.2px solid #0ea5e9;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      user-select: none;
-      margin: 0.3rem;
-      white-space: nowrap;
-      flex: 1;
-      text-align: center;
-    }
-    .custom-item:hover {
-      background-color: #e0e7ff;
-      border-color: #3b82f6;
-      color: #1e40af;
-      transform: translateY(-1px);
-    }
-    .custom-item.active {
-      background-color: #0ea5e9;
-      border-color: #0284c7;
-      color: white;
-    }
-    .custom-item .btn-remove {
-      position: absolute;
-      right: 0.25rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(239, 68, 68, 0.1);
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ef4444;
-      font-size: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      opacity: 0;
-    }
-    .custom-item:hover .btn-remove {
-      opacity: 1;
-    }
-    .custom-item .btn-remove:hover {
-      background: #ef4444;
-      color: white;
-      transform: translateY(-50%) scale(1.1);
-    }
-    .custom-item svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-    .preview-btn {
-      pointer-events: none;
-      opacity: 0.8;
-    }
-    select.form-select {
-      width: 100%;
-      max-width: 420px;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 0.9rem 1rem 0.9rem 1rem;
-      padding-right: 3rem;
-      cursor: pointer;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      transition: all 0.25s ease;
-      user-select: none;
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-      color: #374151;
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-      background-position: right 0.75rem center;
-      background-repeat: no-repeat;
-      background-size: 1.5em 1.5em;
-      appearance: none;
-    }
-    select.form-select:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.1);
-      outline: none;
-      background: #ffffff;
-      transform: translateY(-1px);
-    }
-    select.form-select:hover {
-      border-color: #9ca3af;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-      transform: translateY(-1px);
-    }
-    select.form-select option {
-      padding: 0.75rem 1rem;
-      font-weight: 500;
-      color: #374151;
-      background: white;
-    }
-    select.form-select option:checked {
-      background: #3b82f6;
-      color: white;
-    }
-    .experience-wrapper {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-    .experience-icon {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 1;
-      pointer-events: none;
-      color: #6b7280;
-      transition: color 0.25s ease;
-    }
-    .form-select:focus + .experience-icon,
-    .form-select:hover + .experience-icon {
-      color: #3b82f6;
-    }
-    select.form-select.with-icon {
-      padding-left: 3rem;
-    }
-    .btn-primary-custom {
-      border-radius: 12px;
-      padding: 0.75rem 2rem;
-      font-weight: 600;
-      font-size: 1rem;
-      box-shadow: 0 5px 15px rgb(59 130 246 / 0.4);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      width: 100%;
-      max-width: 300px;
-    }
-    .btn-primary-custom:hover {
-      background-color: #1e40af;
-      box-shadow: 0 7px 22px rgb(30 64 175 / 0.6);
-    }
-    .btn-group-wrap {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1.8rem;
-    }
-    /* Mobile responsiveness */
-    @media (max-width: 576px) {
-      body {
-        padding: 0.5rem;
-      }
-      .card {
-        margin: 0.5rem auto;
+
+    /* --- Wizard Step Navigator --- */
+    .wizard-steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        background-color: var(--color-surface);
         padding: 1rem;
-        border-radius: 8px;
-      }
-      .section-header {
-        font-size: 1rem;
-        gap: 0.4rem;
-        flex-wrap: wrap;
-      }
-      .section-header svg {
-        width: 18px;
-        height: 18px;
-      }
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 0.5rem;
-      }
-      .btn-role, .btn-tech {
-        min-width: unset;
-        padding: 0.5rem 0.75rem;
-        font-size: 13px;
-        margin: 0;
-      }
-      .btn-role svg, .btn-tech svg {
-        width: 16px;
-        height: 16px;
-      }
-      select.form-select {
-        font-size: 0.9rem;
-        padding-left: 0.75rem;
-      }
-      .btn-primary-custom {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.95rem;
-      }
-      .underline {
-        width: 50px;
-        height: 3px;
-      }
-      h3 {
-        font-size: 1.3rem;
-      }
+        border-bottom: 1px solid var(--color-border);
     }
-    @media (min-width: 577px) and (max-width: 768px) {
-      .card {
-        margin: 1.5rem auto;
-        padding: 1.75rem;
-      }
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 0.6rem;
-      }
-      .btn-role, .btn-tech {
-        padding: 0.5rem 0.85rem;
-      }
+    .step { text-align: center; padding: 0.5rem; color: var(--color-text-secondary); font-weight: 500; }
+    .step.active { color: var(--color-primary); font-weight: 600; }
+    .step .step-number {
+        width: 32px; height: 32px; border-radius: 50%;
+        background-color: #e0e9ff; color: var(--color-secondary);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 0.5rem auto; font-weight: 700; transition: all 0.3s ease;
     }
-    @media (max-width: 576px) and (orientation: landscape) {
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      }
-      .card {
-        margin: 0.25rem auto;
-      }
+    .step.active .step-number { background-color: var(--color-primary); color: #fff; }
+    .step.completed .step-number { background-color: var(--color-accent); color: #fff; }
+
+    /* --- Wizard Content --- */
+    .wizard-content { padding: 2.5rem; }
+    .wizard-pane { display: none; }
+    .wizard-pane.active { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .wizard-pane h2 { font-weight: 700; color: var(--color-primary); text-align: center; }
+    .wizard-pane p.lead { text-align: center; color: var(--color-text-secondary); margin-bottom: 2rem; }
+    
+    .search-input {
+        height: 48px;
+        border-radius: 0.5rem;
     }
-    @media (max-width: 380px) {
-      .btn-group-wrap {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .btn-role, .btn-tech {
-        font-size: 12px;
-        padding: 0.4rem 0.5rem;
-        min-width: unset;
-      }
-      .section-header {
-        font-size: 0.95rem;
-      }
-      .card {
-        padding: 0.75rem;
-      }
+    .search-input:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(10, 10, 77, 0.1);
     }
-    @media (min-width: 992px) {
-      .btn-group-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      }
+
+    /* --- Tag Selection --- */
+    .tag-selection-group {
+        display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;
+        margin-top: 1.5rem;
     }
-    /* Popup styles */
-    .popup-bg {
-      position: fixed;
-      z-index: 10000;
-      left: 0; top: 0; right: 0; bottom: 0;
-      min-height: 100vh;
-      min-width: 100vw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(43,47,80,0.25);
-      backdrop-filter: blur(3.5px) brightness(0.94);
-      transition: opacity 0.23s;
+    .tag-checkbox input[type="checkbox"], .tag-radio input[type="radio"] { display: none; }
+    .tag-checkbox label, .tag-radio label {
+        display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.25rem;
+        border: 1px solid #d1d5db; border-radius: 2rem; font-weight: 500;
+        color: var(--color-text-primary); cursor: pointer; transition: all 0.2s ease;
     }
-    .popup-bg.hide {
-      display: none;
+    .tag-checkbox input:checked + label, .tag-radio input:checked + label {
+        background-color: var(--color-primary); border-color: var(--color-primary); color: #fff;
     }
-    .popup-card {
-      width: 340px;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(24,28,50,0.12);
-      border: 1.5px solid #171c38;
-      padding: 32px 28px 22px 28px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    .tag-checkbox label:hover, .tag-radio label:hover {
+        border-color: var(--color-secondary); background-color: #f0f5ff;
     }
-    .popup-close {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      font-size: 18px;
-      color: #6c6c78;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      line-height: 1;
-      padding: 0 4px;
-      border-radius: 50%;
-      transition: background 0.15s;
+    
+    /* --- Wizard Actions --- */
+    .wizard-actions {
+        border-top: 1px solid var(--color-border);
+        padding: 1.5rem 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--color-surface);
     }
-    .popup-close:hover {
-      background: #f0f0fa;
-      color: #09094b;
+    
+    /* --- Reusable Button Styles --- */
+    .btn-primary { 
+        background-color: var(--color-primary); border-color: var(--color-primary);
+        padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 0.5rem;
     }
-    .popup-title {
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: #171c38;
-      margin-bottom: 10px;
-      letter-spacing: 0.01em;
-      display: flex;
-      align-items: center;
-      gap: 0.45em;
-      justify-content: center;
+    .btn-secondary { 
+        background-color: #e2e8f0; border-color: #e2e8f0; color: var(--color-text-primary);
+        padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 0.5rem;
     }
-    .popup-title .emoji {
-      font-size: 1.15em;
-      margin-right: 0.2em;
+    .btn-outline-secondary {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
     }
-    .popup-hand {
-      font-size: 1.5em;
-      margin-bottom: 8px;
-      margin-top: 2px;
-      display: block;
-      text-align: center;
+    .btn-outline-secondary:hover {
+        background-color: var(--color-primary);
+        color: #fff;
     }
-    .popup-heading {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #23283a;
-      margin-bottom: 13px;
-      text-align: center;
+    
+    /* --- Popup --- */
+    .preferences-popup-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(10, 10, 77, 0.3);
+        backdrop-filter: blur(5px);
+        display: none; align-items: center; justify-content: center; z-index: 1050;
     }
-    .popup-desc {
-      font-size: 0.92rem;
-      color: #585d6e;
-      font-weight: 400;
-      text-align: center;
-      margin-bottom: 8px;
-      line-height: 1.45;
+    .preferences-popup {
+        background: var(--color-background); border-radius: 1rem; padding: 2rem;
+        width: 100%; max-width: 400px; text-align: center;
     }
-    .popup-desc .emoji {
-      vertical-align: -2px;
+    .preferences-popup h3 { color: var(--color-primary); font-weight: 700; }
+    .preferences-popup .btn-light { /* Use our secondary style instead of default light */
+        background-color: #e2e8f0; border-color: #e2e8f0; color: var(--color-text-primary);
+        padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 0.5rem;
     }
-    .popup-desc strong {
-      font-weight: 600;
-      color: #23283a;
+
+    /* --- Responsive Fixes --- */
+    @media (max-width: 576px) {
+        main { padding: 1rem 0; }
+        .preferences-card { border-radius: 0; }
+        .wizard-content { padding: 1.5rem; }
+        .wizard-actions { 
+            padding: 1rem 1.5rem; 
+            flex-direction: column-reverse; /* Stack buttons with primary on top */
+            gap: 0.75rem;
+        }
+        .wizard-actions .btn {
+            width: 100%;
+        }
+        .step-label { display: none; }
     }
-    .popup-hint {
-      font-size: 0.90rem;
-      color: #585d6e;
-      text-align: center;
-      margin-bottom: 18px;
-      margin-top: 6px;
-    }
-    .popup-hint .emoji {
-      vertical-align: -2px;
-    }
-    .popup-button {
-      width: 100%;
-      background: #181c32;
-      color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
-      border: none;
-      border-radius: 22px;
-      padding: 0.78em 0;
-      margin-top: 5px;
-      margin-bottom: 8px;
-      box-shadow: 0 1px 7px 0 rgba(24,28,50,0.08);
-      outline: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4em;
-      transition: all 0.18s ease;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .popup-button:hover, .popup-button:focus {
-      background: #09094b;
-      color: #fff;
-      text-decoration: none;
-      transform: translateY(-1px);
-      box-shadow: 0 3px 12px 0 rgba(24,28,50,0.15);
-    }
-    .popup-button:active {
-      transform: translateY(0);
-      box-shadow: 0 1px 5px 0 rgba(24,28,50,0.1);
-    }
-    .popup-later {
-      margin-top: 4px;
-      font-size: 0.89rem;
-      color: #585d6e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.25em;
-      cursor: pointer;
-      user-select: none;
-      text-decoration: none;
-      padding: 0.5em 1em;
-      border-radius: 12px;
-      transition: all 0.15s ease;
-      font-weight: 500;
-    }
-    .popup-later:hover, .popup-later:focus {
-      text-decoration: none;
-      color: #171c38;
-      background: #f8f9fc;
-      transform: translateY(-1px);
-    }
-    .popup-later:active {
-      transform: translateY(0);
-      background: #f0f2f7;
-    }
-    @media (max-width: 450px) {
-      .popup-card {
-        width: 98vw;
-        padding: 18px 2vw 15px 2vw;
-      }
-      .popup-title { font-size: 1.04rem;}
-    }
-  </style>
+</style>
 {% endblock css %}
 
 {% block body %}
-<div id="main-content">
-  <div class="card bg-white">
-    <h3 class="text-center fw-semibold mb-2">Set Your Preferences</h3>
-    <p class="text-center text-secondary mb-3">
-      Choose your roles and tech stack to get personalized opportunities
-    </p>
-    <div class="underline"></div>
-    <!-- Choose Your Roles -->
-    <div class="mb-4">
-      <div class="section-header text-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5" width="20" height="20" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zM4.5 17.5a4.5 4.5 0 019 0v.5h-9v-.5z"/></svg>
-        Choose Your Roles
-      </div>
-      <div class="btn-group-wrap">
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#3b82f6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          Frontend
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#22c55e" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="icon-backend" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2" ry="2"/><line x1="7" y1="7" x2="7" y2="17"/><line x1="17" y1="7" x2="17" y2="17"/></svg>
-          Backend
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#a855f7" viewBox="0 0 24 24" class="icon-mobile" aria-hidden="true" height="18" width="18"><path d="M7 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM12 20a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"/></svg>
-          Mobile
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#db2777" viewBox="0 0 24 24" class="icon-uiux" aria-hidden="true" height="18" width="18"><path d="M12 2c-3 0-8 1.5-8 7.5 0 3.47 2.59 7.5 8 7.5 5.29 0 8-3.6 8-7.5S16 2 12 2z"/></svg>
-          UI/UX
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#dc6a13" viewBox="0 0 24 24" class="icon-aiml" aria-hidden="true" height="18" width="18"><path d="M12 2.25c-5.73 0-7.5 5.28-7.5 8.25 0 1.93.97 4.95 3.88 6.57 1.35.85 2.73 1 3.62 1.06 1.8.11 3.19-.93 3.19-3.18 0-.38-.07-3.45-.07-3.45L12 2.25z"/></svg>
-          AI/ML
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-devops" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M17 4h5v5"/><path d="M7 17H2v-5"/></svg>
-          DevOps
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#2563eb" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-data" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 6h16"/><path d="M7 18h10"/></svg>
-          Data Science
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ef4444" viewBox="0 0 24 24" class="icon-security" aria-hidden="true" height="18" width="18"><path d="M12 3l7 4v6c0 4-7 7-7 7s-7-3-7-7V7l7-4z"/></svg>
-          Security
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#f59e0b" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-fullstack" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-          Full Stack
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#8b5cf6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-qa" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M21 12c.552 0 1-.448 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .552.448 1 1 1h3v4l4-4z"/></svg>
-          QA/Testing
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#10b981" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-blockchain" viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="3" width="6" height="6" rx="1"/><rect x="3" y="15" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/></svg>
-          Blockchain
-        </button>
-        <button type="button" class="btn-role" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#f97316" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-gamedev" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"/><circle cx="7" cy="12" r="1"/><circle cx="17" cy="10" r="1"/><circle cx="17" cy="14" r="1"/></svg>
-          Game Dev
-        </button>
-        <button type="button" class="btn-role btn-add-more" id="addMoreRoles" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-add" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-          Add More
-        </button>
-      </div>
-    </div>
-    <!-- Choose Your Tech Stack -->
-    <div class="mb-4">
-      <div class="section-header text-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="#2563eb" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5" width="20" height="20" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7M3 7l9 6 9-6"/></svg>
-        Choose Your Tech Stack
-      </div>
-      <div class="btn-group-wrap">
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#61dafb" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 10.11c1.03 0 1.87.84 1.87 1.89S13.03 13.89 12 13.89 10.13 13.05 10.13 12s.84-1.89 1.87-1.89M12 7a5 5 0 00-5 5 5 5 0 005 5 5 5 0 005-5 5 5 0 00-5-5"/></svg>
-          React
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#4fc08d" viewBox="0 0 24 24" aria-hidden="true"><path d="M2,3L5,3L12,17L19,3L22,3L12,21L2,3Z"/></svg>
-          Vue.js
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#dd0031" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L1 7l4 14 7 3 7-3 4-14-11-5z"/></svg>
-          Angular
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#68a063" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.85c-.27 0-.55.07-.78.2l-7.44 4.3c-.48.28-.78.8-.78 1.36v8.58c0 .56.3 1.08.78 1.36l7.44 4.3c.46.26 1.04.26 1.5 0l7.44-4.3c.48-.28.78-.8.78-1.36V7.71c0-.56-.3-1.08-.78-1.36l-7.44-4.3c-.23-.13-.51-.2-.78-.2z"/></svg>
-          Node.js
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#3776ab" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.34 1.85c-.25 0-.5.05-.73.14L5.45 4.92c-.45.18-.76.62-.76 1.11v11.94c0 .49.31.93.76 1.11l6.16 2.93c.46.22 1 .22 1.46 0l6.16-2.93c.45-.18.76-.62.76-1.11V6.03c0-.49-.31-.93-.76-1.11L13.07 1.99c-.23-.09-.48-.14-.73-.14z"/></svg>
-          Python
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ed8b00" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149M8.276 15.933s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308 0 0 .384.389.987.602-5.679 1.661-12.007.13-7.942-1.218M13.116 11.475c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688 0-.001-8.216 2.051-4.292 6.573M19.33 20.504s.679.559-.747.99c-2.712.822-11.288 1.069-13.669.033-.856-.373.75-.89 1.254-.998.527-.114.828-.093.828-.093-.953-.671-6.156 1.317-2.643 1.887 9.58 1.553 17.462-.7 14.977-1.819M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062 1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568 2.082-1.006 3.776-.892 3.776-.892M17.116 17.584c4.503-2.34 2.421-4.589.968-4.285-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562 0-.001.07-.062.09-.118M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.888 4.832-.001 6.836-2.274-2.053-3.943-3.858-2.824-5.539 1.644-2.469 6.197-3.665 5.19-7.627M9.734 23.924c4.322.277 10.959-.153 11.116-2.198 0 0-.302.775-3.572 1.391-3.688.694-8.239.613-10.937.168 0-.001.553.457 3.393.639"/></svg>
-          Java
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#f7df1e" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></svg>
-          JavaScript
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#3178c6" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/></svg>
-          TypeScript
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#47a248" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0111.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 003.639-8.464c.01-.814-.103-1.662-.197-2.218zm-5.336 8.195s0-8.291.275-8.29c.213 0 .49 10.695.49 10.695-.381-.116-.765-1.6-.765-2.405z"/></svg>
-          MongoDB
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#00758f" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.405 5.501c-.115 0-.193.014-.274.033v.013h.014c.054.104.146.18.214.274.054.107.1.214.154.32l.014-.015c.094-.066.14-.172.14-.333-.04-.047-.046-.094-.08-.14-.04-.067-.126-.1-.18-.152zM5.77 18.695h-.927a50.854 50.854 0 00-.27-4.41h-.008l-1.41 4.41H2.45l-1.4-4.41h-.01a72.892 72.892 0 00-.195 4.41H.082c.055-1.966.192-3.81.41-5.53h1.15l1.335 4.064h.008l1.347-4.064h1.095c.242 2.015.384 3.854.428 5.53zm4.017-4.08c-.378 2.045-.876 3.533-1.492 4.46-.482.716-1.01 1.073-1.583 1.073-.153 0-.34-.046-.566-.138v-.494c.11.017.24.026.386.026.268 0 .483-.075.647-.222.197-.18.295-.382.295-.605 0-.155-.077-.397-.23-.724L5.9 14.615h.902l.952 3.004c.086.267.134.522.148.766.429-1.323.673-2.61.733-3.85zm7.455-.348c.017-.99-.103-1.807-.36-2.45-.268-.68-.687-1.019-1.256-1.019-.372 0-.651.129-.835.388a1.717 1.717 0 00-.277.638c-.018.02-.037.07-.037.122 0 .332.108.572.322.72.214.154.98.505 2.29 1.052.02.382-.131.72-.455.973-.324.254-.772.381-1.343.381-.445 0-.84-.108-1.187-.324v-.539c.383.157.822.236 1.15.236.31 0 .525-.05.64-.154.12-.1.18-.247.18-.44-.018-.059-.126-.157-.323-.293-.395-.27-1.094-.646-1.315-.84-.75-.646-.698-1.266-.698-1.61 0-.613.229-1.139.687-1.577.458-.439 1.023-.658 1.694-.658.407 0 .815.129 1.225.388v.539a1.9 1.9 0 00-1.078-.388c-.29 0-.546.82-.546 1.627-.018.382.205.694.668 1.01.463.315 1.094.7 1.315.84.221.14.332.285.332.436zm1.69-.877h1.48c-.018.49-.03.98-.03 1.47h-.902c-.018-.49-.03-.98-.03-1.47h-.518zm-.949-1.563h.902c-.018.49-.03.98-.03 1.47h-.424c-.018-.49-.03-.98-.03-1.47h-.418z"/></svg>
-          MySQL
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#e44d26" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg>
-          HTML
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#1572b6" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z"/></svg>
-          CSS
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#0db7ed" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/></svg>
-          Docker
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ff9900" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.527 14.938c-.681.681-1.785.681-2.466 0l-7.404-7.404c-.681-.681-.681-1.785 0-2.466l7.404-7.404c.681-.681 1.785-.681 2.466 0l7.404 7.404c.681.681.681 1.785 0 2.466l-7.404 7.404z"/></svg>
-          AWS
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#f05032" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.428 1.9l2.658 2.66c.645-.23 1.387-.87 1.9.428.72.72.72 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.713.713 1.87 0 2.582-.719.719-1.881.719-2.6 0-.719-.719-.719-1.881 0-2.6.175-.175.375-.297.586-.387v-6.59c-.211-.09-.411-.211-.586-.387-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"/></svg>
-          Git
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#092e20" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.146 0h.858l.175 1.322h.063c.242-.827.863-1.322 1.694-1.322.097 0 .194.007.29.022v1.57c-.145-.029-.29-.043-.436-.043-.621 0-1.076.348-1.256.957-.086.291-.135.604-.135.933v7.156h-1.253V0zM5.342 14.1c-.97 0-1.768-.348-2.394-1.043C2.322 12.362 2 11.27 2 9.782V0h1.253v9.782c0 1.174.206 2.05.618 2.628.412.578 1.026.867 1.842.867.815 0 1.43-.289 1.842-.867.412-.578.618-1.454.618-2.628V0h1.253v9.782c0 1.488-.322 2.58-.968 3.275-.646.695-1.425 1.043-2.338 1.043zm13.71.09l-.5-1.37h-3.89l-.5 1.37H12.5L16.1 0h1.32l3.6 14.19h-1.97zm-1.02-2.92l-1.35-3.7-1.35 3.7h2.7z"/></svg>
-          Django
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#68217a" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-.855 2.844c4.607.027 8.333 3.77 8.333 8.378 0 4.621-3.741 8.355-8.355 8.355-4.614 0-8.355-3.734-8.355-8.355 0-4.608 3.726-8.351 8.333-8.378h.044z"/></svg>
-          Bootstrap
-        </button>
-        <button type="button" class="btn-tech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#06b6d4" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zM6.001 12c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"/></svg>
-          Tailwind
-        </button>
-        <button type="button" class="btn-tech btn-add-more" id="addMoreTech" aria-pressed="false">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-add" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-          Add More
-        </button>
-      </div>
-    </div>
-    <!-- Experience Level -->
-    <div class="mb-4">
-      <div class="section-header text-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 17h16M4 10h16"/><path d="M10 3h4"/></svg>
-        Experience Level
-      </div>
-      <div class="experience-wrapper">
-        <select id="experience-level" class="form-select with-icon" aria-label="Select your experience level">
-          <option selected disabled>Select your experience level</option>
-          <option value="junior">🌱 Junior (0-2 years)</option>
-          <option value="mid">🚀 Mid-level (2-5 years)</option>
-          <option value="senior">⭐ Senior (5+ years)</option>
-          <option value="lead">👑 Lead/Principal (8+ years)</option>
-        </select>
-        <svg class="experience-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="18" height="18">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-      </div>
-    </div>
-    <!-- Save and Continue Button -->
-    <div class="text-center mt-4">
-      <button id="save-btn" class="btn btn-primary btn-primary-custom" type="button">
-        Save & Continue
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-1" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
-    </div>
-  </div>
-</div>
-<!-- Popup -->
-<div class="popup-bg hide" id="popup-bg" tabindex="-1" aria-modal="true" role="dialog">
-  <div class="popup-card shadow">
-    <button class="popup-close" id="closeBtn" aria-label="Close">&times;</button>
-    <div class="popup-title">
-      <span class="emoji" aria-hidden="true">❓</span>
-      Show What You Know
-    </div>
-    <span class="popup-hand" aria-hidden="true">👋</span>
-    <div class="popup-heading">
-      Hey there, curious dev!
-    </div>
-    <div class="popup-desc">
-      We noticed you've selected your skills. Take a short test now to earn your first badge <span class="emoji" aria-label="badge">🥇</span> and unlock your real developer profile.
-    </div>
-    <div class="popup-hint">
-      It's just a few questions. Let your skills shine. <span class="emoji" aria-label="light bulb">💡</span>
-    </div>
-    <a href="{% url 'skill-qa' %}" class="popup-button" id="startTestBtn" aria-label="Start Test Now">
-       Start Test Now
-    </a>
-    <a href="{% url 'explore-projects' %}" class="popup-later" id="maybeLater" aria-label="Maybe Later">
-      Maybe Later
-    </a>
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Role & Tech toggle
-  document.addEventListener('click', function(e) {
-    const button = e.target.closest('.btn-role, .btn-tech');
-    if (!button) return;
-    
-    // Don't toggle "Add More" buttons like regular selection buttons
-    if (button.classList.contains('btn-add-more')) {
-      return; // We'll handle these separately
-    }
-    
-    // Don't toggle if clicking the remove button on custom items
-    if (e.target.closest('.btn-remove')) {
-      return;
-    }
-    
-    const isActive = button.classList.contains('active');
-    button.classList.toggle('active');
-    button.setAttribute('aria-pressed', !isActive);
-  });
-
-  // Add More Roles functionality
-  document.getElementById('addMoreRoles').addEventListener('click', function() {
-    showAddMoreModal('Role', 'role');
-  });
-
-  // Add More Tech functionality  
-  document.getElementById('addMoreTech').addEventListener('click', function() {
-    showAddMoreModal('Tech Stack', 'tech');
-  });
-
-  // Modal functionality for Add More
-  function showAddMoreModal(title, type) {
-    // Create modal HTML with input field
-    const modalHTML = `
-      <div class="modal fade" id="addMoreModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header border-0 pb-2">
-              <h5 class="modal-title fw-bold text-primary">
-                <i class="fas fa-plus-circle me-2"></i>Add Custom ${title}
-              </h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<main>
+    <div class="preferences-card">
+        <div class="wizard-steps">
+            <div class="step active" data-step="1">
+                <div class="step-number"><i class="fas fa-user-tie"></i></div>
+                <div class="step-label">Your Role</div>
             </div>
-            <div class="modal-body pt-2">
-              <p class="text-muted mb-3">Enter a custom ${title.toLowerCase()} to add to your preferences:</p>
-              <div class="input-group mb-3">
-                <span class="input-group-text bg-primary text-white">
-                  <i class="fas ${type === 'role' ? 'fa-user-tag' : 'fa-code'}"></i>
-                </span>
-                <input type="text" class="form-control custom-input" placeholder="e.g., ${type === 'role' ? 'Cloud Architect' : 'Svelte'}" maxlength="20" id="customItemInput">
-                <button class="btn btn-primary" type="button" id="addCustomItem">
-                  <i class="fas fa-plus"></i> Add
-                </button>
-              </div>
-              <div id="customItemPreview" class="d-none">
-                <p class="small text-muted mb-2">Preview:</p>
-                <button type="button" class="btn btn-${type} preview-btn" disabled>
-                  <i class="fas ${type === 'role' ? 'fa-user' : 'fa-code'} me-2"></i>
-                  <span id="previewText"></span>
-                </button>
-              </div>
+            <div class="step" data-step="2">
+                <div class="step-number"><i class="fas fa-code"></i></div>
+                <div class="step-label">Your Tech</div>
             </div>
-            <div class="modal-footer border-0 pt-2">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <div class="step" data-step="3">
+                <div class="step-number"><i class="fas fa-layer-group"></i></div>
+                <div class="step-label">Experience</div>
             </div>
-          </div>
         </div>
-      </div>
-    `;
-    
-    // Remove existing modal if any
-    const existingModal = document.getElementById('addMoreModal');
-    if (existingModal) {
-      existingModal.remove();
-    }
-    
-    // Add modal to body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Initialize and show modal
-    const modal = new bootstrap.Modal(document.getElementById('addMoreModal'));
-    modal.show();
-    
-    // Get modal elements
-    const customInput = document.getElementById('customItemInput');
-    const addButton = document.getElementById('addCustomItem');
-    const preview = document.getElementById('customItemPreview');
-    const previewText = document.getElementById('previewText');
-    
-    // Focus on input when modal opens
-    modal._element.addEventListener('shown.bs.modal', () => {
-      customInput.focus();
-    });
-    
-    // Real-time preview
-    customInput.addEventListener('input', function() {
-      const value = this.value.trim();
-      if (value) {
-        previewText.textContent = value;
-        preview.classList.remove('d-none');
-        addButton.disabled = false;
-      } else {
-        preview.classList.add('d-none');
-        addButton.disabled = true;
-      }
-    });
-    
-    // Add custom item functionality
-    function addCustomItem() {
-      const customValue = customInput.value.trim();
-      if (!customValue) return;
-      
-      // Create new button element
-      const newButton = document.createElement('button');
-      newButton.type = 'button';
-      newButton.className = `btn-${type} custom-item`;
-      newButton.setAttribute('aria-pressed', 'false');
-      
-      // Random color for custom items
-      const customColors = ['#8b5cf6', '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#f97316', '#ec4899'];
-      const randomColor = customColors[Math.floor(Math.random() * customColors.length)];
-      
-      newButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" stroke="${randomColor}" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" class="icon-custom">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-        </svg>
-        ${customValue}
-        <button type="button" class="btn-remove" aria-label="Remove ${customValue}">
-          <i class="fas fa-times"></i>
-        </button>
-      `;
-      
-      // Add click handler for selection
-      newButton.addEventListener('click', function(e) {
-        // Don't toggle if clicking the remove button
-        if (e.target.closest('.btn-remove')) return;
+
+        <div class="wizard-content">
+            <div class="wizard-pane active" id="step-1">
+                <h2>What's Your Role?</h2>
+                <p class="lead">Select roles that best describe you.</p>
+                <div class="input-group">
+                    <input type="search" class="form-control search-input" placeholder="🔍 Search or add a new role..." id="role-search">
+                    <button class="btn btn-outline-secondary d-none" type="button" id="add-role-btn">Add</button>
+                </div>
+                <div class="tag-selection-group" id="role-list">
+                    </div>
+            </div>
+
+            <div class="wizard-pane" id="step-2">
+                <h2>What's Your Tech Stack?</h2>
+                <p class="lead">Choose the technologies you love to work with.</p>
+                 <div class="input-group">
+                    <input type="search" class="form-control search-input" placeholder="🔍 Search or add a new technology..." id="tech-search">
+                    <button class="btn btn-outline-secondary d-none" type="button" id="add-tech-btn">Add</button>
+                </div>
+                <div class="tag-selection-group" id="tech-list">
+                    </div>
+            </div>
+
+            <div class="wizard-pane" id="step-3">
+                <h2>What's Your Experience Level?</h2>
+                <p class="lead">This helps us recommend suitable projects for you.</p>
+                <div class="tag-selection-group justify-content-center">
+                    <span class="tag-radio"><input type="radio" name="experience" id="exp1" value="Junior"><label for="exp1">🌱 Junior (0-2 years)</label></span>
+                    <span class="tag-radio"><input type="radio" name="experience" id="exp2" value="Mid-level"><label for="exp2">🚀 Mid-level (2-5 years)</label></span>
+                    <span class="tag-radio"><input type="radio" name="experience" id="exp3" value="Senior"><label for="exp3">⭐ Senior (5+ years)</label></span>
+                </div>
+            </div>
+        </div>
         
-        const isActive = this.classList.contains('active');
-        this.classList.toggle('active');
-        this.setAttribute('aria-pressed', !isActive);
-      });
-      
-      // Add remove functionality
-      const removeBtn = newButton.querySelector('.btn-remove');
-      removeBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        if (confirm(`Remove "${customValue}" from your ${type === 'role' ? 'roles' : 'tech stack'}?`)) {
-          newButton.remove();
-        }
-      });
-      
-      // Find the appropriate container and add before "Add More" button
-      let container;
-      if (type === 'role') {
-        // Find the roles section by looking for the "Add More Roles" button
-        const addMoreRolesBtn = document.getElementById('addMoreRoles');
-        container = addMoreRolesBtn ? addMoreRolesBtn.parentElement : null;
-      } else {
-        // Find the tech section by looking for the "Add More Tech" button  
-        const addMoreTechBtn = document.getElementById('addMoreTech');
-        container = addMoreTechBtn ? addMoreTechBtn.parentElement : null;
-      }
-      
-      if (!container) {
-        console.error('Could not find container for', type);
-        return;
-      }
-      
-      const addMoreBtn = container.querySelector('.btn-add-more');
-      container.insertBefore(newButton, addMoreBtn);
-      
-      // Close modal and show success message
-      modal.hide();
-      
-      // Show a brief success indicator
-      const successToast = document.createElement('div');
-      successToast.className = 'toast show position-fixed top-0 start-50 translate-middle-x mt-3';
-      successToast.style.zIndex = '9999';
-      successToast.innerHTML = `
-        <div class="toast-body bg-success text-white d-flex align-items-center">
-          <i class="fas fa-check-circle me-2"></i>
-          "${customValue}" added successfully!
+        <div class="wizard-actions">
+            <button class="btn btn-secondary" id="prev-btn" style="display: none;">Previous Step</button>
+            <button class="btn btn-primary" id="next-btn">Next Step</button>
+            <button class="btn btn-primary" id="save-btn" style="display: none;">Save Preferences</button>
         </div>
-      `;
-      document.body.appendChild(successToast);
-      
-      setTimeout(() => {
-        successToast.remove();
-      }, 3000);
-    }
-    
-    // Add button click handler
-    addButton.addEventListener('click', addCustomItem);
-    
-    // Enter key handler
-    customInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter' && !addButton.disabled) {
-        addCustomItem();
-      }
-    });
-    
-    // Clean up modal on hide
-    document.getElementById('addMoreModal').addEventListener('hidden.bs.modal', function() {
-      this.remove();
-    });
-  }
+    </div>
+</main>
 
-  // Save & Continue with Popup
-  document.getElementById('save-btn').addEventListener('click', () => {
-    const selectedRoles = [...document.querySelectorAll('.btn-role.active')]
-      .map(btn => btn.textContent.trim());
-    const selectedTech = [...document.querySelectorAll('.btn-tech.active')]
-      .map(btn => btn.textContent.trim());
-    const experience = document.getElementById('experience-level').value;
-
-    if (!experience) {
-      alert('Please select your experience level.');
-      return;
-    }
-
-    // Show popup, blur background
-    document.getElementById('popup-bg').classList.remove('hide');
-    document.getElementById('main-content').classList.add('blurred');
-    // Optionally: Prevent scrolling in background while popup is open
-    document.body.style.overflow = "hidden";
-    // Set focus to popup for accessibility
-    document.getElementById('popup-bg').focus();
-  });
-
-  // Close popup and unblur
-  function closePopup() {
-    document.getElementById('popup-bg').classList.add('hide');
-    document.getElementById('main-content').classList.remove('blurred');
-    document.body.style.overflow = "";
-  }
-  document.getElementById('closeBtn').addEventListener('click', closePopup);
-  document.getElementById('maybeLater').addEventListener('click', closePopup);
-  document.getElementById('popup-bg').addEventListener('click', function(e) {
-    if(e.target === this) closePopup();
-  });
-
-  // Start Test button - no need for additional logic since it's now a direct link
-  document.getElementById('startTestBtn').addEventListener('click', function() {
-    closePopup();
-    // The link will handle navigation automatically
-  });
-</script>
+<div class="preferences-popup-overlay" id="popup-overlay">
+    <div class="preferences-popup">
+        <h3 class="mb-3">Preferences Saved! 🎉</h3>
+        <p class="text-secondary">Ready to test your skills? Take a short quiz to earn your first badge.</p>
+        <div class="d-grid gap-2 mt-4">
+            <a href="#" class="btn btn-primary">Start Skill Test</a>
+            <button type="button" class="btn btn-secondary" id="close-popup-btn">Maybe Later</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
+
+{% block js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- DATA ---
+    const allRoles = [
+        { id: 'frontend', name: 'Frontend', icon: 'fa-desktop' }, { id: 'backend', name: 'Backend', icon: 'fa-server' },
+        { id: 'fullstack', name: 'Full Stack', icon: 'fa-layer-group' }, { id: 'mobile', name: 'Mobile', icon: 'fa-mobile-alt' },
+        { id: 'uiux', name: 'UI/UX', icon: 'fa-palette' }, { id: 'devops', name: 'DevOps', icon: 'fa-cogs' }
+    ];
+    const allTech = [
+        { id: 'react', name: 'React', icon: 'fa-react' }, { id: 'python', name: 'Python', icon: 'fa-python' },
+        { id: 'nodejs', name: 'Node.js', icon: 'fa-node-js' }, { id: 'javascript', name: 'JavaScript', icon: 'fa-js' },
+        { id: 'vuejs', name: 'Vue.js', icon: 'fa-vuejs' }, { id: 'django', name: 'Django', icon: 'fa-file-code' },
+        { id: 'aws', name: 'AWS', icon: 'fa-aws' }
+    ];
+
+    // --- STATE ---
+    let currentStep = 1;
+    const totalSteps = 3;
+    const userSelections = { roles: new Set(), tech: new Set() };
+    
+    // --- DOM ELEMENTS ---
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const saveBtn = document.getElementById('save-btn');
+
+    // --- WIZARD LOGIC ---
+    function updateWizard() {
+        document.querySelectorAll('.wizard-pane').forEach(p => p.classList.remove('active'));
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+        
+        document.querySelectorAll('.step').forEach((step, index) => {
+            const stepNum = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            if (stepNum < currentStep) step.classList.add('completed');
+            else if (stepNum === currentStep) step.classList.add('active');
+        });
+
+        prevBtn.style.display = currentStep > 1 ? 'inline-block' : 'none';
+        nextBtn.style.display = currentStep < totalSteps ? 'inline-block' : 'none';
+        saveBtn.style.display = currentStep === totalSteps ? 'inline-block' : 'none';
+    }
+
+    nextBtn.addEventListener('click', () => { if (currentStep < totalSteps) { currentStep++; updateWizard(); } });
+    prevBtn.addEventListener('click', () => { if (currentStep > 1) { currentStep--; updateWizard(); } });
+
+    // --- DYNAMIC RENDERING & SEARCH ---
+    function setupSearchAndRender(dataType, allData, listElement, searchInput, addBtn) {
+        function render(filter = '') {
+            const lowerFilter = filter.toLowerCase();
+            const filteredData = allData.filter(item => item.name.toLowerCase().includes(lowerFilter));
+            
+            listElement.innerHTML = filteredData.map(item => `
+                <span class="tag-checkbox">
+                    <input type="checkbox" id="${dataType}-${item.id}" value="${item.name}" ${userSelections[dataType].has(item.name) ? 'checked' : ''}>
+                    <label for="${dataType}-${item.id}"><i class="fas ${item.icon}"></i> ${item.name}</label>
+                </span>
+            `).join('');
+
+            const exactMatch = allData.some(item => item.name.toLowerCase() === lowerFilter);
+            if (filter && !exactMatch) {
+                addBtn.classList.remove('d-none');
+            } else {
+                addBtn.classList.add('d-none');
+            }
+        }
+
+        searchInput.addEventListener('input', () => render(searchInput.value));
+        
+        addBtn.addEventListener('click', () => {
+            const value = searchInput.value.trim();
+            if (value) {
+                const newItem = { id: value.toLowerCase().replace(/\s+/g, '-'), name: value, icon: 'fa-star' };
+                allData.push(newItem);
+                userSelections[dataType].add(value);
+                searchInput.value = '';
+                render();
+            }
+        });
+        
+        listElement.addEventListener('change', e => {
+            if (e.target.type === 'checkbox') {
+                if (e.target.checked) {
+                    userSelections[dataType].add(e.target.value);
+                } else {
+                    userSelections[dataType].delete(e.target.value);
+                }
+            }
+        });
+
+        render(); // Initial render
+    }
+
+    setupSearchAndRender('roles', allRoles, document.getElementById('role-list'), document.getElementById('role-search'), document.getElementById('add-role-btn'));
+    setupSearchAndRender('tech', allTech, document.getElementById('tech-list'), document.getElementById('tech-search'), document.getElementById('add-tech-btn'));
+
+    // --- POPUP LOGIC ---
+    const popupOverlay = document.getElementById('popup-overlay');
+    saveBtn.addEventListener('click', () => popupOverlay.style.display = 'flex');
+    document.getElementById('close-popup-btn').addEventListener('click', () => popupOverlay.style.display = 'none');
+
+    // --- INITIALIZE ---
+    updateWizard();
+});
+</script>
+{% endblock js %}
