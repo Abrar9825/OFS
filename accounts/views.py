@@ -14,11 +14,6 @@ def login(request):
 def forgotpassword(request):
     return render(request, 'accounts/forgot_password.html')
 
-
-def github_auth(request):
-    return render(request, 'accounts/github_auth.html')
-
-
 def profile(request):
     return render(request,'accounts/profile.html')
 
